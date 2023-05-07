@@ -1,7 +1,11 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
 
-type MesUser = {
-  id : string
+export type MesUser = {
+  id : string,
+  userName: string,
+  userToken: string,
+  permissions: Object,
+  miscInfo: {}
 }
 
 const userSlice = createSlice<MesUser,any, any>({
@@ -14,8 +18,8 @@ const userSlice = createSlice<MesUser,any, any>({
     miscInfo : {}
   },
   reducers: {
-    setUser : (state, action) =>{
-      alert(JSON.stringify(action.payload))
+    setUser : (state: MesUser, action: PayloadAction<MesUser>) =>{
+      alert(JSON.stringify(action.type))
       state.id = action.payload.id
       state.userName = action.payload.userName
       state.userToken= action.payload.userToken
@@ -26,9 +30,12 @@ const userSlice = createSlice<MesUser,any, any>({
   }
 })
 
-
 export const { setUser } = userSlice.actions
 
-export default configureStore({
+const store =  configureStore({
   reducer: {user : userSlice.reducer},
 })
+
+export type IRootState = ReturnType<typeof store.getState>
+
+export default store;

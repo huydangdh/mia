@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import store, { setUser } from './store.ts';
+import store, { IRootState, MesUser, setUser } from './store.ts';
 
 
 function Layout() {
@@ -18,7 +18,7 @@ function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const mesUser = useSelector((state) => state.user)
+  const mesUser = useSelector<IRootState,MesUser>((state) => state.user)
   const dispatch = useDispatch()
 
   // User Login info
@@ -67,10 +67,10 @@ function LoginPage() {
     }
 
   };
-
+  const useAppDispatch: () => typeof store.dispatch = useDispatch
   // test 
   const doTestGetUser = () =>{
-    dispatch(setUser({id: "001"}))
+    useAppDispatch(setUser({id:"001"}))
   }
 
   // JSX code for login form
