@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import store, { IRootState, MesUser, setUser } from './store.ts';
+import store, { AppDispatch, IRootState, MesUser, setUser } from './store.ts';
 
 
 function Layout() {
@@ -19,7 +19,7 @@ function LoginPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const mesUser = useSelector<IRootState,MesUser>((state) => state.user)
-  const dispatch = useDispatch()
+  const dispatch : AppDispatch = useDispatch()
 
   // User Login info
   const database = [
@@ -67,10 +67,9 @@ function LoginPage() {
     }
 
   };
-  const useAppDispatch: () => typeof store.dispatch = useDispatch
   // test 
   const doTestGetUser = () =>{
-    useAppDispatch(setUser({id:"001"}))
+   dispatch()
   }
 
   // JSX code for login form

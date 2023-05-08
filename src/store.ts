@@ -1,12 +1,13 @@
-import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, combineReducers, configureStore, createSlice } from '@reduxjs/toolkit'
 
 export type MesUser = {
   id : string,
   userName: string,
   userToken: string,
-  permissions: Object,
+  permissions: Object[],
   miscInfo: {}
 }
+
 
 const userSlice = createSlice<MesUser,any, any>({
   name : "UserSlice",
@@ -25,6 +26,8 @@ const userSlice = createSlice<MesUser,any, any>({
       state.userToken= action.payload.userToken
       state.permissions = action.payload.permissions
       state.miscInfo = action.payload.miscInfo
+      
+      return
     }
       
   }
@@ -32,10 +35,13 @@ const userSlice = createSlice<MesUser,any, any>({
 
 export const { setUser } = userSlice.actions
 
+
 const store =  configureStore({
   reducer: {user : userSlice.reducer},
 })
 
 export type IRootState = ReturnType<typeof store.getState>
+
+export type AppDispatch = typeof store.dispatch
 
 export default store;
