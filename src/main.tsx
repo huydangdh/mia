@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { database, errors } from './dataMock.ts';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import store, { AppDispatch, IRootState, MesUser, setUser } from './store.ts';
+import store, { AppDispatch, IRootState, MesUserState, setUser } from './store.ts';
 
 
 function Layout() {
@@ -18,25 +19,9 @@ function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const mesUser = useSelector<IRootState,MesUser>((state) => state.user)
-  const dispatch : AppDispatch = useDispatch()
+  const mesUser = useSelector<IRootState, MesUserState>((state) => state.user)
+  const dispatch: AppDispatch = useDispatch()
 
-  // User Login info
-  const database = [
-    {
-      username: "user1",
-      password: "pass1"
-    },
-    {
-      username: "user2",
-      password: "pass2"
-    }
-  ];
-
-  const errors = {
-    uname: "invalid username",
-    pass: "invalid password"
-  };
 
   // Generate JSX code for error message
   const renderErrorMessage = (name: string) =>
@@ -59,17 +44,19 @@ function LoginPage() {
         // Invalid password
         setErrorMessages({ name: "pass", message: errors.pass });
       } else {
-        setIsSubmitted(true);
+        dispatch(setUser({ user: { id: "001", userName: "Deng Guang Hui", userToken: "LHF001", permissions: [{ app_name: "app1", pers: "Start|Update|Delete" }], miscInfo: {}, isAuthed: true } }))
       }
-    } else {
+
+    }
+    else {
       // Username not found
       setErrorMessages({ name: "uname", message: errors.uname });
     }
 
   };
   // test 
-  const doTestGetUser = () =>{
-   dispatch()
+  const doTestGetUser = () => {
+    dispatch(setUser({ user: { id: "001", userName: "Deng Guang Hui", userToken: "LHF001", permissions: [{ app_name: "app1", pers: "Start|Update|Delete" }], miscInfo: {}, isAuthed: true } }))
   }
 
   // JSX code for login form
@@ -98,9 +85,9 @@ function LoginPage() {
     <>
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        {mesUser.user.isAuthed ? <Navigate replace to={"/"} /> : renderForm}
         <button onClick={doTestGetUser}>Do_Test_Get_User</button>
-        <div> Current_user : {mesUser.id}</div>
+        <div> Current_user : {JSON.stringify((mesUser.user))}</div>
       </div>
     </>
   )

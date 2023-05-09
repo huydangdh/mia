@@ -1,43 +1,50 @@
-import { PayloadAction, combineReducers, configureStore, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
 
 export type MesUser = {
-  id : string,
+  id: string,
   userName: string,
   userToken: string,
   permissions: Object[],
-  miscInfo: {}
+  miscInfo: {},
+  isAuthed: Boolean
 }
 
+export type MesUserState = {
+  user: MesUser
+}
 
-const userSlice = createSlice<MesUser,any, any>({
-  name : "UserSlice",
-  initialState : {
-    id : "",
-    userName : "No_Name",
-    userToken : "LHF00",
-    permissions : [{}],
-    miscInfo : {}
-  },
+const initialState: MesUserState = {
+  user: {
+    id: "",
+    userName: "No_Name",
+    userToken: "LHF00",
+    permissions: [{}],
+    miscInfo: {},
+    isAuthed: false
+  }
+}
+const userSlice = createSlice({
+  name: "UserSlice",
+  initialState,
   reducers: {
-    setUser : (state: MesUser, action: PayloadAction<MesUser>) =>{
+    setUser: (state: MesUserState, action: PayloadAction<MesUserState>) => {
       alert(JSON.stringify(action.type))
-      state.id = action.payload.id
-      state.userName = action.payload.userName
-      state.userToken= action.payload.userToken
-      state.permissions = action.payload.permissions
-      state.miscInfo = action.payload.miscInfo
-      
-      return
+      state.user.id = action.payload.user.id
+      state.user.userName = action.payload.user.userName
+      state.user.userToken = action.payload.user.userToken
+      state.user.permissions = action.payload.user.permissions
+      state.user.miscInfo = action.payload.user.miscInfo,
+      state.user.isAuthed = action.payload.user.isAuthed
     }
-      
+
   }
 })
 
 export const { setUser } = userSlice.actions
 
 
-const store =  configureStore({
-  reducer: {user : userSlice.reducer},
+const store = configureStore({
+  reducer: { user: userSlice.reducer },
 })
 
 export type IRootState = ReturnType<typeof store.getState>
