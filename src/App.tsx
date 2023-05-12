@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import store from './store'
 import { Link, Navigate, redirect } from 'react-router-dom'
 
@@ -18,18 +15,14 @@ function App() {
 
   } else {
     return (
-  <>
-
-        <h2> [MAIN_APP ] </h2>
-        <Link to='Login'>Login</Link>
-        |
-        <Link to='SignUp'>SignUp</Link>
-        |
-        <Link to='AccountInfo'>AccountInfo</Link>
-        |
-        <Link to='Null'>Null</Link>
-        |
-        <Link to='Null'>Null</Link>
+      <>
+        <div className='w3-container w3-blue'>
+          <h2>[[App_Name]]</h2>
+        </div>
+        <div className="w3-container">
+          <p>A car is a wheeled, self-powered motor vehicle used for transportation. Most definitions of the term specify that cars are designed to run primarily on roads. (Wikipedia)</p>
+          <button className='w3-btn w3-green' type='button'>[[Button_Name]]</button>
+        </div>
       </>
     )
   }
