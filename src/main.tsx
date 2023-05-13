@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { BrowserRouter, Link, Route, Router, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import store, { AppDispatch, IRootState, MesUserState, setUser } from './store.ts';
+import { BrowserRouter, Link, Route, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store, {  } from './store.ts';
 import LoginPage from './pages/Login.tsx';
 import 'w3-css'
 import WorkTimeRecord from './pages/app/worktime_record.tsx';
@@ -46,7 +46,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
         <div className="w3-bar w3-black">
           <Link to={"/"} className="w3-bar-item w3-button">Home</Link>
           <a href="#" className="w3-bar-item w3-button">Link 1</a>
@@ -54,13 +53,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <a href="#" className="w3-bar-item w3-button">Link 3</a>
         </div>
         <div className='w3-container'>
-          <Routes>
-            <Route path='/' element={<App />} />
-            <Route path='/Login' element={<LoginPage />} />
-            <Route path='/app/worktime_record' element={<WorkTimeRecord />} />
-          </Routes>
+          <RouterProvider router={router} />
         </div>
-      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
 )
