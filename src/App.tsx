@@ -1,18 +1,17 @@
-import { useState } from 'react'
+import { APP_URL } from './dataMock';
 import store from './store'
-import { Link, Navigate, redirect, useNavigate } from 'react-router-dom'
-
-
+import { Navigate, useNavigate } from 'react-router-dom'
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   const isAuth = store.getState().user.user.isAuthed
   const navigate = useNavigate();
 
-  function btnLunch(event: React.MouseEventHandler<HTMLButtonElement>) {
-    navigate({pathname: "/app/worktime_record"},{replace:true}) 
+  function btnLunch(_event: React.MouseEventHandler<HTMLButtonElement>) {
+    navigate({
+      pathname: String().concat(APP_URL.APP_URL_ROOT,"/",APP_URL.APP_WORKTIME_RECORD)
+    }, { replace: true }) 
   }
 
   if (!isAuth) {

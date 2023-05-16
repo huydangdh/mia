@@ -1,4 +1,6 @@
 import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
+import { DoECheckData } from './dataMock'
+import { renderToReadableStream } from 'react-dom/server'
 
 export type MesUser = {
   id: string,
@@ -23,10 +25,15 @@ const initialState: MesUserState = {
     isAuthed: false
   }
 }
+
 const userSlice = createSlice({
-  name: "UserSlice",
+  name: "MesUser",
   initialState,
   reducers: {
+    init: (state: MesUserState)=>{
+      let mesuser = DoECheckData()
+      if(mesuser == undefined) return undefined 
+    },
     setUser: (state: MesUserState, action: PayloadAction<MesUserState>) => {
       alert(JSON.stringify(action.type))
       state.user.id = action.payload.user.id
@@ -40,7 +47,7 @@ const userSlice = createSlice({
   }
 })
 
-export const { setUser } = userSlice.actions
+export const { setUser, init } = userSlice.actions
 
 
 const store = configureStore({

@@ -1,3 +1,4 @@
+import localforage from "localforage";
 import { MesUser } from "./store";
 
 type databaseMock = {
@@ -26,9 +27,22 @@ export const database: databaseMock = {
   }]
 }
 
+export const DoECheckData = (): MesUser | undefined => {
+  let mesuser: MesUser | undefined = undefined
+  localforage.getItem<MesUser | undefined>("sv_MesUser").then((value)=>{
+    console.log(value)
+  })
+  return mesuser
+}
+
 export const errors = {
   uname: "invalid username",
   pass: "invalid password"
 };
 
 
+export const APP_URL = {
+  ROOT : "/",
+  APP_URL_ROOT : "app",
+  APP_WORKTIME_RECORD: "WorkTimeRecord"
+}
