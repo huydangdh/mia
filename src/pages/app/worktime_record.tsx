@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import DateTimePicker from "react-datetime-picker";
+import { MyContext } from "../../main";
 
 function WorkTimeRecord() {
-  const [value, onChange] = useState(new Date());
+  const mycπtx = useContext(MyContext)
+  const [dtStartTime, onChangeStartTime] = useState(new Date().setHours(05,00));
+  const [dtEndTime, onChangeEndTime] = useState(new Date());
 
+  console.debug("[I] MesUser: " + JSON.stringify(mycπtx))
 
   function doSend(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-    alert(_event)
+    alert(_event)   
   }
-
+  
   return (
     <>
       <div>
@@ -19,11 +23,11 @@ function WorkTimeRecord() {
           <form className="w3-container">
             <p>
               <label>Start_Time: </label>
-              <DateTimePicker onChange={onChange} value={value}></DateTimePicker>
+              <DateTimePicker onChange={onChangeStartTime} value={dtStartTime}></DateTimePicker>
             </p>
             <p>
               <label>End_Time: </label>
-              <DateTimePicker onChange={onChange} value={value} ></DateTimePicker>
+              <DateTimePicker onChange={onChangeEndTime} value={dtEndTime} ></DateTimePicker>
             </p>
             <button type="button" onClick={doSend}>Send</button>
             <p></p>

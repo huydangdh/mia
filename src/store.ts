@@ -1,5 +1,5 @@
 import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
-import { DoECheckData } from './dataMock'
+import { DoECheckData, database } from './dataMock'
 import { renderToReadableStream } from 'react-dom/server'
 
 export type MesUser = {
@@ -7,7 +7,7 @@ export type MesUser = {
   userName: string,
   userToken: string,
   permissions: Object[],
-  miscInfo: {},
+  miscInfo: any,
   isAuthed: Boolean
 }
 
@@ -30,11 +30,17 @@ const userSlice = createSlice({
   name: "MesUser",
   initialState,
   reducers: {
-    init: (state: MesUserState)=>{
-      let mesuser = DoECheckData()
-      if(mesuser == undefined) return undefined 
+    initUser: (state: MesUserState)=>{
+      const mesuser = database.user
+      console.log("[I] initUser: " + mesuser)
+      state.user.id = mesuser?.id
+      state.user.userName = mesuser.userName
+      state.user.userToken = mesuser.userToken
+      state.user.permissions = mesuser.permissions
+      state.user.miscInfo = mesuser.miscInfo,
+      state.user.isAuthed = mesuser.isAuthed
     },
-    setUser: (state: MesUserState, action: PayloadAction<MesUserState>) => {
+    setUser: (state: MesUserState, acion: PayloadAction<MesUserState>) => {
       alert(JSON.stringify(action.type))
       state.user.id = action.payload.user.id
       state.user.userName = action.payload.user.userName
@@ -42,12 +48,14 @@ const userSlice = createSlice({
       state.user.permissions = action.payload.user.permissions
       state.user.miscInfo = action.payload.user.miscInfo,
       state.user.isAuthed = action.payload.user.isAuthed
+    },
+    getUser: (state: MesUserState) =>{
+      return state
     }
-
   }
 })
 
-export const { setUser, init } = userSlice.actions
+export const { getUser,  setUser, initUser } = userSlice.actions
 
 
 const store = configureStore({
@@ -57,5 +65,7 @@ const store = configureStore({
 export type IRootState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
+
+store.dispatch(initUser())
 
 export default store;

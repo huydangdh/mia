@@ -18,7 +18,9 @@ export const database: databaseMock = {
       app_name: "WorkTimeRecord",
       role: "admin"
     }],
-    miscInfo: ""
+    miscInfo: {
+      start_time:"05:00"
+    }
   },
   mes_app: [{
     app_id : "A001",
@@ -30,7 +32,10 @@ export const database: databaseMock = {
 export const DoECheckData = (): MesUser | undefined => {
   let mesuser: MesUser | undefined = undefined
   localforage.getItem<MesUser | undefined>("sv_MesUser").then((value)=>{
-    console.log(value)
+    console.log("[I] LocalStorage_MesUser : " + value)
+    mesuser = database.user
+    console.log(mesuser)
+
   })
   return mesuser
 }
