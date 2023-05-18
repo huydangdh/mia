@@ -40,7 +40,7 @@ const userSlice = createSlice({
       state.user.miscInfo = mesuser.miscInfo,
       state.user.isAuthed = mesuser.isAuthed
     },
-    setUser: (state: MesUserState, acion: PayloadAction<MesUserState>) => {
+    setUser: (state: MesUserState, action: PayloadAction<MesUserState>) => {
       alert(JSON.stringify(action.type))
       state.user.id = action.payload.user.id
       state.user.userName = action.payload.user.userName

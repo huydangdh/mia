@@ -12,6 +12,7 @@ import { APP_URL, database } from './dataMock.ts';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
+import { UserProvider } from './providers/UserProvider.tsx';
 
 export const MyContext = createContext<MesUser>(database.user)
 
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <MyContext.Provider value={store.getState().mesUserStore.user}>
+      <UserProvider>
         <div className="w3-bar w3-black">
           <a href="/" className="w3-bar-item w3-button">Home</a>
           <a href="#" className="w3-bar-item w3-button">Link 1</a>
@@ -48,7 +49,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <div className='w3-container'>
           <RouterProvider router={router} />
         </div>
-      </MyContext.Provider>
+      </UserProvider>
     </Provider>
   </React.StrictMode>,
 )
