@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 function App() {
 
-  const isAuth = store.getState().user.user.isAuthed
+  const isAuth = store.getState().mesUserStore.user.isAuthed
   const navigate = useNavigate();
 
   function btnLunch(_event: React.MouseEventHandler<HTMLButtonElement>) {

@@ -10,7 +10,7 @@ function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const mesUser = useSelector<IRootState, MesUserState>((state) => state.user)
+  const mesUser = useSelector<IRootState, MesUserState>((state) => state.mesUserStore)
   const dispatch: AppDispatch = useDispatch()
 
 

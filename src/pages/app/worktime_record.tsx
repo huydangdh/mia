@@ -3,11 +3,11 @@ import DateTimePicker from "react-datetime-picker";
 import { MyContext } from "../../main";
 
 function WorkTimeRecord() {
-  const mycπtx = useContext(MyContext)
-  const [dtStartTime, onChangeStartTime] = useState(new Date().setHours(05,00));
+  const myctx = useContext(MyContext)
+  const [dtStartTime, onChangeStartTime] = useState(new Date());
   const [dtEndTime, onChangeEndTime] = useState(new Date());
 
-  console.debug("[I] MesUser: " + JSON.stringify(mycπtx))
+  console.debug("[I] MesUser: " + JSON.stringify(myctx))
 
   function doSend(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     alert(_event)   

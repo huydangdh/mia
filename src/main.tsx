@@ -16,6 +16,7 @@ import 'react-clock/dist/Clock.css';
 export const MyContext = createContext<MesUser>(database.user)
 
 
+
 const router = createBrowserRouter([
   {
     path: APP_URL.ROOT,
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <MyContext.Provider value={store.getState().user.user}>
+      <MyContext.Provider value={store.getState().mesUserStore.user}>
         <div className="w3-bar w3-black">
           <a href="/" className="w3-bar-item w3-button">Home</a>
           <a href="#" className="w3-bar-item w3-button">Link 1</a>

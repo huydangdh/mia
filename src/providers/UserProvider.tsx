@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, ReactNode } from 'react';
 import { MesUser } from '../store';
 
 export const UserContext = createContext<MesUser>({
@@ -10,8 +10,14 @@ export const UserContext = createContext<MesUser>({
     isAuthed: false
 });
 
-export const UserProvider = ({ children: JSX.Element }) => {
+interface UserProviderProps {
+  children: ReactNode
+}
 
+export const UserProvider = ({ children }: UserProviderProps) => {
+ 
+
+  
   return (
     <UserContext.Provider >
       {children}

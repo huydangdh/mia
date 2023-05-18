@@ -59,7 +59,7 @@ export const { getUser,  setUser, initUser } = userSlice.actions
 
 
 const store = configureStore({
-  reducer: { user: userSlice.reducer },
+  reducer: { mesUserStore: userSlice.reducer },
 })
 
 export type IRootState = ReturnType<typeof store.getState>
