@@ -35,7 +35,7 @@ function LoginPage() {
         // Invalid password
         setErrorMessages({ name: "pass", message: errors.pass });
       } else {
-        dispatch(setUser({ user: { id: "001", userName: "Deng Guang Hui", userToken: "LHF001", permissions: [{ app_name: "app1", pers: "Start|Update|Delete" }], miscInfo: {}, isAuthed: true } }))
+        dispatch(setUser({user : database.user}))
       }
 
     }

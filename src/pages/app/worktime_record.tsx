@@ -7,7 +7,7 @@ function WorkTimeRecord() {
   const [dtStartTime, onChangeStartTime] = useState(new Date());
   const [dtEndTime, onChangeEndTime] = useState(new Date());
 
-  console.debug("[I] MesUser: " + JSON.stringify(myctx))
+  console.debug("[I] WorkTimeRecord_myctx: " + JSON.stringify(myctx))
 
   function doSend(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     alert(_event)   

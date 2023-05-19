@@ -1,23 +1,36 @@
-import React, { createContext, ReactNode, useEffect } from 'react';
-import { AppDispatch, initUser, MesUser } from '../store';
+import React, { createContext, ReactNode, useContext, useEffect } from 'react';
+import store, { AppDispatch, initUser, MesUser, setUser } from '../store';
 import { useDispatch } from 'react-redux';
+import localforage from 'localforage';
+import { MyContext } from '../main';
 
-export const UserContext = createContext<any>({});
+export function UserInitialized() {
+  let _tmp: any = undefined;
+  localforage.getItem<MesUser>("sv_MesUser", (err, value)=>{
+    if(value != undefined){ 
+      _tmp = value
+      store.dispatch(setUser(_tmp))
+    }
+
+    console.log(`[I] sv_MesUser: ${err}, ${value}`);
+    
+  });
+}
 
 interface UserProviderProps {
   children: ReactNode
 }
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const dispatch : AppDispatch = useDispatch()
+  const _mesUser = store.getState().mesUserStore.user
   useEffect(()=>{
-    dispatch(initUser())
+    UserInitialized()
   })
 
 
   return (
-    <UserContext.Provider value={{}}>
+    <MyContext.Provider value={_mesUser}>
       {children}
-    </UserContext.Provider>
+    </MyContext.Provider>
   );
 };
