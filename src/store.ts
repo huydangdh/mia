@@ -40,8 +40,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     initUser: (state: MesUserState) => {
-      const mesuser = database.user
-      state.user = mesuser
       console.log("[I] initUser: " + JSON.stringify(state.user))
     },
     setUser: (state: MesUserState, action: PayloadAction<MesUser>) => {

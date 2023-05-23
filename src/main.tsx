@@ -2,8 +2,8 @@ import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
-import store, { MesUser, MesUserState, resetUser } from "./store.ts";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store, { AppDispatch, MesUser, MesUserState, resetUser, setUser, useMesSelector } from "./store.ts";
 import LoginPage from "./pages/Login.tsx";
 import "w3-css";
 import WorkTimeRecord from "./pages/app/worktime_record.tsx";
@@ -14,11 +14,18 @@ import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
-
+ 
+const sleep = ms => new Promise(
+  resolve => setTimeout(resolve, ms));
 
 function MyRouter() {
+  const isAuth = useMesSelector((state) => state.mesUserState.user.isAuthed)
+  const dispatch: AppDispatch = useDispatch()
+  sleep(3000).then(()=> dispatch(setUser(database.user)))
+  if (!isAuth) return <>Loading...</>
+  else
     return <RouterProvider router={router} ></RouterProvider>
-  }
+}
 
 
 
