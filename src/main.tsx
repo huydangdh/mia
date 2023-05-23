@@ -1,9 +1,9 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Provider } from "react-redux";
-import store, { MesUser } from "./store.ts";
+import { Provider, useSelector } from "react-redux";
+import store, { MesUser, MesUserState, resetUser } from "./store.ts";
 import LoginPage from "./pages/Login.tsx";
 import "w3-css";
 import WorkTimeRecord from "./pages/app/worktime_record.tsx";
@@ -12,9 +12,15 @@ import { APP_URL, database } from "./dataMock.ts";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import { UserProvider } from "./providers/UserProvider.tsx";
 
-export const MyContext = createContext<MesUser | undefined>(undefined);
+export const MyContext = createContext<MesUser | undefined | any>(undefined);
+
+
+function MyRouter() {
+    return <RouterProvider router={router} ></RouterProvider>
+  }
+
+
 
 const router = createBrowserRouter([
   {
@@ -38,18 +44,21 @@ const router = createBrowserRouter([
   },
 ]);
 
+function DoLogout() {
+  store.dispatch(resetUser())
+
+}
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>
-    <UserProvider>
-      <div className="w3-bar w3-black">
-        <a href="/" className="w3-bar-item w3-button">Home</a>
-        <a href="#" className="w3-bar-item w3-button">Link 1</a>
-        <a href="#" className="w3-bar-item w3-button">Link 2</a>
-        <a href="#" className="w3-bar-item w3-button">Link 3</a>
-      </div>
-      <div className="w3-container">
-        <RouterProvider router={router} />
-      </div>
-    </UserProvider>
+    <div className="w3-bar w3-black">
+      <a href="/" className="w3-bar-item w3-button">Home</a>
+      <a href="#" className="w3-bar-item w3-button">Link 1</a>
+      <a href="#" className="w3-bar-item w3-button">Link 2</a>
+      <a href="#" className="w3-bar-item w3-button w3-red" onClick={DoLogout}>Logout</a>
+    </div>
+    <div className="w3-container">
+      <MyRouter></MyRouter>
+    </div>
   </Provider>,
 );

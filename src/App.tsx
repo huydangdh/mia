@@ -1,23 +1,23 @@
+import { useSelector } from 'react-redux';
 import { APP_URL } from './dataMock';
-import store from './store'
+import store, { MesUserState, SELECTMesUser, useMesSelector, useStoreSelector } from './store'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 
 function App() {
 
-  const isAuth = store.getState().mesUserStore.user.isAuthed
   const navigate = useNavigate();
+
+  const mesUserState = useMesSelector((state) => state.mesUserState)
 
   function btnLunch(_event: React.MouseEventHandler<HTMLButtonElement>) {
     navigate({
-      pathname: String().concat(APP_URL.APP_URL_ROOT,"/",APP_URL.APP_WORKTIME_RECORD)
-    }, { replace: true }) 
+      pathname: String().concat(APP_URL.APP_URL_ROOT, "/", APP_URL.APP_WORKTIME_RECORD)
+    }, { replace: true })
   }
-
-  if (!isAuth) {
-    return <Navigate replace to={"/Login"} />
-
-  } else {
+  console.log(`[I] App_mesUserState : ${JSON.stringify(mesUserState)},${new Date().getTime()}`)
+  if (!mesUserState.user.isAuthed) return <Navigate to={"Login"} />
+  else {
     return (
       <>
         <div className='w3-container w3-blue'>
@@ -31,5 +31,6 @@ function App() {
     )
   }
 }
+
 
 export default App

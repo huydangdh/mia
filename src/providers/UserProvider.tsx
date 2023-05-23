@@ -1,6 +1,5 @@
-import React, { createContext, ReactNode, useContext, useEffect } from 'react';
-import store, { AppDispatch, initUser, MesUser, setUser } from '../store';
-import { useDispatch } from 'react-redux';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import store, { AppDispatch, initUser, MesUser, setLoading, setUser } from '../store';
 import localforage from 'localforage';
 import { MyContext } from '../main';
 
@@ -10,11 +9,13 @@ export function UserInitialized() {
     if(value != undefined){ 
       _tmp = value
       store.dispatch(setUser(_tmp))
+      store.dispatch(setLoading(false))
     }
 
-    console.log(`[I] sv_MesUser: ${err}, ${value}`);
+    console.log(`[I] sv_MesUser: ${err}, ${JSON.stringify(value)} + ${new Date().getTime()}`);
     
   });
+  console.log(`[I] MainPage_UserInit : ${new Date().getTime()}`)
 }
 
 interface UserProviderProps {
@@ -22,7 +23,8 @@ interface UserProviderProps {
 }
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const _mesUser = store.getState().mesUserStore.user
+  const _mesUser = store.getState().mesUserStore
+  
   useEffect(()=>{
     UserInitialized()
   })

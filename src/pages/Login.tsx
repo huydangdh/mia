@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { IRootState, MesUserState, AppDispatch, setUser } from "../store";
-import { Navigate } from "react-router-dom";
+import { AppDisptch, setUser, useMesSelector } from "../store";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import { database } from "../dataMock";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const mesUser = useSelector<IRootState, MesUserState>((state) => state.mesUserStore)
+  const mesUser = useMesSelector((state) => state.mesUserState.user)
   const dispatch: AppDispatch = useDispatch()
-
+  const navigate = useNavigate()
 
   // Generate JSX code for error message
   const renderErrorMessage = (name: string) =>
@@ -46,8 +45,9 @@ function LoginPage() {
 
   };
   // test 
-  const doTestGetUser = () => {
-    dispatch(setUser({ user: { id: "001", userName: "Deng Guang Hui", userToken: "LHF001", permissions: [{ app_name: "app1", pers: "Start|Update|Delete" }], miscInfo: {}, isAuthed: true } }))
+   const doTestGetUser = () => {
+    dispatch(setUser(database.user))
+    navigate("/")
   }
 
   // JSX code for login form
@@ -76,7 +76,7 @@ function LoginPage() {
     <>
       <div className="login-form">
         <div className="title">Sign In</div>
-        {mesUser.user.isAuthed ? <Navigate replace to={"/"} /> : renderForm}
+        {mesUser.isAuthed ? <Navigate replace to={"/"} /> : renderForm}
         <button onClick={doTestGetUser}>Do_Test_Get_User</button>
         <div> Current_user : {JSON.stringify((mesUser.user))}</div>
       </div>

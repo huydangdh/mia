@@ -1,7 +1,9 @@
 import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
-import { DoECheckData, database } from './dataMock'
-import { renderToReadableStream } from 'react-dom/server'
+import { database } from './dataMock'
 import localforage from 'localforage'
+import { useSelector, TypedUseSelectorHook } from 'react-redux'
+
+
 
 export type MesUser = {
   id: string,
@@ -13,7 +15,10 @@ export type MesUser = {
 }
 
 export type MesUserState = {
-  user: MesUser
+  user: MesUser,
+  lhf_app : {
+    isLoading : Boolean
+  }
 }
 
 const initialState: MesUserState = {
@@ -24,6 +29,9 @@ const initialState: MesUserState = {
     permissions: [{}],
     miscInfo: {},
     isAuthed: false
+  },
+  lhf_app : {
+    isLoading: true
   }
 }
 
@@ -31,40 +39,43 @@ const userSlice = createSlice({
   name: "MesUser",
   initialState,
   reducers: {
-    initUser: (state: MesUserState)=>{
+    initUser: (state: MesUserState) => {
       const mesuser = database.user
       state.user = mesuser
-      console.log("[I] initUser: " + JSON.stringify(state.user) )
+      console.log("[I] initUser: " + JSON.stringify(state.user))
     },
-    setUser: (state: MesUserState, action: PayloadAction<MesUserState>) => {
+    setUser: (state: MesUserState, action: PayloadAction<MesUser>) => {
       //alert(JSON.stringify(action.type))
       //console.log(action.payload)
-      state.user.id = action.payload.user.id
-      state.user.userName = action.payload.user.userName
-      state.user.userToken = action.payload.user.userToken
-      state.user.permissions = action.payload.user.permissions
-      state.user.miscInfo = action.payload.user.miscInfo,
-      state.user.isAuthed = action.payload.user.isAuthed
+      state.user = action.payload
 
-      localforage.setItem<MesUserState>("sv_MesUser",action.payload)
+      localforage.setItem<MesUser>("sv_MesUser", action.payload)
     },
-    getUser: (state: MesUserState) =>{
+    getUser: (state: MesUserState) => {
+      return state.user
+    },
+    resetUser: (state: MesUserState) => {
+      state = initialState
+      localforage.removeItem("sv_MesUser")
       return state
+    },
+    setLoading: (state: MesUserState, action: PayloadAction<Boolean>) =>{
+      state.lhf_app.isLoading = action.payload
     }
   }
 })
 
-export const { getUser,  setUser, initUser } = userSlice.actions
+export const { getUser, setUser, initUser, resetUser, setLoading } = userSlice.actions
 
 
 const store = configureStore({
-  reducer: { mesUserStore: userSlice.reducer },
+  reducer: { mesUserState: userSlice.reducer },
 })
 
 export type IRootState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
 
-//store.dispatch(initUser())
+export const useMesSelector: TypedUseSelectorHook<IRootState> = useSelector
 
 export default store;
