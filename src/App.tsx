@@ -1,6 +1,6 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { APP_URL } from './dataMock';
-import store, { MesUserState, SELECTMesUser, useMesSelector, useStoreSelector } from './store'
+import { useMesSelector } from './store'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 
@@ -15,8 +15,11 @@ function App() {
       pathname: String().concat(APP_URL.APP_URL_ROOT, "/", APP_URL.APP_WORKTIME_RECORD)
     }, { replace: true })
   }
-  console.log(`[I] App_mesUserState : ${JSON.stringify(mesUserState)},${new Date().getTime()}`)
-  if (!mesUserState.user.isAuthed) return <Navigate to={"Login"} />
+  useEffect(() => {
+    console.log(`[I] App_mesUserState : ${JSON.stringify(mesUserState)},${new Date().getTime()}`)
+  }, [])
+
+  if (!mesUserState.user.isAuthed) return <Navigate to={"/Login"} />
   else {
     return (
       <>

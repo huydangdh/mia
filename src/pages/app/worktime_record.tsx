@@ -1,18 +1,17 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import DateTimePicker from "react-datetime-picker";
-import { MyContext } from "../../main";
+import { useMesSelector } from "../../store";
+import { Navigate } from "react-router-dom";
 
 function WorkTimeRecord() {
-  const myctx = useContext(MyContext)
+  const mesUser = useMesSelector((state)=> state.mesUserState.user)
   const [dtStartTime, onChangeStartTime] = useState(new Date());
   const [dtEndTime, onChangeEndTime] = useState(new Date());
-
-  console.debug("[I] WorkTimeRecord_myctx: " + JSON.stringify(myctx))
 
   function doSend(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     alert(_event)   
   }
-  
+  if(!mesUser.isAuthed) return <Navigate to="/Login" /> 
   return (
     <>
       <div>

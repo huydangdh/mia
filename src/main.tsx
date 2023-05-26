@@ -1,30 +1,42 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import store, { AppDispatch, MesUser, MesUserState, resetUser, setUser, useMesSelector } from "./store.ts";
+import { Provider, useDispatch } from "react-redux";
+import store, { AppDispatch, MesUser, resetUser, setUser, useMesSelector } from "./store.ts";
 import LoginPage from "./pages/Login.tsx";
 import "w3-css";
 import WorkTimeRecord from "./pages/app/worktime_record.tsx";
-import { APP_URL, database } from "./dataMock.ts";
+import { APP_URL } from "./dataMock.ts";
 
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
+import { GetCurrentUser } from "./util/mock.ts";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
- 
-const sleep = ms => new Promise(
-  resolve => setTimeout(resolve, ms));
 
 function MyRouter() {
-  const isAuth = useMesSelector((state) => state.mesUserState.user.isAuthed)
-  const dispatch: AppDispatch = useDispatch()
-  sleep(3000).then(()=> dispatch(setUser(database.user)))
-  if (!isAuth) return <>Loading...</>
-  else
-    return <RouterProvider router={router} ></RouterProvider>
+  const isAuth = useMesSelector((s) => s.mesUserState.user.isAuthed)
+  const [isLoading, setIsloading] = useState(true)
+
+  useEffect(() => {
+    let _mesUser = undefined
+    if (!isLoading) return undefined
+    GetCurrentUser().then((value) => {
+      _mesUser = value
+      console.log(JSON.stringify(_mesUser))
+      setIsloading(false)
+      store.dispatch(setUser(_mesUser))
+    }).catch((reason) => {
+      console.error(reason)
+
+      setIsloading(false)
+    })
+  }, [])
+
+  if (!isAuth && isLoading) return <>Loading...</>
+  else return <RouterProvider router={router} ></RouterProvider>
 }
 
 
@@ -52,20 +64,21 @@ const router = createBrowserRouter([
 ]);
 
 function DoLogout() {
-  store.dispatch(resetUser())
-
+  store.dispatch(resetUser({}))
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <Provider store={store}>
-    <div className="w3-bar w3-black">
-      <a href="/" className="w3-bar-item w3-button">Home</a>
-      <a href="#" className="w3-bar-item w3-button">Link 1</a>
-      <a href="#" className="w3-bar-item w3-button">Link 2</a>
-      <a href="#" className="w3-bar-item w3-button w3-red" onClick={DoLogout}>Logout</a>
-    </div>
-    <div className="w3-container">
-      <MyRouter></MyRouter>
-    </div>
-  </Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <div className="w3-bar w3-black">
+        <a href="/" className="w3-bar-item w3-button">Home</a>
+        <a href="#" className="w3-bar-item w3-button">Link 1</a>
+        <a href="#" className="w3-bar-item w3-button">Link 2</a>
+        <a href="#" className="w3-bar-item w3-button w3-red" onClick={DoLogout}>Logout</a>
+      </div>
+      <div className="w3-container">
+        <MyRouter></MyRouter>
+      </div>
+    </Provider>
+  </React.StrictMode>,
 );

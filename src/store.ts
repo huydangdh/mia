@@ -46,7 +46,6 @@ const userSlice = createSlice({
       //alert(JSON.stringify(action.type))
       //console.log(action.payload)
       state.user = action.payload
-
       localforage.setItem<MesUser>("sv_MesUser", action.payload)
     },
     getUser: (state: MesUserState) => {
@@ -54,8 +53,7 @@ const userSlice = createSlice({
     },
     resetUser: (state: MesUserState) => {
       state = initialState
-      localforage.removeItem("sv_MesUser")
-      return state
+      localforage.clear()
     },
     setLoading: (state: MesUserState, action: PayloadAction<Boolean>) =>{
       state.lhf_app.isLoading = action.payload
