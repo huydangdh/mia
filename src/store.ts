@@ -48,9 +48,6 @@ const userSlice = createSlice({
       state.user = action.payload
       localforage.setItem<MesUser>("sv_MesUser", action.payload)
     },
-    getUser: (state: MesUserState) => {
-      return state.user
-    },
     resetUser: (state: MesUserState) => {
       state = initialState
       localforage.clear()
@@ -61,7 +58,7 @@ const userSlice = createSlice({
   }
 })
 
-export const { getUser, setUser, initUser, resetUser, setLoading } = userSlice.actions
+export const { setUser, initUser, resetUser, setLoading } = userSlice.actions
 
 
 const store = configureStore({

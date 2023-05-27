@@ -1,9 +1,19 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { AppDispatch, resetUser, useMesSelector } from "./store";
+import { useDispatch } from "react-redux";
 
 function NavBar() {
+  const mesUser = useMesSelector((state) => state.mesUserState.user);
+  const appDispatch: AppDispatch = useDispatch()
+
+  function Logout(_event: React.MouseEventHandler<HTMLLinkElement>) {
+    appDispatch(resetUser())
+    window.location.replace("/")
+  }
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -24,6 +34,7 @@ function NavBar() {
                 Separated link
               </NavDropdown.Item>
             </NavDropdown>
+            {mesUser.isAuthed ? <Nav.Link bsPrefix="btn btn-danger" color="red" onClick={Logout}>Logout</Nav.Link> : ""}
           </Nav>
         </Navbar.Collapse>
       </Container>
