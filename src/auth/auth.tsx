@@ -1,7 +1,5 @@
-import { useDispatch } from "react-redux"
-import { AppDispatch, resetUser } from "../store"
+import store, { resetUser } from "../store";
 
-
-export const MesUserLogOut = ()=>{
- 
-}
+export const MesUserLogOut = () => {
+  store.dispatch(resetUser());
+};

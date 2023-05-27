@@ -2,15 +2,13 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { AppDispatch, resetUser, useMesSelector } from "./store";
-import { useDispatch } from "react-redux";
+import { useMesSelector } from "./store";
+import { MesUserLogOut } from "./auth/auth";
 
 function NavBar() {
   const mesUser = useMesSelector((state) => state.mesUserState.user);
-  const appDispatch: AppDispatch = useDispatch()
-
   function Logout(_event: React.MouseEventHandler<HTMLLinkElement>) {
-    appDispatch(resetUser())
+    MesUserLogOut()
     window.location.replace("/")
   }
 
