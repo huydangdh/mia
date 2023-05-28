@@ -3,9 +3,16 @@ import { MesUser } from "./store";
 
 type databaseMock = {
   user: MesUser
-  mes_app: any
+  mes_app: IMESAPP_TBL[]
 }
 
+
+interface IMESAPP_TBL {
+  app_id: string,
+  app_name: string,
+  app_func: string,
+  app_href: string
+}
 
 // User Login info
 export const database: databaseMock = {
@@ -16,22 +23,33 @@ export const database: databaseMock = {
     isAuthed: true,
     permissions: [{
       app_name: "WorkTimeRecord",
+      role: "admin",
+    }, {
+      app_name: "WorktimeQuery",
       role: "admin"
     }],
     miscInfo: {
-      start_time:"05:00"
+      start_time: "05:00"
     }
   },
   mes_app: [{
-    app_id : "A001",
+    app_id: "A001",
     app_name: "WorkTimeRecord",
-    app_func: "ADD|DELETE"
-  }]
+    app_func: "ADD|DELETE|VIEW",
+    app_href: "WorkTimeRecord"
+  },
+  {
+    "app_id": "A002",
+    "app_name": "WorktimeQuery",
+    "app_func": "VIEW",
+    "app_href": "WorktimeQuery"
+  }
+  ]
 }
 
 export const DoECheckData = (): MesUser | undefined => {
   let mesuser: MesUser | undefined = undefined
-  localforage.getItem<MesUser | undefined>("sv_MesUser").then((value)=>{
+  localforage.getItem<MesUser | undefined>("sv_MesUser").then((value) => {
     console.log("[I] LocalStorage_MesUser : " + value)
     mesuser = database.user
     console.log(mesuser)
@@ -47,7 +65,7 @@ export const errors = {
 
 
 export const APP_URL = {
-  ROOT : "/",
-  APP_URL_ROOT : "app",
+  ROOT: "/",
+  APP_URL_ROOT: "app",
   APP_WORKTIME_RECORD: "WorkTimeRecord"
 }

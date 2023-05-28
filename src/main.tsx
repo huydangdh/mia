@@ -99,18 +99,12 @@ const router = createBrowserRouter([
   },
 ]);
 
-function DoLogout() {
-  store.dispatch(resetUser({}));
-  window.location.replace("/");
-}
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  // <React.StrictMode>
     <Provider store={store}>
       <NavBar></NavBar>
       <Container>
         <MyRouter></MyRouter>
       </Container>
-    </Provider>,
-  {/* </React.StrictMode> */}
+    </Provider>
 )
