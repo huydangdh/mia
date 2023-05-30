@@ -3,6 +3,8 @@ import { useMesSelector } from "../../store";
 import { Navigate } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
+import { MesCardUI } from "../../MesUI";
+import moment from "moment";
 
 
 function WorkTimeRecord() {
@@ -15,27 +17,28 @@ function WorkTimeRecord() {
   }
 
   function WorkTimeRecordForm() {
+    function MyForm() {
+      const mesUser = useMesSelector(s => s.mesUserState.user)
+      const [dtStartTime, onChangeStartTime] = useState(moment(mesUser.miscInfo.start_time, "hh:mm").toDate());
+      const [dtEndTime, onChangeEndTime] = useState(new Date());
+
+
+
+      return (
+        <>
+          <div>
+            <p>start_time: </p>
+            <DateTimePicker onChange={onChangeStartTime} value={dtStartTime} />
+            <p>EndTime:</p>
+            <DateTimePicker onChange={onChangeEndTime} value={dtEndTime} />
+
+          </div>
+        </>
+      )
+    }
     return (
-      <Card>
-        <Card.Header as="h5">WORKTIME_RECORD</Card.Header>
-        <Card.Body>
-          <Card.Title></Card.Title>
-          <Form className="">
-            <Stack>
-              <Form.Group>
-                <Form.Label> Start_Time: </Form.Label>
-                <DateTimePicker onChange={onChangeStartTime} value={dtStartTime}></DateTimePicker>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label> End_Time: </Form.Label>
-                <DateTimePicker onChange={onChangeEndTime} value={dtEndTime}></DateTimePicker>
-              </Form.Group>
-              <Button variant="primary" onClick={doSend}>Send</Button>
-            </Stack>
-          </Form>
-        </Card.Body>
-      </Card>
-    );
+      <MesCardUI card_title="Title" card_body={<MyForm />} card_header={"Sample_CardUI"}></MesCardUI>
+    )
   }
 
 

@@ -31,6 +31,7 @@ import "react-clock/dist/Clock.css";
 import { GetCurrentUser } from "./util/mock.ts";
 import NavBar from "./NavBar.tsx";
 import { Card, Container, Placeholder } from "react-bootstrap";
+import TestUI from "./pages/test.tsx";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
       </>
     ),
   },
+  {
+    path: "TestUI",
+    element: <TestUI />
+  }
 ]);
 
 

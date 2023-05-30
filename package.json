@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.2.3",
     "localforage": "^1.10.0",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-calendar": "^4.2.1",
