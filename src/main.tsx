@@ -56,10 +56,9 @@ function MyRouter() {
       });
   }, []);
 
-  if (!isAuth && isLoading){
+  if (!isAuth && isLoading) {
     return (
       <Card style={{ width: '18rem' }}>
-        {/* <Card.Img variant="top" src={'data:image/svg+xml;charset=UTF-8,%3Csvg width%3D"286" height%3D"180" xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 286 180" preserveAspectRatio%3D"none"%3E%3Cdefs%3E%3Cstyle type%3D"text%2Fcss"%3E%23holder_1885831cc06 text %7B fill%3A%23999%3Bfont-weight%3Anormal%3Bfont-family%3AArial%2C Helvetica%2C Open Sans%2C sans-serif%2C monospace%3Bfont-size%3A14pt %7D %3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg id%3D"holder_1885831cc06"%3E%3Crect width%3D"286" height%3D"180" fill%3D"%23373940"%3E%3C%2Frect%3E%3Cg%3E%3Ctext x%3D"107.5078125" y%3D"96.3"%3E286x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E'} /> */}
         <Card.Body>
           <Placeholder as={Card.Title} animation="glow">
             <Placeholder xs={6} />
@@ -104,12 +103,11 @@ const router = createBrowserRouter([
   }
 ]);
 
-
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <Provider store={store}>
-      <NavBar></NavBar>
-      <Container>
-        <MyRouter></MyRouter>
-      </Container>
-    </Provider>
+  <Provider store={store}>
+    <NavBar></NavBar>
+    <Container>
+      <MyRouter></MyRouter>
+    </Container>
+  </Provider>
 )

@@ -6,7 +6,7 @@ interface IMesCardUI {
   card_title: string,
   card_img: string | undefined,
   card_body: string | JSX.Element[] | JSX.Element,
-  card_footer: any
+  card_footer: string | JSX.Element | JSX.Element[]
 }
 
 function MesCardUI(props: IMesCardUI) {
@@ -19,46 +19,43 @@ function MesCardUI(props: IMesCardUI) {
         <Card.Text>
           {props.card_body}
         </Card.Text>
-        <Button variant="primary">Run</Button>
       </Card.Body>
+      {props.card_footer ? <Card.Footer>{props.card_footer}</Card.Footer>:""}
     </Card>
   )
 }
 
 interface IMesModalUI {
-  show: boolean
+  title: string,
+  content: string
 }
 
-function MesModalUI(a: IMesModalUI) {
-  const [show, setShow] = useState(false);
+function MesModalUI(params: IMesModalUI) {
+  const [show, setShow] = useState(true);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Launch static backdrop modal
-      </Button>
 
       <Modal
         show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
+        centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>{params.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          I will not close if you click outside me. Don't even try to press
-          escape key.
+          {params.content}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
+          <Button variant="primary" onClick={handleClose}>
+            OK
           </Button>
-          <Button variant="primary">Understood</Button>
         </Modal.Footer>
       </Modal>
     </>
