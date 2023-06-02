@@ -32,6 +32,7 @@ import { GetCurrentUser } from "./util/mock.ts";
 import NavBar from "./NavBar.tsx";
 import { Card, Container, Placeholder } from "react-bootstrap";
 import TestUI from "./pages/test.tsx";
+import WorkTimeQuery from "./pages/app/worktime_query.tsx";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
         path: APP_URL.APP_WORKTIME_RECORD,
         element: <WorkTimeRecord />,
       },
+      {
+        path: APP_URL.APP_WORKTIME_QUERY,
+        element: <WorkTimeQuery />
+      }
     ],
   },
   {

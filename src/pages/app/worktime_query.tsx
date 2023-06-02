@@ -8,21 +8,22 @@ import moment from "moment";
 import { APISvr_Add_WorktimeRecord } from "../../util/mock";
 
 
-function WorkTimeRecord() {
+function WorkTimeQuery() {
   const mesUser = useMesSelector((state) => state.mesUserState.user)
   const [showAlert, setShowAlert] = useState(false)
- 
+
   function doSend(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     alert(_event)
   }
 
-  function WorkTimeRecordForm() {
+  function WorkTimeQueryForm() {
     function MyForm() {
       const mesUser = useMesSelector(s => s.mesUserState.user)
       const [dtStartTime, onChangeStartTime] = useState(moment(mesUser.miscInfo.start_time, "hh:mm").toDate());
       const [dtEndTime, onChangeEndTime] = useState(new Date());
 
       const [isLoading, setLoading] = useState<boolean>(false)
+
       useEffect(() => {
         if (isLoading) {
           alert(`[I] mStartTime: ${dtStartTime}, mEndTime: ${dtEndTime}`);
@@ -41,6 +42,7 @@ function WorkTimeRecord() {
 
         }
       }, [isLoading])
+
       function DoPost() {
         setLoading(true)
       }
@@ -71,7 +73,7 @@ function WorkTimeRecord() {
       <div>
         <div className="">
           <Container>
-            <WorkTimeRecordForm></WorkTimeRecordForm>
+            <WorkTimeQueryForm></WorkTimeQueryForm>
           </Container>
           {showAlert ? <MesModalUI title="Alert" content="Test" /> : ""}
 
@@ -82,4 +84,4 @@ function WorkTimeRecord() {
   )
 }
 
-export default WorkTimeRecord
+export default WorkTimeQuery
