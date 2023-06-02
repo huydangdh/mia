@@ -71,6 +71,4 @@ export type AppDispatch = typeof store.dispatch
 
 export const useMesSelector: TypedUseSelectorHook<IRootState> = useSelector
 
-export const useMesUserSelector: MesUser =  useMesSelector(e=> e.mesUserState.user)
-
 export default store;

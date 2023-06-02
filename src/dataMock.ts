@@ -40,9 +40,9 @@ export const database: databaseMock = {
   },
   {
     "app_id": "A002",
-    "app_name": "WorktimeQuery",
+    "app_name": "WorkTimeQuery",
     "app_func": "VIEW",
-    "app_href": "WorktimeQuery"
+    "app_href": "WorkTimeQuery"
   }
   ]
 }

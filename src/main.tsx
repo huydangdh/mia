@@ -1,27 +1,19 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import {
   createBrowserRouter,
-  Navigate,
   RouterProvider,
 } from "react-router-dom";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import store, {
-  AppDispatch,
   MesUser,
-  resetUser,
   setUser,
   useMesSelector,
 } from "./store.ts";
-import LoginPage from "./pages/Login.tsx";
-{
-  /* The following line can be included in your src/index.js or App.js file */
-}
-import Button from "react-bootstrap/Button";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import LoginPage from "./pages/Login.tsx";
 import WorkTimeRecord from "./pages/app/worktime_record.tsx";
 import { APP_URL } from "./dataMock.ts";
 

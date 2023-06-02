@@ -12,6 +12,7 @@
   "dependencies": {
     "@1stquad/react-bootstrap-datetimepicker": "^1.0.25",
     "@reduxjs/toolkit": "^1.9.5",
+    "@supabase/supabase-js": "^2.24.0",
     "bootstrap": "^5.2.3",
     "localforage": "^1.10.0",
     "moment": "^2.29.4",
