@@ -10,6 +10,12 @@ import { useDispatch } from "react-redux";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Card } from "react-bootstrap";
+// supabase
+
+import { Auth } from '@supabase/auth-ui-react'
+import { supabase } from "../lib/supabase";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+
 
 function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
@@ -26,7 +32,7 @@ function LoginPage() {
 
   // JSX code for login form
 
-  function LoginForm() {
+  function LoginFormV1() {
     return (
       <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -47,6 +53,10 @@ function LoginPage() {
         </Button>
       </Form>
     );
+  }
+
+  function LoginForm() {
+    return <Auth supabaseClient={supabase} appearance={{theme: ThemeSupa}} />
   }
 
   return (
