@@ -1,7 +1,6 @@
 import localforage from "localforage";
 import { database } from "../dataMock";
 import store, { MesUser } from "../store";
-import { json } from "react-router-dom";
 
 const _fakeGetUser = (isSuccess: boolean, timeout: number) => {
   return new Promise<MesUser>((resolve, reject) => {
@@ -41,7 +40,7 @@ export interface IMM_WorkTimeRecordTBL {
 export interface IMsgMesResponse {
   error_code: number,
   error_msg: string,
-  payload: any,
+  payload: Object,
 
 }
 
@@ -57,7 +56,29 @@ export function APISvr_Add_WorktimeRecord(data: IMM_WorkTimeRecordTBL) {
         let msg : IMsgMesResponse = {
           error_code:400,
           error_msg: "Add_NG",
-          payload : "External"
+          payload : {}
+        }
+        reject(msg)
+      }
+    }, 2345)
+  })
+}
+
+export function APISvr_Select_WorktimeRecord(data: IMM_WorkTimeRecordTBL) {
+  let isOk = false
+
+  return new Promise<IMsgMesResponse>((resolve, reject) => {
+    setTimeout(() => {
+      console.log(`[I] APISvr_Select_WorktimeRecord: ${JSON.stringify(data)}`);
+      if (isOk)
+        resolve({ error_code: 200, error_msg: "Add_OK", payload: "NotImplement" })
+      else{
+        let msg : IMsgMesResponse = {
+          error_code:400,
+          error_msg: "Query_Not_found_NG",
+          payload : {
+            
+          }
         }
         reject(msg)
       }

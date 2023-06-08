@@ -14,7 +14,7 @@ const LogsContainer = () => {
     return () => Unhook(hookedConsole)
   }, [])
 
-  return <Console logs={logs} variant="dark" />
+  return <Console logs={logs} variant="dark"/>
 }
 
 export { LogsContainer }

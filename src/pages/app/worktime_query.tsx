@@ -5,7 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
 import { MesCardUI, MesModalUI } from "../../MesUI";
 import moment from "moment";
-import { APISvr_Add_WorktimeRecord } from "../../util/mock";
+import { APISvr_Add_WorktimeRecord, APISvr_Select_WorktimeRecord } from "../../util/mock";
 
 
 function WorkTimeQuery() {
@@ -28,7 +28,7 @@ function WorkTimeQuery() {
         if (isLoading) {
           alert(`[I] mStartTime: ${dtStartTime}, mEndTime: ${dtEndTime}`);
 
-          APISvr_Add_WorktimeRecord({
+          APISvr_Select_WorktimeRecord({
             user_id: mesUser.id,
             record_id: "001",
             start_time: dtStartTime,
@@ -38,6 +38,7 @@ function WorkTimeQuery() {
           }).catch((reason) => {
             console.error(reason)
             setLoading(false)
+              setShowAlert(true)
           })
 
         }
@@ -56,13 +57,13 @@ function WorkTimeQuery() {
             EndTime:
             <DateTimePicker onChange={onChangeEndTime} value={dtEndTime} />
             <p />
-            <Button disabled={isLoading} variant="primary" onClick={DoPost}>{isLoading ? "Adding..." : "Thêm"}</Button>
+            <Button disabled={isLoading} variant="primary" onClick={DoPost}>{isLoading ? "Đang truy vấn..." : "Truy vấn"}</Button>
           </div>
         </>
       )
     }
     return (
-      <MesCardUI card_title="Title" card_body={<MyForm />} card_header={"WorkTimeRecord"} card_footer={"Footer"}></MesCardUI>
+      <MesCardUI card_title="Title" card_body={<MyForm />} card_header={"WorkTimeQuery"} card_footer={"Footer"}></MesCardUI>
     )
   }
 
@@ -75,7 +76,7 @@ function WorkTimeQuery() {
           <Container>
             <WorkTimeQueryForm></WorkTimeQueryForm>
           </Container>
-          {showAlert ? <MesModalUI title="Alert" content="Test" /> : ""}
+          <MesModalUI title="Alert" content="Test" isShow={showAlert}/>
 
         </div>
       </div>

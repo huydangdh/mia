@@ -7,8 +7,10 @@ import { MesUserLogOut } from "./auth/auth";
 
 function NavBar() {
   const mesUser = useMesSelector((state) => state.mesUserState.user);
-  function Logout(_event: React.MouseEventHandler<HTMLLinkElement>) {
-    MesUserLogOut()
+  async function Logout(_event: React.MouseEventHandler<HTMLLinkElement>) {
+    let err = await MesUserLogOut()
+    console.debug(err)
+
     window.location.replace("/")
   }
 

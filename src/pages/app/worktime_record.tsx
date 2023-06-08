@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMesSelector } from "../../store";
-import { Navigate } from "react-router-dom";
+import { Navigate, json } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
 import { MesCardUI, MesModalUI } from "../../MesUI";
@@ -11,7 +11,12 @@ import { APISvr_Add_WorktimeRecord } from "../../util/mock";
 function WorkTimeRecord() {
   const mesUser = useMesSelector((state) => state.mesUserState.user)
   const [showAlert, setShowAlert] = useState(false)
- 
+  const [alertContent, setAlertContent] = useState("")
+
+  const onHideMesUI = () =>{
+    setShowAlert(false)
+  }
+
   function doSend(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
     alert(_event)
   }
@@ -37,6 +42,8 @@ function WorkTimeRecord() {
           }).catch((reason) => {
             console.error(reason)
             setLoading(false)
+            setShowAlert(true)
+            setAlertContent(JSON.stringify(reason))
           })
 
         }
@@ -73,8 +80,7 @@ function WorkTimeRecord() {
           <Container>
             <WorkTimeRecordForm></WorkTimeRecordForm>
           </Container>
-          {showAlert ? <MesModalUI title="Alert" content="Test" /> : ""}
-
+          <MesModalUI title="Thông báo" content={alertContent} isShow={showAlert} onHide={onHideMesUI} />
         </div>
       </div>
     </>

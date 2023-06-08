@@ -27,21 +27,24 @@ function MesCardUI(props: IMesCardUI) {
 
 interface IMesModalUI {
   title: string,
-  content: string
+  content: string,
+  isShow: boolean,
+  onHide?: () => void,
+  onShow?: () => void
 }
-
+/**
+  * MesModalUI - hien thi Modal  alertt
+  *
+  */
 function MesModalUI(params: IMesModalUI) {
-  const [show, setShow] = useState(true);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
     <>
 
       <Modal
-        show={show}
-        onHide={handleClose}
+        show={params.isShow}
+        onHide={params.onHide}
+        onShow={params.onShow}
         backdrop="static"
         keyboard={false}
         centered
@@ -53,7 +56,7 @@ function MesModalUI(params: IMesModalUI) {
           {params.content}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={params.onHide}>
             OK
           </Button>
         </Modal.Footer>
