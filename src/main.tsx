@@ -57,6 +57,15 @@ function MyRouter() {
     //
     //     setIsloading(false);
     //   });
+    
+    const {data} = supabase.auth.onAuthStateChange((event, session) => {
+      if(event == "SIGNED_IN"){
+        store.dispatch(setUser(database.user))
+      }
+      
+    })
+
+    return () => data.subscription.unsubscribe()
   }, []);
 
   if (!isAuth && isLoading) {

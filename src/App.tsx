@@ -68,7 +68,7 @@ function App() {
       <>
         <MesTabUI></MesTabUI>
         <Container>
-          <p><h2>Hi: {mesUserState.user.userName}</h2></p>
+          <h2>Hi: {mesUserState.user.userName}</h2>
           <Row>
             {GetAppList()}
           </Row>
