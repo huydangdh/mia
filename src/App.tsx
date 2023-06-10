@@ -26,7 +26,8 @@ function MesTabUI() {
     </Nav>
   );
 }
-function MesCardUI({ app_name }) {
+
+function MesCardUI({ app_name }: {app_name : string}) {
   const navigate = useNavigate()
 
   function RunApp(path: string) {
@@ -41,7 +42,7 @@ function MesCardUI({ app_name }) {
           <Card.Text>
             [[APP_DESC]].
           </Card.Text>
-          <Button variant="primary" onClick={e => RunApp(app_name)}>[[btnLunch]]</Button>
+          <Button variant="primary" onClick={() => RunApp(app_name)}>[[btnLunch]]</Button>
         </Card.Body>
       </Card>
     </Col>

@@ -1,11 +1,11 @@
 import moment from "moment"
-import { MesCardUI, MesModalUI } from "../MesUI"
+import { MesUICard, MesUIModal } from "../MesUI"
 
 function TestUI() {
   return (
     <>
-      <MesCardUI card_header={"Header"} card_img="/Total.jpg" card_title="Title" card_body={"VioBody"} card_footer={"Footer"} />
-      <MesModalUI />
+      <MesUICard card_header={"Header"} card_img="/Total.jpg" card_title="Title" card_body={"VioBody"} card_footer={"Footer"} />
+      <MesUIModal />
     </>
   )
 }

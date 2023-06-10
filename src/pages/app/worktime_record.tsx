@@ -3,9 +3,9 @@ import { useMesSelector } from "../../store";
 import { Navigate, json } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
-import { MesCardUI, MesModalUI } from "../../MesUI";
+import { MesUICard, MesUIModal } from "../../MesUI";
 import moment from "moment";
-import { APISvr_Add_WorktimeRecord } from "../../util/mock";
+import { AddWorktimeRecord } from "../../api/mes_app/WorkTimeAPI";
 
 
 function WorkTimeRecord() {
@@ -32,7 +32,7 @@ function WorkTimeRecord() {
         if (isLoading) {
           alert(`[I] mStartTime: ${dtStartTime}, mEndTime: ${dtEndTime}`);
 
-          APISvr_Add_WorktimeRecord({
+          AddWorktimeRecord({
             user_id: mesUser.id,
             record_id: "001",
             start_time: dtStartTime,
@@ -67,7 +67,7 @@ function WorkTimeRecord() {
       )
     }
     return (
-      <MesCardUI card_title="Title" card_body={<MyForm />} card_header={"WorkTimeRecord"} card_footer={"Footer"}></MesCardUI>
+      <MesUICard card_title="Title" card_body={<MyForm />} card_header={"WorkTimeRecord"} card_footer={"Footer"}></MesUICard>
     )
   }
 
@@ -80,7 +80,7 @@ function WorkTimeRecord() {
           <Container>
             <WorkTimeRecordForm></WorkTimeRecordForm>
           </Container>
-          <MesModalUI title="Thông báo" content={alertContent} isShow={showAlert} onHide={onHideMesUI} />
+          <MesUIModal title="Thông báo" content={alertContent} isShow={showAlert} onHide={onHideMesUI} />
         </div>
       </div>
     </>

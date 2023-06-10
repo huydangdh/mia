@@ -22,7 +22,6 @@ import { APP_URL, database } from "./dataMock.ts";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import NavBar from "./NavBar.tsx";
 import { Card, Container, Placeholder } from "react-bootstrap";
 import TestUI from "./pages/test.tsx";
 import WorkTimeQuery from "./pages/app/worktime_query.tsx";
@@ -30,8 +29,17 @@ import { supabase } from "./lib/supabase.ts";
 import { LogsContainer } from "./lib/consolefeed.tsx";
 import { MesUserGetSession } from "./auth/auth.tsx";
 import { Session } from "@supabase/supabase-js";
+import { MesUINavBar } from "./MesUI.tsx";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined)
+
+supabase
+  .rpc('AddWorkTime', {
+    end_time: "2023-06-04T08:09:56.157236", 
+    start_time: "2023-06-04T08:09:56.157236"
+  }).then((va)=>{
+    console.log(va)
+  })
 
 function MyRouter() {
   const isAuth = useMesSelector((s) => s.mesUserState.user.isAuthed);
@@ -46,19 +54,6 @@ function MyRouter() {
       }
       setIsloading(false)
     })
-    // return () => data.subscription.unsubscribe()
-    // GetCurrentUser()
-    //   .then((value) => {
-    //     _mesUser = value;
-    //     console.log(JSON.stringify(_mesUser));
-    //     setIsloading(false);
-    //     store.dispatch(setUser(_mesUser));
-    //   })
-    //   .catch((reason) => {
-    //     console.error(reason);
-    //
-    //     setIsloading(false);
-    //   });
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event == "SIGNED_IN") {
@@ -124,7 +119,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <>
     <Provider store={store}>
-      <NavBar></NavBar>
+      <MesUINavBar></MesUINavBar>
       <Container>
         <MyRouter></MyRouter>
       </Container>
