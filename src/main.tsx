@@ -28,6 +28,8 @@ import TestUI from "./pages/test.tsx";
 import WorkTimeQuery from "./pages/app/worktime_query.tsx";
 import { supabase } from "./lib/supabase.ts";
 import { LogsContainer } from "./lib/consolefeed.tsx";
+import { MesUserGetSession } from "./auth/auth.tsx";
+import { Session } from "@supabase/supabase-js";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined)
 
@@ -37,9 +39,9 @@ function MyRouter() {
 
   useEffect(() => {
     if (!isLoading) return undefined;
-    supabase.auth.getSession().then(({ data, error }) => {
-      console.log(`[i] data: ${JSON.stringify(data)}; ${JSON.stringify(error)}`);
-      if (data.session != null) {
+    MesUserGetSession().then((session) => {
+      console.log(`[i] data: ${JSON.stringify(session)};`);
+      if (session != null) {
         store.dispatch(setUser(database.user))
       }
       setIsloading(false)
@@ -57,12 +59,12 @@ function MyRouter() {
     //
     //     setIsloading(false);
     //   });
-    
-    const {data} = supabase.auth.onAuthStateChange((event, session) => {
-      if(event == "SIGNED_IN"){
+
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event == "SIGNED_IN") {
         store.dispatch(setUser(database.user))
       }
-      
+
     })
 
     return () => data.subscription.unsubscribe()
