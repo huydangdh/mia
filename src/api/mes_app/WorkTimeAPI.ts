@@ -1,3 +1,5 @@
+import { supabase } from "../../lib/supabase"
+
 export interface IMM_WorkTimeRecordTBL {
   record_id: string,
   user_id: string,
@@ -12,48 +14,20 @@ export interface IMsgMesResponse {
 
 }
 
-export function AddWorktimeRecord(data: IMM_WorkTimeRecordTBL): Promise<IMsgMesResponse> {
-  let isOk = false
+export async function AddWorktimeRecord(input: IMM_WorkTimeRecordTBL): Promise<IMsgMesResponse> {
+  let { error, data, count } = await supabase.from("mm_worktimerecord").insert({ user_id: "" }).then()
+  console.log(`[I] AddWorktimeRecord: `, error, data);
 
-  return new Promise<IMsgMesResponse>((resolve, reject) => {
-    setTimeout(() => {
-      console.log(`[I] APISvr_Add_WorktimeRecord: ${JSON.stringify(data)}`);
-      if (isOk)
-        resolve({ error_code: 200, error_msg: "Add_OK", payload: "NotImplement" })
-      else{
-        let msg : IMsgMesResponse = {
-          error_code:400,
-          error_msg: "Add_NG",
-          payload : {}
-        }
-        reject(msg)
-      }
-    }, 2345)
-  })
+
 }
 /**
  * 
  * @param data @type IMM_WorkTimeRecordTBL
  * @returns 
  */
-export function WorktimeQuery(data: IMM_WorkTimeRecordTBL) {
-  let isOk = false
+export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
+  let { error, data, count } = await supabase.from("mm_worktimerecord").select("*").then()
+  console.log(`[I] WorkTimeQuery: `, error, data, count);
 
-  return new Promise<IMsgMesResponse>((resolve, reject) => {
-    setTimeout(() => {
-      console.log(`[I] APISvr_Select_WorktimeRecord: ${JSON.stringify(data)}`);
-      if (isOk)
-        resolve({ error_code: 200, error_msg: "Add_OK", payload: "NotImplement" })
-      else{
-        let msg : IMsgMesResponse = {
-          error_code:400,
-          error_msg: "Query_Not_found_NG",
-          payload : {
-            
-          }
-        }
-        reject(msg)
-      }
-    }, 2345)
-  })
+
 }

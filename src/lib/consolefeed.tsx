@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Console, Hook, Unhook } from 'console-feed'
+import { Button } from 'react-bootstrap'
 
 const LogsContainer = () => {
   const [logs, setLogs] = useState<any>([])
+  
+  function BtnClearOnClick() {
+    setLogs([])
+  }
 
   // run once!
   useEffect(() => {
@@ -14,7 +19,7 @@ const LogsContainer = () => {
     return () => Unhook(hookedConsole)
   }, [])
 
-  return <Console logs={logs} variant="dark"/>
+  return <><Button variant='danger' onClick={BtnClearOnClick}>X</Button><Console logs={logs} variant="dark" styles={{LOG_BACKGROUND: "black"}}/></>
 }
 
 export { LogsContainer }

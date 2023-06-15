@@ -28,18 +28,9 @@ import WorkTimeQuery from "./pages/app/worktime_query.tsx";
 import { supabase } from "./lib/supabase.ts";
 import { LogsContainer } from "./lib/consolefeed.tsx";
 import { MesUserGetSession } from "./auth/auth.tsx";
-import { Session } from "@supabase/supabase-js";
 import { MesUINavBar } from "./MesUI.tsx";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined)
-
-supabase
-  .rpc('AddWorkTime', {
-    end_time: "2023-06-04T08:09:56.157236", 
-    start_time: "2023-06-04T08:09:56.157236"
-  }).then((va)=>{
-    console.log(va)
-  })
 
 function MyRouter() {
   const isAuth = useMesSelector((s) => s.mesUserState.user.isAuthed);
@@ -48,11 +39,12 @@ function MyRouter() {
   useEffect(() => {
     if (!isLoading) return undefined;
     MesUserGetSession().then((session) => {
-      console.log(`[i] data: ${JSON.stringify(session)};`);
+      console.log(`[i] user_data: ${JSON.stringify(session?.user)};`);
       if (session != null) {
         store.dispatch(setUser(database.user))
       }
       setIsloading(false)
+      
     })
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
