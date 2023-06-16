@@ -1,18 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import {
-  createBrowserRouter,
-  json,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, json, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import store, {
-  MesUser,
-  resetUser,
-  setUser,
-  useMesSelector,
-} from "./store.ts";
+import store, { MesUser, resetUser, setUser, useMesSelector } from "./store.ts";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import LoginPage from "./pages/Login.tsx";
@@ -30,7 +21,7 @@ import { LogsContainer } from "./lib/consolefeed.tsx";
 import { MesUserGetSession } from "./auth/auth.tsx";
 import { MesUINavBar } from "./MesUI.tsx";
 
-export const MyContext = createContext<MesUser | undefined | any>(undefined)
+export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
 function MyRouter() {
   const isAuth = useMesSelector((s) => s.mesUserState.user.isAuthed);
@@ -41,39 +32,56 @@ function MyRouter() {
     MesUserGetSession().then((session) => {
       console.log(`[i] user_data: ${JSON.stringify(session?.user)};`);
       if (session != null) {
-        store.dispatch(setUser(database.user))
+        store.dispatch(
+          setUser({
+            id: session.user.id,
+            isAuthed: true,
+            userName: session.user.email,
+            userToken: session.access_token,
+            permissions: [
+              {
+                app_name: "WorkTimeRecord",
+                role: "admin",
+              },
+              {
+                app_name: "WorktimeQuery",
+                role: "admin",
+              },
+            ],
+            miscInfo: {
+              start_time: "05:00",
+            },
+          })
+        );
       }
-      setIsloading(false)
-      
-    })
+      setIsloading(false);
+    });
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event == "SIGNED_IN") {
-        store.dispatch(setUser(database.user))
+        store.dispatch(setUser(database.user));
       }
+    });
 
-    })
-
-    return () => data.subscription.unsubscribe()
+    return () => data.subscription.unsubscribe();
   }, []);
 
   if (!isAuth && isLoading) {
     return (
-      <Card style={{ width: '18rem' }}>
+      <Card style={{ width: "18rem" }}>
         <Card.Body>
           <Placeholder as={Card.Title} animation="glow">
             <Placeholder xs={6} />
           </Placeholder>
           <Placeholder as={Card.Text} animation="glow">
-            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
+            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{" "}
             <Placeholder xs={6} /> <Placeholder xs={8} />
           </Placeholder>
           <Placeholder.Button variant="primary" xs={6} />
         </Card.Body>
       </Card>
-    )
-  }
-  else return <RouterProvider router={router}></RouterProvider>;
+    );
+  } else return <RouterProvider router={router}></RouterProvider>;
 }
 
 const router = createBrowserRouter([
@@ -90,8 +98,8 @@ const router = createBrowserRouter([
       },
       {
         path: APP_URL.APP_WORKTIME_QUERY,
-        element: <WorkTimeQuery />
-      }
+        element: <WorkTimeQuery />,
+      },
     ],
   },
   {
@@ -104,8 +112,8 @@ const router = createBrowserRouter([
   },
   {
     path: "TestUI",
-    element: <TestUI />
-  }
+    element: <TestUI />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -120,4 +128,4 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <p></p>
     <LogsContainer />
   </>
-)
+);

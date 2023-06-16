@@ -6,73 +6,85 @@ export type Json =
   | { [key: string]: Json }
   | Json[]
 
-export interface MESERPDatabase {
-  public: {
-    Tables: {
-      mm_user: {
-        Row: {
-          created_at: string | null
-          full_name: string | null
-          id: string
-          is_active: boolean | null
-          password: string | null
-          role: string | null
-          username: string | null
+// write function add start_time and end_time to mm_worktimerecord
+  export interface MESERPDatabase {
+    public: {
+      Tables: {
+        mm_user: {
+          Row: {
+            userid: string
+            username: string | null
+          }
+          Insert: {
+            userid: string
+            username?: string | null
+          }
+          Update: {
+            userid?: string
+            username?: string | null
+          }
+          Relationships: [
+            {
+              foreignKeyName: "mm_user_userid_fkey"
+              columns: ["userid"]
+              referencedRelation: "users"
+              referencedColumns: ["id"]
+            }
+          ]
         }
-        Insert: {
-          created_at?: string | null
-          full_name?: string | null
-          id: string
-          is_active?: boolean | null
-          password?: string | null
-          role?: string | null
-          username?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          full_name?: string | null
-          id?: string
-          is_active?: boolean | null
-          password?: string | null
-          role?: string | null
-          username?: string | null
+        mm_worktimerecord: {
+          Row: {
+            create_at: string
+            end_time: string
+            misc: string | null
+            record_id: string
+            start_time: string
+            user_id: string
+          }
+          Insert: {
+            create_at?: string
+            end_time: string
+            misc?: string | null
+            record_id?: string
+            start_time: string
+            user_id: string
+          }
+          Update: {
+            create_at?: string
+            end_time?: string
+            misc?: string | null
+            record_id?: string
+            start_time?: string
+            user_id?: string
+          }
+          Relationships: [
+            {
+              foreignKeyName: "mm_worktimerecord_user_id_fkey"
+              columns: ["user_id"]
+              referencedRelation: "users"
+              referencedColumns: ["id"]
+            }
+          ]
         }
       }
-      mm_worktimerecord: {
-        Row: {
-          created_at: string | null
-          end_time: string
-          record_id: string
-          start_time: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          end_time: string
-          record_id: string
-          start_time: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          end_time?: string
-          record_id?: string
-          start_time?: string
-          user_id?: string
+      Views: {
+        [_ in never]: never
+      }
+      Functions: {
+        AddWorkTime: {
+          Args: {
+            start_time: string
+            end_time: string
+          }
+          Returns: Json
         }
       }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      [_ in never]: never
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
+      Enums: {
+        [_ in never]: never
+      }
+      CompositeTypes: {
+        [_ in never]: never
+      }
     }
   }
-}
+  

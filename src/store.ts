@@ -7,7 +7,7 @@ import { useSelector, TypedUseSelectorHook } from 'react-redux'
 
 export type MesUser = {
   id: string,
-  userName: string,
+  userName: string | undefined,
   userToken: string,
   permissions: Object[],
   miscInfo: any,

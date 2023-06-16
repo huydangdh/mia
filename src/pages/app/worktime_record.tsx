@@ -5,7 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
 import { MesUICard, MesUIModal } from "../../MesUI";
 import moment from "moment";
-import { AddWorktimeRecord } from "../../api/mes_app/WorkTimeAPI";
+import { AddWorktimeRecord, IMsgMesResponse } from "../../api/mes_app/WorkTimeAPI";
 
 
 function WorkTimeRecord() {
@@ -34,16 +34,18 @@ function WorkTimeRecord() {
 
           AddWorktimeRecord({
             user_id: mesUser.id,
-            record_id: "001",
+            record_id: "0010",
             start_time: dtStartTime,
             end_time: dtEndTime
-          }).then(() => {
+          }).then((res) => {
+            setShowAlert(true)
+            setAlertContent(res.error_msg)
             setLoading(false)
-          }).catch((reason) => {
+          }).catch((reason : IMsgMesResponse) => {
             console.error(reason)
             setLoading(false)
             setShowAlert(true)
-            setAlertContent(JSON.stringify(reason))
+            setAlertContent(reason.error_msg)
           })
 
         }
