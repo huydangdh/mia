@@ -1,3 +1,4 @@
+import { formatISO } from "date-fns";
 import { supabase } from "../../lib/supabase"
 
 export interface IMM_WorkTimeRecordTBL {
@@ -15,8 +16,8 @@ export interface IMsgMesResponse {
 }
 
 export async function AddWorktimeRecord(input: IMM_WorkTimeRecordTBL): Promise<IMsgMesResponse> {
-  let { error, data, count } = await supabase.from("mm_worktimerecord").insert({ user_id: "" }).then()
-  console.log(`[I] AddWorktimeRecord: `, error, data);
+//  let { error, data, count } = await supabase.from("mm_worktimerecord").insert({ user_id: "" }).then()
+  console.log(`[I] AddWorktimeRecord: `, formatISO(input.start_time));
 
 
 }
