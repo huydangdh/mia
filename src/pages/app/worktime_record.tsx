@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMesSelector } from "../../store";
-import { Navigate, json } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import DateTimePicker from "react-datetime-picker";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
 import { MesUICard, MesUIModal } from "../../MesUI";
@@ -63,7 +63,7 @@ function WorkTimeRecord() {
             EndTime:
             <DateTimePicker onChange={onChangeEndTime} value={dtEndTime} />
             <p />
-            <Button disabled={isLoading} variant="primary" onClick={DoPost}>{isLoading ? "Adding..." : "Thêm"}</Button>
+            <Button disabled={isLoading} variant="primary" onClick={DoPost}>{isLoading ? "Đang thêm." : "Thêm"}</Button>
           </div>
         </>
       )

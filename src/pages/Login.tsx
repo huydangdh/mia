@@ -2,7 +2,6 @@ import { useState } from "react";
 import { AppDispatch, setUser, useMesSelector } from "../store";
 import { Navigate, useNavigate } from "react-router-dom";
 
-import { database } from "../dataMock";
 
 import { useDispatch } from "react-redux";
 

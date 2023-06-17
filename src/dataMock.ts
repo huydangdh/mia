@@ -15,7 +15,7 @@ interface IMESAPP_TBL {
 }
 
 // User Login info
-export const database: databaseMock = {
+export const database_fak: databaseMock = {
   user: {
     id: "LHF00001",
     userName: "Dang Quang Huy",

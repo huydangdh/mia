@@ -55,9 +55,6 @@ export async function AddWorktimeRecord(
  * @returns
  */
 export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
-  let { error, data, count } = await supabase
-    .from("mm_worktimerecord")
-    .select("*")
-    .then();
+  let { error, data, count } = await supabase.from("mm_worktimerecord").select().then()
   console.log(`[I] WorkTimeQuery: `, error, data, count);
 }

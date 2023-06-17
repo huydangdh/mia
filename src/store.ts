@@ -1,9 +1,6 @@
 import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
-import { database } from './dataMock'
 import localforage from 'localforage'
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
-
-
 
 export type MesUser = {
   id: string,

@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import LoginPage from "./pages/Login.tsx";
 import WorkTimeRecord from "./pages/app/worktime_record.tsx";
-import { APP_URL, database } from "./dataMock.ts";
+import { APP_URL } from "./dataMock.ts";
 
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
