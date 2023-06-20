@@ -51,7 +51,7 @@ function MyRouter() {
             miscInfo: {
               start_time: "05:00",
             },
-          })
+          }),
         );
       }
       setIsloading(false);
@@ -59,7 +59,27 @@ function MyRouter() {
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event == "SIGNED_IN") {
-        store.dispatch(setUser(database.user));
+        store.dispatch(
+          setUser({
+            id: session.user.id,
+            isAuthed: true,
+            userName: session.user.email,
+            userToken: session.access_token,
+            permissions: [
+              {
+                app_name: "WorkTimeRecord",
+                role: "admin",
+              },
+              {
+                app_name: "WorktimeQuery",
+                role: "admin",
+              },
+            ],
+            miscInfo: {
+              start_time: "05:00",
+            },
+          }),
+        );
       }
     });
 
@@ -74,7 +94,8 @@ function MyRouter() {
             <Placeholder xs={6} />
           </Placeholder>
           <Placeholder as={Card.Text} animation="glow">
-            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{" "}
+            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />
+            {" "}
             <Placeholder xs={6} /> <Placeholder xs={8} />
           </Placeholder>
           <Placeholder.Button variant="primary" xs={6} />
@@ -127,5 +148,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <p></p>
     <p></p>
     <LogsContainer />
-  </>
+  </>,
 );

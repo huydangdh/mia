@@ -10,17 +10,17 @@ export interface IMM_WorkTimeRecordTBL {
 
 export interface IMsgMesResponse {
   error_code: number | string;
-  error_msg: string;
+  error_msg: string | Object | any;
   payload: Object;
 }
 
 export async function AddWorktimeRecord(
-  input: IMM_WorkTimeRecordTBL
+  input: IMM_WorkTimeRecordTBL,
 ): Promise<IMsgMesResponse> {
   console.log(
     `[I] AddWorktimeRecord: `,
     formatISO(input.start_time),
-    formatISO(input.end_time)
+    formatISO(input.end_time),
   );
   let { error, data, count } = await supabase
     .from("mm_worktimerecord")
@@ -34,7 +34,7 @@ export async function AddWorktimeRecord(
     `[I] AddWorktimeRecord - mm_worktimerecord: `,
     data,
     error,
-    count
+    count,
   );
   let res: IMsgMesResponse = {
     error_code: 200,
@@ -45,16 +45,30 @@ export async function AddWorktimeRecord(
     if (error != null) {
       res.error_code = error.code;
       res.error_msg = error.message;
-      reject(res)
-    } else resolve(res)
+      reject(res);
+    } else resolve(res);
   });
 }
 /**
- *
  * @param data @type IMM_WorkTimeRecordTBL
  * @returns
  */
 export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
-  let { error, data, count } = await supabase.from("mm_worktimerecord").select().then()
+  let { error, data, count } = await supabase.from("mm_worktimerecord").select()
+    .select('')
+    .then();
+
   console.log(`[I] WorkTimeQuery: `, error, data, count);
+  let res: IMsgMesResponse = {
+    error_code: 200,
+    error_msg: data,
+    payload: {},
+  };
+  return new Promise<IMsgMesResponse>((resolve, reject) => {
+    if (error != null) {
+      res.error_code = error.code;
+      res.error_msg = error.message;
+      reject(res);
+    } else resolve(res);
+  });
 }

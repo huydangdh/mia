@@ -6,18 +6,36 @@ import { Button, Container } from "react-bootstrap";
 import { MesUICard, MesUIModal } from "../../MesUI";
 import moment from "moment";
 import { WorktimeQuery } from "../../api/mes_app/WorkTimeAPI";
+import { formatISO } from "date-fns";
+
+// datagrid
+import 'react-data-grid/lib/styles.css';
+import DataGrid from 'react-data-grid'
 
 function WorkTimeQuery() {
   const mesUser = useMesSelector((state) => state.mesUserState.user);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertContent, setAlertContent] = useState("")
+  const [alertContent, setAlertContent] = useState("");
+
+  const columns = [
+    { key: 'record_id', name: "Record ID"},
+    { key: 'user_id', name: "User ID"},
+    { key: 'user_name', name: 'User Name'},
+    { key: 'start_time', name: "Start Time"},
+    { key: 'end_time', name: "End Time"}
+  ]
+
+  const default_cols = [
+    {record_id: 'xxx-xxx-xxx-xxx', start_time:"xxx", end_time: "xxx"}
+  ]
+  const [rows, setRows] = useState(default_cols);
 
   function MesModalUIOnHide() {
-    setShowAlert(false)
+    setShowAlert(false);
   }
 
   function doSend(
-    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ): void {
     alert(_event);
   }
@@ -26,7 +44,7 @@ function WorkTimeQuery() {
     function MyForm() {
       const mesUser = useMesSelector((s) => s.mesUserState.user);
       const [dtStartTime, onChangeStartTime] = useState(
-        moment(mesUser.miscInfo.start_time, "hh:mm").toDate()
+        moment(mesUser.miscInfo.start_time, "hh:mm").toDate(),
       );
       const [dtEndTime, onChangeEndTime] = useState(new Date());
 
@@ -39,17 +57,18 @@ function WorkTimeQuery() {
           WorktimeQuery({
             user_id: mesUser.id,
             record_id: "001",
-            start_time: dtStartTime,
-            end_time: dtEndTime,
+            start_time: formatISO(dtStartTime),
+            end_time: formatISO(dtEndTime),
           })
-            .then(() => {
+            .then((res) => {
               setLoading(false);
+              setRows(res.error_msg);
             })
             .catch((reason) => {
               console.error(reason);
               setLoading(false);
+              setAlertContent(reason);
               setShowAlert(true);
-              setAlertContent(JSON.stringify(reason))
             });
         }
       }, [isLoading]);
@@ -61,7 +80,7 @@ function WorkTimeQuery() {
       return (
         <>
           <div className="d-grid gap-2">
-            start_time: 
+            start_time:
             <DateTimePicker onChange={onChangeStartTime} value={dtStartTime} />
             <p></p>
             EndTime:
@@ -80,7 +99,8 @@ function WorkTimeQuery() {
         card_body={<MyForm />}
         card_header={"WorkTimeQuery"}
         card_footer={"Footer"}
-      ></MesUICard>
+      >
+      </MesUICard>
     );
   }
 
@@ -91,8 +111,14 @@ function WorkTimeQuery() {
         <div className="">
           <Container>
             <WorkTimeQueryForm></WorkTimeQueryForm>
+            <DataGrid columns={columns} rows={rows} onRowsChange={setRows}></DataGrid>
           </Container>
-          <MesUIModal title="Thông báo" content={alertContent}  isShow={showAlert} onHide={MesModalUIOnHide}/>
+          <MesUIModal
+            title="Thông báo"
+            content={alertContent.err_msg}
+            isShow={showAlert}
+            onHide={MesModalUIOnHide}
+          />
         </div>
       </div>
     </>
