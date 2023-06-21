@@ -54,9 +54,19 @@ export async function AddWorktimeRecord(
  * @returns
  */
 export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
-  let { error, data, count } = await supabase.from("mm_worktimerecord").select()
-    .select('')
-    .then();
+  let { error, data, count } = await supabase.from("mm_worktimerecord")
+    .select(`
+      record_id,
+      user_id,
+      start_time,
+      end_time,
+      mm_user (
+        userid,
+        username,
+        full_name
+      )
+    `);
+  
 
   console.log(`[I] WorkTimeQuery: `, error, data, count);
   let res: IMsgMesResponse = {
@@ -64,10 +74,11 @@ export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
     error_msg: data,
     payload: {},
   };
-  return new Promise<IMsgMesResponse>((resolve, reject) => {
+
+ return new Promise<IMsgMesResponse>((resolve, reject) => {
     if (error != null) {
       res.error_code = error.code;
-      res.error_msg = error.message;
+      res.error_msg = error.message.concat(error.details);
       reject(res);
     } else resolve(res);
   });

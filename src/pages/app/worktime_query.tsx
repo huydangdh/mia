@@ -111,11 +111,12 @@ function WorkTimeQuery() {
         <div className="">
           <Container>
             <WorkTimeQueryForm></WorkTimeQueryForm>
+            <br></br> 
             <DataGrid columns={columns} rows={rows} onRowsChange={setRows}></DataGrid>
           </Container>
           <MesUIModal
             title="Thông báo"
-            content={alertContent.err_msg}
+            content={alertContent.error_msg}
             isShow={showAlert}
             onHide={MesModalUIOnHide}
           />
