@@ -54,17 +54,11 @@ export async function AddWorktimeRecord(
  * @returns
  */
 export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
-  let { error, data, count } = await supabase.from("mm_worktimerecord")
-    .select(`
+  let { error, data, count } = await supabase.from("mm_worktimerecord").select(`
       record_id,
       user_id,
       start_time,
       end_time,
-      mm_user (
-        userid,
-        username,
-        full_name
-      )
     `);
   
 
