@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json }
   | Json[]
 
-export interface Database {
+export interface MESERPDatabase {
   public: {
     Tables: {
       mm_user: {

@@ -54,9 +54,8 @@ export async function AddWorktimeRecord(
  * @returns
  */
 export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
-  let { data, error } = await supabase.rpc('search_worktime',{})
-  
-  
+  let { data, error } = await supabase.rpc("search_worktime", { in_start_time: formatISO(queryData.start_time), in_end_time: formatISO(queryData.end_time) })
+
 
   console.log(`[I] WorkTimeQuery: `, error, data);
   let res: IMsgMesResponse = {
@@ -65,7 +64,7 @@ export async function WorktimeQuery(queryData: IMM_WorkTimeRecordTBL) {
     payload: {},
   };
 
- return new Promise<IMsgMesResponse>((resolve, reject) => {
+  return new Promise<IMsgMesResponse>((resolve, reject) => {
     if (error != null) {
       res.error_code = error.code;
       res.error_msg = error.message.concat(error.details);

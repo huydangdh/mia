@@ -20,7 +20,7 @@ function WorkTimeQuery() {
   const columns = [
     { key: 'record_id', name: "Record ID"},
     { key: 'user_id', name: "User ID"},
-    { key: 'user_name', name: 'User Name'},
+    { key: 'username', name: 'Full Name'},
     { key: 'start_time', name: "Start Time"},
     { key: 'end_time', name: "End Time"}
   ]
@@ -57,8 +57,8 @@ function WorkTimeQuery() {
           WorktimeQuery({
             user_id: mesUser.id,
             record_id: "001",
-            start_time: formatISO(dtStartTime),
-            end_time: formatISO(dtEndTime),
+            start_time: (dtStartTime),
+            end_time: (dtEndTime),
           })
             .then((res) => {
               setLoading(false);
