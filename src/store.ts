@@ -2,6 +2,10 @@ import { PayloadAction, configureStore, createSlice } from '@reduxjs/toolkit'
 import localforage from 'localforage'
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
 
+export type IMesUserPermisson = {
+
+}
+
 export type MesUser = {
   id: string,
   userName: string | undefined,

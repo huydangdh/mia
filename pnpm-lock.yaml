@@ -25,6 +25,12 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  gridjs:
+    specifier: ^6.0.6
+    version: 6.0.6
+  gridjs-react:
+    specifier: ^6.0.1
+    version: 6.0.1(gridjs@6.0.6)(react@18.2.0)
   localforage:
     specifier: ^1.10.0
     version: 1.10.0
@@ -1815,6 +1821,22 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
+  /gridjs-react@6.0.1(gridjs@6.0.6)(react@18.2.0):
+    resolution: {integrity: sha512-Cb9tti25vlQH7qn1J61NMzu+1sRYxGCbTdlj+/iJmhWTe+8C0VI6snr6Gi2LKDsvcUhlBSb56T6IZQ8UF3D6aQ==}
+    peerDependencies:
+      gridjs: ^6.0.1
+      react: '>=17.x'
+    dependencies:
+      gridjs: 6.0.6
+      react: 18.2.0
+    dev: false
+
+  /gridjs@6.0.6:
+    resolution: {integrity: sha512-TZ20nY+weE/wlyXOd3A9FJyJlsJ/MrHr6frMgUHFN29RmWZCYtnyfF0zuspXC81oePwSJeSZ8HY651aeyX8+rQ==}
+    dependencies:
+      preact: 10.15.1
+    dev: false
+
   /has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
     engines: {node: '>=4'}
@@ -2210,6 +2232,10 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: true
+
+  /preact@10.15.1:
+    resolution: {integrity: sha512-qs2ansoQEwzNiV5eAcRT1p1EC/dmEzaATVDJNiB3g2sRDWdA7b7MurXdJjB2+/WQktGWZwxvDrnuRFbWuIr64g==}
+    dev: false
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}

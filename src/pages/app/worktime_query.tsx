@@ -6,11 +6,10 @@ import { Button, Container } from "react-bootstrap";
 import { MesUICard, MesUIModal } from "../../MesUI";
 import moment from "moment";
 import { WorktimeQuery } from "../../api/mes_app/WorkTimeAPI";
-import { formatISO } from "date-fns";
 
 // datagrid
-import 'react-data-grid/lib/styles.css';
-import DataGrid from 'react-data-grid'
+import { Grid } from 'gridjs-react';
+import "gridjs/dist/theme/mermaid.css"
 
 function WorkTimeQuery() {
   const mesUser = useMesSelector((state) => state.mesUserState.user);
@@ -18,15 +17,15 @@ function WorkTimeQuery() {
   const [alertContent, setAlertContent] = useState("");
 
   const columns = [
-    { key: 'record_id', name: "Record ID"},
-    { key: 'user_id', name: "User ID"},
-    { key: 'username', name: 'Full Name'},
-    { key: 'start_time', name: "Start Time"},
-    { key: 'end_time', name: "End Time"}
+    { id: 'record_id', name: "Record ID" },
+    { id: 'user_id', name: "User ID" },
+    { id: 'username', name: 'Full Name' },
+    { id: 'start_time', name: "Start Time" },
+    { id: 'end_time', name: "End Time" }
   ]
 
   const default_cols = [
-    {record_id: 'xxx-xxx-xxx-xxx', start_time:"xxx", end_time: "xxx"}
+    { record_id: 'xxx-xxx-xxx-xxx', start_time: "xxx", end_time: "xxx" }
   ]
   const [rows, setRows] = useState(default_cols);
 
@@ -99,6 +98,7 @@ function WorkTimeQuery() {
         card_body={<MyForm />}
         card_header={"WorkTimeQuery"}
         card_footer={"Footer"}
+        card_img=" "
       >
       </MesUICard>
     );
@@ -111,8 +111,15 @@ function WorkTimeQuery() {
         <div className="">
           <Container>
             <WorkTimeQueryForm></WorkTimeQueryForm>
-            <br></br> 
-            <DataGrid columns={columns} rows={rows} onRowsChange={setRows}></DataGrid>
+            <br></br>
+            <Grid
+              data={rows}
+              columns={columns}
+              search={true}
+              pagination={{
+                limit: 10,
+              }}
+            />
           </Container>
           <MesUIModal
             title="Thông báo"
