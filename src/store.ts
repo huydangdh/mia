@@ -3,6 +3,8 @@ import localforage from 'localforage'
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
 
 export type IMesUserPermisson = {
+  appID: string,
+  appName: string,
 
 }
 
@@ -10,7 +12,7 @@ export type MesUser = {
   id: string,
   userName: string | undefined,
   userToken: string,
-  permissions: Object[],
+  permissions: Object[] | IMesUserPermisson[],
   miscInfo: any,
   isAuthed: Boolean
 }

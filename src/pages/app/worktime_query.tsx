@@ -33,12 +33,6 @@ function WorkTimeQuery() {
     setShowAlert(false);
   }
 
-  function doSend(
-    _event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ): void {
-    alert(_event);
-  }
-
   function WorkTimeQueryForm() {
     function MyForm() {
       const mesUser = useMesSelector((s) => s.mesUserState.user);
@@ -51,7 +45,7 @@ function WorkTimeQuery() {
 
       useEffect(() => {
         if (isLoading) {
-          alert(`[I] mStartTime: ${dtStartTime}, mEndTime: ${dtEndTime}`);
+//          alert(`[I] mStartTime: ${dtStartTime}, mEndTime: ${dtEndTime}`);
 
           WorktimeQuery({
             user_id: mesUser.id,
@@ -115,7 +109,7 @@ function WorkTimeQuery() {
             <Grid
               data={rows}
               columns={columns}
-              search={true}
+              search={true} 
               pagination={{
                 limit: 10,
               }}

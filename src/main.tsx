@@ -40,11 +40,13 @@ function MyRouter() {
             userToken: session.access_token,
             permissions: [
               {
-                app_name: "WorkTimeRecord",
+                appID: "223981ea-384d-4e4d-a6d4-56cf1dbe4e54",
+                appName: "WorkTimeRecord",
                 role: "admin",
               },
               {
-                app_name: "WorktimeQuery",
+                appID: "0ca3deec-ff59-4d4c-8771-7a8e6127ad95",
+                appName: "WorktimeRecordQuery",
                 role: "admin",
               },
             ],
