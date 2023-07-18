@@ -20,6 +20,7 @@ import { supabase } from "./lib/supabase.ts";
 import { LogsContainer } from "./lib/consolefeed.tsx";
 import { MesUserGetSession } from "./auth/auth.tsx";
 import { MesUINavBar } from "./MesUI.tsx";
+import ProtectedRoute from "./routes/ProtectedRoute.tsx";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
@@ -59,34 +60,7 @@ function MyRouter() {
       setIsloading(false);
     });
 
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event == "SIGNED_IN") {
-        store.dispatch(
-          setUser({
-            id: session.user.id,
-            isAuthed: true,
-            userName: session.user.email,
-            userToken: session.access_token,
-            permissions: [
-              {
-                app_name: "WorkTimeRecord",
-                role: "admin",
-              },
-              {
-                app_name: "WorktimeQuery",
-                role: "admin",
-              },
-            ],
-            miscInfo: {
-              start_time: "05:00",
-            },
-          }),
-        );
-      }
-    });
-
-    return () => data.subscription.unsubscribe();
-  }, []);
+     }, []);
 
   if (!isAuth && isLoading) {
     return (
@@ -110,7 +84,8 @@ function MyRouter() {
 const router = createBrowserRouter([
   {
     path: APP_URL.ROOT,
-    element: <App />,
+    element: <ProtectedRoute><App /></ProtectedRoute>,
+
   },
   {
     path: APP_URL.APP_URL_ROOT,
