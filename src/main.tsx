@@ -28,57 +28,7 @@ function MyRouter() {
   const isAuth = useMesSelector((s) => s.mesUserState.user.isAuthed);
   const [isLoading, setIsloading] = useState(true);
 
-  useEffect(() => {
-    if (!isLoading) return undefined;
-    MesUserGetSession().then((session) => {
-      console.log(`[i] user_data: ${JSON.stringify(session?.user)};`);
-      if (session != null) {
-        store.dispatch(
-          setUser({
-            id: session.user.id,
-            isAuthed: true,
-            userName: session.user.email,
-            userToken: session.access_token,
-            permissions: [
-              {
-                appID: "223981ea-384d-4e4d-a6d4-56cf1dbe4e54",
-                appName: "WorkTimeRecord",
-                role: "admin",
-              },
-              {
-                appID: "0ca3deec-ff59-4d4c-8771-7a8e6127ad95",
-                appName: "WorktimeRecordQuery",
-                role: "admin",
-              },
-            ],
-            miscInfo: {
-              start_time: "05:00",
-            },
-          }),
-        );
-      }
-      setIsloading(false);
-    });
-
-     }, []);
-
-  if (!isAuth && isLoading) {
-    return (
-      <Card style={{ width: "18rem" }}>
-        <Card.Body>
-          <Placeholder as={Card.Title} animation="glow">
-            <Placeholder xs={6} />
-          </Placeholder>
-          <Placeholder as={Card.Text} animation="glow">
-            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />
-            {" "}
-            <Placeholder xs={6} /> <Placeholder xs={8} />
-          </Placeholder>
-          <Placeholder.Button variant="primary" xs={6} />
-        </Card.Body>
-      </Card>
-    );
-  } else return <RouterProvider router={router}></RouterProvider>;
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
 const router = createBrowserRouter([

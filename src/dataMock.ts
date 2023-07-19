@@ -69,5 +69,5 @@ export const APP_URL = {
   APP_URL_ROOT: "app/",
   // worktime
   APP_WORKTIME_RECORD: "WorkTimeRecord",
-  APP_WORKTIME_QUERY: "WorkTimeQuery"
+  APP_WORKTIME_QUERY: "WorkTimeRecordQuery"
 }

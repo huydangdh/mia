@@ -7,7 +7,3 @@ const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 export const supabase = createClient<Database>(supabaseUrl,supabaseKey)
 
-
-supabase.from("mm_user").select("*").then((value)=>{
-  console.log(value)
-})
