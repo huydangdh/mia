@@ -14,12 +14,13 @@ import { Card } from "react-bootstrap";
 import { Auth } from '@supabase/auth-ui-react'
 import { supabase } from "../lib/supabase";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useAuth } from "../routes/ProtectedRoute";
 
 
 function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
 
-  const mesUser = useMesSelector((state) => state.mesUserState.user);
+  const { mesUser } = useAuth()
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -32,7 +33,7 @@ function LoginPage() {
   // JSX code for login form
 
   function LoginForm() {
-    return <Auth supabaseClient={supabase} appearance={{theme: ThemeSupa}} />
+    return <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />
   }
 
   return (

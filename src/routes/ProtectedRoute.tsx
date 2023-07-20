@@ -1,45 +1,48 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
 import supabase from "../api/supabase";
-import { MesUser } from "../store";
+import store, { MesUser, setUser, useMesSelector } from "../store";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-    let [isLoading, setLoading] = useState<boolean>(true)
-    let [isAuth, setAuth] = useState<MesUser| null>(null)
-    let {isAuthenticated, user} = useAuth()
+  let [isLoading, setLoading] = useState<boolean>(true)
+  let { mesUser } = useAuth()
+  //let mesUser = useMesSelector((state) => state.mesUserState.user)
+  console.log('[i] user: ', mesUser)
+  if (isLoading) {
+    if (!mesUser.isAuthed) return <>Is Loading...</>
 
-    if(isLoading){
-      if(!isAuthenticated) return <>Is Loading...</>
-      
-      else{
-        setLoading(false)
-      }
+    else {
+      setLoading(false)
     }
-    console.log(user)
-
-    return <>Under development</>;
+  }
+  return <>Under development</>;
 };
 
 export default ProtectedRoute;
 
-const useAuth = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<any>(null)
+export const useAuth = () => {
+  const mesUser = useMesSelector((s) => s.mesUserState.user)
 
   useEffect(() => {
-    supabase.auth.getUser().then((userResponse)=>{
-      setUser(userResponse.data.user)
-      setIsAuthenticated(true)
-      console.log(userResponse)
+    supabase.auth.getUser().then((userResponse) => {
+      let _user = userResponse.data.user;
+      if (_user) {
+        store.dispatch(setUser({
+          id: _user?.id,
+          isAuthed: true,
+          userName: _user?.email,
+          userToken: "<userToken>",
+          miscInfo: {},
+          permissions: [{}]
+        }))
+      }
     })
   }, []);
 
   return {
-    isAuthenticated,
-    user,
+    mesUser
   };
 };
