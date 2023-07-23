@@ -7,6 +7,7 @@ import { Card, Button, Container, Row, Col } from 'react-bootstrap';
 // HUY
 import { MMPermissions, FCheckRoleUser } from "./api/mes_app/PermissionsAPI";
 import { useState } from 'react';
+import useMesAuth from './hooks/useAuth';
 
 
 function MesTabUI() {
@@ -34,11 +35,10 @@ function MesTabUI() {
 
 function MesCardUI({ app_name, app_id }: {app_name : string, app_id: string}) {
   const navigate = useNavigate()
-  const mesUserState = useMesSelector((state) => state.mesUserState)
-  const [isLoading, setLoading] = useState<boolean>(false)
+  const { mesUser } = useMesAuth()
 
   async function RunApp(path: string, appID: string) {
-    const isRole = await FCheckRoleUser(mesUserState.user.id, appID, MMPermissions.RUN);
+    const isRole = await FCheckRoleUser(mesUser.id, appID, MMPermissions.RUN);
     if (isRole) {
       alert("The user is in the role.");
       navigate(String().concat(APP_URL.ROOT, APP_URL.APP_URL_ROOT, path))
@@ -65,26 +65,27 @@ function MesCardUI({ app_name, app_id }: {app_name : string, app_id: string}) {
 }
 
 function App() {
-  const mesUserState = useMesSelector((state) => state.mesUserState)
+  const { mesUser } = useMesAuth()
 
   function GetAppList() {
-    const app_list = mesUserState.user.permissions
+    const app_list = mesUser.permissions
     const tmp = Array<JSX.Element>()
     for (let index = 0; index < app_list.length; index++) {
       const element = app_list[index] as IMesUserPermisson;
       let elm = <MesCardUI key={index} app_name={element.appName} app_id={element.appID}></MesCardUI>
       tmp.push(elm)
     }
+    
     return tmp
   }
 
-  if (!mesUserState.user.isAuthed) return <Navigate to={"/Login"} />
-  else if (mesUserState.user.isAuthed) {
+  if (!mesUser.isAuthed) return <Navigate to={"/Login"} />
+  else if (mesUser.isAuthed) {
     return (
       <>
         <MesTabUI></MesTabUI>
         <Container>
-          <h2>Hi: {mesUserState.user.userName}</h2>
+          <h2>Hi: {mesUser.userName}</h2>
           <Row>
             {GetAppList()}
           </Row>

@@ -14,13 +14,13 @@ import { Card } from "react-bootstrap";
 import { Auth } from '@supabase/auth-ui-react'
 import { supabase } from "../lib/supabase";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { useAuth } from "../routes/ProtectedRoute";
+import useMesAuth from "../hooks/useAuth";
 
 
 function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
 
-  const { mesUser } = useAuth()
+  const { mesUser } = useMesAuth();
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -16,19 +16,18 @@ import "react-clock/dist/Clock.css";
 import { Card, Container, Placeholder } from "react-bootstrap";
 import TestUI from "./pages/test.tsx";
 import WorkTimeQuery from "./pages/app/worktime_query.tsx";
-import { supabase } from "./lib/supabase.ts";
 import { LogsContainer } from "./lib/consolefeed.tsx";
-import { MesUserGetSession } from "./auth/auth.tsx";
 import { MesUINavBar } from "./MesUI.tsx";
 import ProtectedRoute from "./routes/ProtectedRoute.tsx";
+import useMesAuth, { AuthProvider}from "./hooks/useAuth.tsx";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
 function MyRouter() {
-  const isAuth = useMesSelector((s) => s.mesUserState.user.isAuthed);
-  const [isLoading, setIsloading] = useState(true);
-
-  return <RouterProvider router={router}></RouterProvider>;
+  const user = useMesAuth()
+  console.log(user);
+  
+  //return <RouterProvider router={router}></RouterProvider>;
 }
 
 const router = createBrowserRouter([
@@ -67,10 +66,12 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <>
     <Provider store={store}>
-      <MesUINavBar></MesUINavBar>
-      <Container>
-        <MyRouter></MyRouter>
-      </Container>
+      <AuthProvider>
+        <MesUINavBar></MesUINavBar>
+        <Container>
+          <MyRouter></MyRouter>
+        </Container>
+      </AuthProvider>
     </Provider>
     <p></p>
     <p></p>

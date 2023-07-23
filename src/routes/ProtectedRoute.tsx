@@ -1,48 +1,13 @@
-import { useEffect, useState } from "react";
-import supabase from "../api/supabase";
-import store, { MesUser, setUser, useMesSelector } from "../store";
+import { Route, Redirect, Navigate } from 'react-router-dom';
+import useMesAuth from '../hooks/useAuth';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  let [isLoading, setLoading] = useState<boolean>(true)
-  let { mesUser } = useAuth()
-  //let mesUser = useMesSelector((state) => state.mesUserState.user)
-  console.log('[i] user: ', mesUser)
-  if (isLoading) {
-    if (!mesUser.isAuthed) return <>Is Loading...</>
-
-    else {
-      setLoading(false)
-    }
-  }
-  return <>Under development</>;
+const ProtectedRoute = ({ children }) => {
+  const { mesUser, isLoading } = useMesAuth();
+  if(isLoading) return <>Loading...</>
+  if(!isLoading && mesUser.isAuthed) return children
+  if(!isLoading && !mesUser.isAuthed) return <Navigate to={"/login"} />
 };
 
 export default ProtectedRoute;
 
-export const useAuth = () => {
-  const mesUser = useMesSelector((s) => s.mesUserState.user)
-
-  useEffect(() => {
-    supabase.auth.getUser().then((userResponse) => {
-      let _user = userResponse.data.user;
-      if (_user) {
-        store.dispatch(setUser({
-          id: _user?.id,
-          isAuthed: true,
-          userName: _user?.email,
-          userToken: "<userToken>",
-          miscInfo: {},
-          permissions: [{}]
-        }))
-      }
-    })
-  }, []);
-
-  return {
-    mesUser
-  };
-};
