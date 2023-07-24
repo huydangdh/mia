@@ -1,12 +1,11 @@
 import { APP_URL } from './dataMock';
-import { IMesUserPermisson, useMesSelector } from './store'
+import { IMesUserPermisson } from './store'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Nav from 'react-bootstrap/Nav';
 import { Card, Button, Container, Row, Col } from 'react-bootstrap';
 
 // HUY
 import { MMPermissions, FCheckRoleUser } from "./api/mes_app/PermissionsAPI";
-import { useState } from 'react';
 import useMesAuth from './hooks/useAuth';
 
 
@@ -35,10 +34,10 @@ function MesTabUI() {
 
 function MesCardUI({ app_name, app_id }: {app_name : string, app_id: string}) {
   const navigate = useNavigate()
-  const { mesUser } = useMesAuth()
+  const { user } = useMesAuth()
 
   async function RunApp(path: string, appID: string) {
-    const isRole = await FCheckRoleUser(mesUser.id, appID, MMPermissions.RUN);
+    const isRole = await FCheckRoleUser(user.id, appID, MMPermissions.RUN);
     if (isRole) {
       alert("The user is in the role.");
       navigate(String().concat(APP_URL.ROOT, APP_URL.APP_URL_ROOT, path))
@@ -65,7 +64,7 @@ function MesCardUI({ app_name, app_id }: {app_name : string, app_id: string}) {
 }
 
 function App() {
-  const { mesUser } = useMesAuth()
+  const { user: mesUser } = useMesAuth()
 
   function GetAppList() {
     const app_list = mesUser.permissions

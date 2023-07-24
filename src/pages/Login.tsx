@@ -20,7 +20,7 @@ import useMesAuth from "../hooks/useAuth";
 function LoginPage() {
   const [errorMessages, setErrorMessages] = useState({});
 
-  const { mesUser } = useMesAuth();
+  const { user } = useMesAuth();
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -42,12 +42,12 @@ function LoginPage() {
         <Card>
           <Card.Header>LOGIN</Card.Header>
           <Card.Body>
-            {mesUser.isAuthed ? <Navigate replace to={"/"} /> : <LoginForm />}
+            {user.isAuthed ? <Navigate replace to={"/"} /> : <LoginForm />}
           </Card.Body>
         </Card>
         <p></p>
         <Button onClick={doTestGetUser}>Do_Test_Get_User</Button>
-        <div> Current_user : {JSON.stringify(mesUser)}</div>
+        <div> Current_user : {JSON.stringify(user)}</div>
       </div>
     </>
   );

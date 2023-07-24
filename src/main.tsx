@@ -25,9 +25,8 @@ export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
 function MyRouter() {
   const user = useMesAuth()
-  console.log(user);
   
-  //return <RouterProvider router={router}></RouterProvider>;
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
 const router = createBrowserRouter([

@@ -5,13 +5,14 @@ import { useSelector, TypedUseSelectorHook } from 'react-redux'
 export type IMesUserPermisson = {
   appID: string,
   appName: string,
-
+  appPermission: string,
+  createdBy: string
 }
 
 export type MesUser = {
-  id: string,
+  id: string | undefined,
   userName: string | undefined,
-  userToken: string,
+  userToken: string | undefined,
   permissions: Object[] | IMesUserPermisson[],
   miscInfo: any,
   isAuthed: Boolean
@@ -27,9 +28,9 @@ export type MesUserState = {
 const initialState: MesUserState = {
   user: {
     id: "",
-    userName: "No_Name",
-    userToken: "LHF00",
-    permissions: [{}],
+    userName: "",
+    userToken: "",
+    permissions: [],
     miscInfo: {},
     isAuthed: false
   },

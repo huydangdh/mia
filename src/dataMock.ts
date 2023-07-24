@@ -67,6 +67,7 @@ export const errors = {
 export const APP_URL = {
   ROOT: "/",
   APP_URL_ROOT: "app/",
+  LOGIN_PAGE: "login",
   // worktime
   APP_WORKTIME_RECORD: "WorkTimeRecord",
   APP_WORKTIME_QUERY: "WorkTimeRecordQuery"

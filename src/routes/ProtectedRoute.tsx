@@ -1,12 +1,14 @@
-import { Route, Redirect, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import useMesAuth from '../hooks/useAuth';
+import LoginPage from '../pages/Login';
+import { APP_URL } from '../dataMock';
 
 
 const ProtectedRoute = ({ children }) => {
-  const { mesUser, isLoading } = useMesAuth();
-  if(isLoading) return <>Loading...</>
-  if(!isLoading && mesUser.isAuthed) return children
-  if(!isLoading && !mesUser.isAuthed) return <Navigate to={"/login"} />
+  const { user } = useMesAuth();
+  console.log(user);
+  if (!user?.isAuthed) return <Navigate to={APP_URL.LOGIN_PAGE} />
+  else return children
 };
 
 export default ProtectedRoute;
