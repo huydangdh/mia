@@ -1,120 +1,113 @@
-import React, { useEffect, useMemo, useState } from "react";
-import store, { MesUser, resetUser, setUser, useMesSelector } from "../store";
-import supabase from "../api/supabase";
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useMesSelector, setUser, resetUser } from '../store';
+import supabase from '../api/supabase';
+import { User } from '@supabase/supabase-js';
+import { MM_APPLICATION_ID } from '../api/mes_app/PermissionsAPI';
 
-import { useContext, createContext } from 'react';
-
-export type AuthContextType = {
-  user: MesUser | null;
-  signin: (email: string, password: string) => Promise<MesUser>;
-  signout: () => Promise<void>;
-  signup: (email: string, password: string) => Promise<MesUser>;
-};
-
-const defaultAuthContextValue: AuthContextType = {
-  user: null,
-  signin: async (email: string, password: string) => {
-    throw new Error('AuthProvider not initialized');
-  },
-  signout: async () => {
-    throw new Error('AuthProvider not initialized');
-  },
-  signup: async (email: string, password: string) => {
-    throw new Error('AuthProvider not initialized');
-  },
-};
-
-const AuthContext = createContext<AuthContextType>(defaultAuthContextValue);
+// Define the type for the user object
 
 
-function useMesAuth() {
-  return useContext(AuthContext);
-};
+// Define the types for the authentication functions
+type SignUpFunction = (email: string, password: string) => Promise<User | null>;
+type SignInFunction = (email: string, password: string) => Promise<User | null>;
+type SignOutFunction = () => Promise<void>;
 
-function useProvideAuth() {
-  const user = useMesSelector((s) => s.mesUserState.user)
-  const [isLoading, setLoading] = useState<boolean>(false)
+const useMesAuth = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+  const user = useMesSelector((state) => state.mesUserState.user || {});
 
-  // Memoize the context value to prevent re-renders caused by AuthProvider
-  const signin = async (email: string, password: string) => {
-    const { user, error } = await supabase.auth.signIn({
-      email,
-      password,
-    });
-    if (error) throw error;
-    setUser(user);
-    return user;
+  const handleAuthError = (error: Error) => {
+    throw new Error(error.message);
   };
 
-  const signout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+  // Function to sign up a new user
+  const signUp: SignUpFunction = async (email, password) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) handleAuthError(error);
+      return data.user;
+    } catch (error) {
+      handleAuthError(error);
+      throw error; // Re-throw the error to propagate it to the caller
+    }
   };
 
-  const signup = async (email, password) => {
-    const { user, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) throw error;
-    setUser(user);
-    return user;
+  // Function to log in an existing user
+  const signIn: SignInFunction = async (email, password) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) handleAuthError(error);
+      return data.user;
+    } catch (error) {
+      handleAuthError(error);
+      throw error; // Re-throw the error to propagate it to the caller
+    }
+  };
+
+  // Function to log out the current user
+  const signOut: SignOutFunction = async () => {
+    try {
+      await supabase.auth.signOut();
+      dispatch(resetUser());
+    } catch (error) {
+      handleAuthError(error);
+      throw error; // Re-throw the error to propagate it to the caller
+    }
+  };
+
+  // Function to check if the user is logged in and fetch user data
+  const checkUser = async () => {
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) handleAuthError(error);
+
+      if (data?.session != null) {
+        const { id, email } = data.session.user;
+        dispatch(
+          setUser({
+            id,
+            userName: email,
+            userToken: data.session.access_token,
+            isAuthed: true,
+            miscInfo: {},
+            permissions: [{
+              appID: MM_APPLICATION_ID.WorkTimeAdd,
+              appName: "WorkTimeAdd",
+              appPermission: "RUN^CREATE^READ"
+            },
+            {
+              appID: MM_APPLICATION_ID.WorkTimeQuery,
+              appName: "WorkTimeRecordQuery",
+              appPermission: ""
+            }],
+          })
+        );
+      }
+    } catch (error) {
+      handleAuthError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then((res) => {
-      let _user = res.data.session?.user;
-      if (_user) {
-        store.dispatch(setUser({
-          id: _user?.id,
-          isAuthed: true,
-          userName: _user?.email,
-          userToken: "<userToken>",
-          miscInfo: {},
-          permissions: []
-        }))
-      }
-
-      const { data: listener } = supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          if (event === 'SIGNED_OUT') store.dispatch(resetUser());
-          if (event === 'SIGNED_IN') {
-            let _user = session?.user
-            store.dispatch(setUser({
-              id: _user?.id,
-              userName: _user?.email,
-              userToken: session?.access_token,
-              isAuthed: true,
-              permissions: [],
-              miscInfo: {}
-            }))
-          }
-
-        }
-      );
-      return () => {
-        listener.subscription.unsubscribe();
-      };
-    })
+    checkUser();
   }, []);
 
-  const contextValue = useMemo<AuthContextType>(() => {
-    return {
-      user,
-      signin,
-      signout,
-      signup,
-    }
-  }, [user])
+  if (isLoading) {
+    // Show loading state if still fetching user data
+  }
 
+  return {
+    user,
+    checkUser,
+    isLoading,
+    signUp,
+    signIn,
+    signOut,
+  };
+};
 
-  return contextValue;
-}
-
-
-export function AuthProvider({ children }: { children: React.ReactElement }) {
-  const auth = useProvideAuth();
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-}
-
-export default useMesAuth
+export default useMesAuth;

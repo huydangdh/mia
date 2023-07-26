@@ -19,13 +19,30 @@ import WorkTimeQuery from "./pages/app/worktime_query.tsx";
 import { LogsContainer } from "./lib/consolefeed.tsx";
 import { MesUINavBar } from "./MesUI.tsx";
 import ProtectedRoute from "./routes/ProtectedRoute.tsx";
-import useMesAuth, { AuthProvider}from "./hooks/useAuth.tsx";
+import useMesAuth from "./hooks/useAuth.tsx";
+import supabase from "./api/supabase.ts";
 
 export const MyContext = createContext<MesUser | undefined | any>(undefined);
 
 function MyRouter() {
-  const user = useMesAuth()
-  
+  const { checkUser } = useMesAuth();
+
+  useEffect(() => {
+    // Add onAuthStateChange listener when the component mounts
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        // User has signed in, update the user state in the app
+        checkUser();
+      }
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [checkUser]);
+
+
   return <RouterProvider router={router}></RouterProvider>;
 }
 
@@ -65,12 +82,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <>
     <Provider store={store}>
-      <AuthProvider>
-        <MesUINavBar></MesUINavBar>
-        <Container>
-          <MyRouter></MyRouter>
-        </Container>
-      </AuthProvider>
+      <MesUINavBar></MesUINavBar>
+      <Container>
+        <MyRouter></MyRouter>
+      </Container>
     </Provider>
     <p></p>
     <p></p>

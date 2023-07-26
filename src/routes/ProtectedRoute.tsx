@@ -1,15 +1,23 @@
+// components/ProtectedRouter.tsx
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import useMesAuth from '../hooks/useAuth';
-import LoginPage from '../pages/Login';
-import { APP_URL } from '../dataMock';
 
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
 
-const ProtectedRoute = ({ children }) => {
-  const { user } = useMesAuth();
-  console.log(user);
-  if (!user?.isAuthed) return <Navigate to={APP_URL.LOGIN_PAGE} />
-  else return children
+const ProtectedRouter: React.FC<ProtectedRouteProps> = ({
+  children
+}) => {
+  const { user, isLoading } = useMesAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (user.isAuthed) return children
+  else return <Navigate to="/login" />
 };
 
-export default ProtectedRoute;
+export default ProtectedRouter;
 

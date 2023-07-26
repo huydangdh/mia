@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import { supabase } from "../../lib/supabase";
 
 const MMPermissions = {
