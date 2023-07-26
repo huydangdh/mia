@@ -1,11 +1,11 @@
 import { formatISO } from "date-fns";
 import { supabase } from "../../lib/supabase";
 
-interface WorkTimeRecord {
+export interface IWorkTimeRecord {
   record_id: string;
   user_id: string;
-  start_time: Date;
-  end_time: Date;
+  start_time: string | Date | number;
+  end_time: string | Date | number;
 }
 
 interface MsgMesResponse<T> {
@@ -14,14 +14,14 @@ interface MsgMesResponse<T> {
   payload: T;
 }
 
-const formatWorkTimeRecord = (record: WorkTimeRecord) => ({
+const formatWorkTimeRecord = (record: IWorkTimeRecord) => ({
   ...record,
   start_time: formatISO(record.start_time),
   end_time: formatISO(record.end_time),
 });
 
 export async function AddWorktimeRecord(
-  input: WorkTimeRecord
+  input: IWorkTimeRecord
 ): Promise<MsgMesResponse<{}>> {
   try {
     console.log("[I] AddWorktimeRecord: ", formatISO(input.start_time), formatISO(input.end_time));
@@ -36,8 +36,8 @@ export async function AddWorktimeRecord(
 }
 
 export async function WorktimeQuery(
-  queryData: WorkTimeRecord
-): Promise<MsgMesResponse<WorkTimeRecord[]>> {
+  queryData: IWorkTimeRecord
+): Promise<MsgMesResponse<IWorkTimeRecord[]>> {
   try {
     const { data, error } = await supabase.rpc("search_worktime", {
       in_start_time: formatISO(queryData.start_time),

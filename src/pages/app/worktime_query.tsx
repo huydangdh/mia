@@ -5,7 +5,7 @@ import DateTimePicker from "react-datetime-picker";
 import { Button, Container } from "react-bootstrap";
 import { MesUICard, MesUIModal } from "../../MesUI";
 import moment from "moment";
-import { WorktimeQuery } from "../../api/mes_app/WorkTimeAPI";
+import { IWorkTimeRecord, WorktimeQuery } from "../../api/mes_app/WorkTimeAPI";
 
 // datagrid
 import { Grid } from 'gridjs-react';
@@ -24,10 +24,9 @@ function WorkTimeQuery() {
     { id: 'end_time', name: "End Time" }
   ]
 
-  const default_cols = [
-    { record_id: 'xxx-xxx-xxx-xxx', start_time: "xxx", end_time: "xxx" }
-  ]
-  const [rows, setRows] = useState(default_cols);
+  const default_cols =[ 
+    { record_id: 'xxx-xxx-xxx-xxx', user_id: "NULL",start_time: "xxx", end_time: "xxx" } ]
+  const [rows, setRows] = useState<IWorkTimeRecord[]>(default_cols);
 
   function MesModalUIOnHide() {
     setShowAlert(false);
@@ -54,8 +53,9 @@ function WorkTimeQuery() {
             end_time: (dtEndTime),
           })
             .then((res) => {
+              setRows(res.payload);
+            
               setLoading(false);
-              setRows(res.error_msg);
             })
             .catch((reason) => {
               console.error(reason);

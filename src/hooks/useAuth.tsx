@@ -71,7 +71,7 @@ const useMesAuth = () => {
             userName: email,
             userToken: data.session.access_token,
             isAuthed: true,
-            miscInfo: {},
+            miscInfo: {start_time:"05:00"},
             permissions: [{
               appID: MM_APPLICATION_ID.WorkTimeAdd,
               appName: "WorkTimeAdd",
