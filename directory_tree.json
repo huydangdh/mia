@@ -1,0 +1,162 @@
+{
+  "..": {
+    "": {},
+    "lhfz": {
+      ".eslintrc.cjs": null,
+      "README.md": null,
+      ".gitignore": null,
+      "index.html": null,
+      "tsconfig.json": null,
+      "tsconfig.node.json": null,
+      "vite.config.ts": null,
+      "package.json": null,
+      "create_struct.py": null,
+      "pnpm-lock.yaml": null,
+      "project-struct.md": null,
+      "public": {
+        "vite.svg": null
+      },
+      "src": {
+        "vite-env.d.ts": null,
+        "App.tsx": null,
+        "index.tsx": null,
+        "util.py": null,
+        "assets": {
+          "images": {},
+          "styles": {
+            "main.scss": null,
+            "mixins.scss": null,
+            "variables.scss": null
+          }
+        },
+        "components": {
+          "analytics": {
+            "DataAnalytics.tsx": null,
+            "ProductionReports.tsx": null
+          },
+          "common": {
+            "Sidebar.tsx": null,
+            "Footer.tsx": null,
+            "Header.tsx": null
+          },
+          "dashboard": {
+            "Dashboard.tsx": null,
+            "Widget.tsx": null
+          },
+          "materialmanagement": {
+            "MaterialInventory.tsx": null,
+            "MaterialIssuance.tsx": null,
+            "MaterialReceipts.tsx": null,
+            "MaterialRequisition.tsx": null,
+            "PurchaseManagement.tsx": null,
+            "SMTRouteManagement.tsx": null,
+            "StockAnalysis.tsx": null,
+            "InventoryReconciliation.tsx": null,
+            "MaterialConsumption.tsx": null,
+            "StockManagement.tsx": null
+          },
+          "notifications": {
+            "NotificationSystem.tsx": null,
+            "UserNotifications.tsx": null
+          },
+          "orders": {
+            "OrderDetail.tsx": null,
+            "OrderList.tsx": null
+          },
+          "production": {
+            "ProductionSchedule.tsx": null,
+            "ProductionStatus.tsx": null
+          },
+          "quality": {
+            "DefectList.tsx": null,
+            "QualityDashboard.tsx": null
+          },
+          "routecheck": {
+            "RouteCheck.tsx": null,
+            "RouteCheckLog.tsx": null,
+            "RouteCheckHistory.tsx": null
+          },
+          "scanner": {
+            "Scanner.tsx": null,
+            "ScanHistory.tsx": null,
+            "ScanLog.tsx": null
+          },
+          "settings": {
+            "UserSettings.tsx": null,
+            "SystemSettings.tsx": null
+          },
+          "shopfloor": {
+            "ShopfloorControl.tsx": null,
+            "ShopfloorLogs.tsx": null,
+            "ShopfloorStatus.tsx": null
+          },
+          "smtmanagement": {
+            "SMTRouteManagement.tsx": null,
+            "SMTLineManagement.tsx": null,
+            "SMTLineOptimization.tsx": null
+          },
+          "usermanagement": {
+            "UserAuthentication.tsx": null,
+            "UserAuthorization.tsx": null
+          }
+        },
+        "containers": {
+          "DashboardContainer.tsx": null,
+          "DataAnalyticsContainer.tsx": null,
+          "FinalInspectionContainer.tsx": null,
+          "FirmwareProgrammingContainer.tsx": null,
+          "MaterialConsumptionContainer.tsx": null,
+          "MaterialInventoryContainer.tsx": null,
+          "MaterialIssuanceContainer.tsx": null,
+          "MaterialRequisitionContainer.tsx": null,
+          "MaterialReceiptsContainer.tsx": null,
+          "PackagingContainer.tsx": null,
+          "ProductionContainer.tsx": null,
+          "ProductionReportsContainer.tsx": null,
+          "PurchaseManagementContainer.tsx": null,
+          "QualityContainer.tsx": null,
+          "QualityControlContainer.tsx": null,
+          "RepairContainer.tsx": null,
+          "RouteCheckContainer.tsx": null,
+          "SMTLineManagementContainer.tsx": null,
+          "SMTLineOptimizationContainer.tsx": null,
+          "ScannerContainer.tsx": null,
+          "SettingsContainer.tsx": null,
+          "ShippingContainer.tsx": null,
+          "ShopfloorContainer.tsx": null,
+          "SMTRouteManagementContainer.tsx": null,
+          "TestingContainer.tsx": null,
+          "UserAuthenticationContainer.tsx": null,
+          "UserAuthorizationContainer.tsx": null,
+          "UserNotificationsContainer.tsx": null,
+          "AssemblyStationContainer.tsx": null,
+          "CustomerSupportContainer.tsx": null,
+          "InventoryReconciliationContainer.tsx": null
+        },
+        "routes": {
+          "index.tsx": null
+        },
+        "services": {
+          "api.ts": null,
+          "auth.ts": null,
+          "integrationService.ts": null,
+          "materialManagementService.ts": null,
+          "notificationService.ts": null,
+          "orderService.ts": null,
+          "productionService.ts": null,
+          "qualityService.ts": null,
+          "routeCheckService.ts": null,
+          "scannerService.ts": null,
+          "shopfloorService.ts": null,
+          "smtManagementService.ts": null,
+          "userService.ts": null,
+          "analyticsService.ts": null
+        },
+        "utils": {
+          "helpers.ts": null,
+          "formatDate.ts": null
+        }
+      }
+    }
+  }
+}
