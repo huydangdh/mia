@@ -34,6 +34,7 @@ export const performLogout = (): void => {
 export const isUserLoggedIn = (): boolean => {
   // Kiểm tra xem có thông tin đăng nhập trong localStorage hay không
   let userDataString = localStorage.getItem('userData');
+  console.log(userDataString)
   return !!userDataString; // Trả về true nếu có thông tin đăng nhập, ngược lại trả về false
 };
 

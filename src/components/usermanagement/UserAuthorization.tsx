@@ -1,17 +1,35 @@
 // useAuthorization.ts
 
-import { useState, useEffect } from 'react';
-import { authenticateUser, AuthData, performLogout, isUserLoggedIn } from '../../services/auth';
+import { useEffect, useState } from "react";
+import {
+  AuthData,
+  authenticateUser,
+  isUserLoggedIn,
+  performLogout,
+} from "../../services/auth";
+
+export const Permissions = {
+  VIEW_DASHBOARD: "viewDashboard",
+  VIEW_REPORTS: "viewReports",
+  MANAGE_USERS: "manageUsers",
+};
 
 interface UserAuthorizationHook {
   hasPermission: (permission: string) => boolean;
-  loginAndFetchPermissions: (username: string, password: string) => Promise<void>;
+  loginAndFetchPermissions: (
+    username: string,
+    password: string,
+  ) => Promise<boolean>;
   logout: () => void;
   isLoggedIn: boolean;
+  user: AuthData
 }
 
 export const useAuthorization = (): UserAuthorizationHook => {
-  const [userData, setUserData] = useState<AuthData>({ userId: null, permissions: [] });
+  const [userData, setUserData] = useState<AuthData>({
+    userId: null,
+    permissions: [],
+  });
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isUserLoggedIn());
 
   // Function to check if the user has the specified permission
@@ -20,12 +38,20 @@ export const useAuthorization = (): UserAuthorizationHook => {
   };
 
   // Function to handle user login and fetch permissions
-  const loginAndFetchPermissions = async (username: string, password: string) => {
-    const authData = await authenticateUser(username, password);
-    setUserData(authData);
-    setIsLoggedIn(authData.userId !== null);
+  const loginAndFetchPermissions = async (
+    username: string,
+    password: string,
+  ): Promise<boolean> => {
+    try {
+      const authData = await authenticateUser(username, password);
+      setUserData(authData);
+      setIsLoggedIn(true);
+      return true;
+    } catch (error) {
+      setIsLoggedIn(false);
+      return false;
+    }
   };
-
   // Function to handle user logout
   const logout = () => {
     performLogout();
@@ -35,8 +61,8 @@ export const useAuthorization = (): UserAuthorizationHook => {
 
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
+    console.log("setIsLoggedIn")
   }, [userData]);
 
-  return { hasPermission, loginAndFetchPermissions, logout, isLoggedIn };
+  return { hasPermission, loginAndFetchPermissions, logout, isLoggedIn, user: userData };
 };
-
