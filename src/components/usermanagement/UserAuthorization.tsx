@@ -1,68 +1,48 @@
-// useAuthorization.ts
+// src/components/usermanagement/useAuthorization.ts
 
-import { useEffect, useState } from "react";
-import {
-  AuthData,
-  authenticateUser,
-  isUserLoggedIn,
-  performLogout,
-} from "../../services/auth";
-
-export const Permissions = {
-  VIEW_DASHBOARD: "viewDashboard",
-  VIEW_REPORTS: "viewReports",
-  MANAGE_USERS: "manageUsers",
-};
+import { useState, useEffect } from 'react';
+import { authenticateUser as MESAuthService_CheckAuth, AuthData, performLogout as MESAuthService_Logout, isUserLoggedIn } from '../../services/auth';
 
 interface UserAuthorizationHook {
   hasPermission: (permission: string) => boolean;
-  loginAndFetchPermissions: (
-    username: string,
-    password: string,
-  ) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   isLoggedIn: boolean;
-  user: AuthData
+  userData: AuthData;
 }
 
+const USER_DATA_KEY = 'userData';
+
 export const useAuthorization = (): UserAuthorizationHook => {
-  const [userData, setUserData] = useState<AuthData>({
-    userId: null,
-    permissions: [],
+  const [userData, setUserData] = useState<AuthData>(() => {
+    const storedData = localStorage.getItem(USER_DATA_KEY);
+    return storedData ? JSON.parse(storedData) : { userId: null, permissions: [] };
   });
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isUserLoggedIn());
+
+  useEffect(() => {
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+  }, [userData]);
 
   // Function to check if the user has the specified permission
   const hasPermission = (permission: string): boolean => {
     return userData.permissions.includes(permission);
   };
 
-  // Function to handle user login and fetch permissions
-  const loginAndFetchPermissions = async (
-    username: string,
-    password: string,
-  ): Promise<boolean> => {
-    try {
-      const authData = await authenticateUser(username, password);
-      setUserData(authData);
-      setIsLoggedIn(true);
-      return true;
-    } catch (error) {
-      setIsLoggedIn(false);
-      return false;
-    }
+  // Function to handle user login
+  const login = async (username: string, password: string) => {
+    const authData = await MESAuthService_CheckAuth(username, password);
+    setUserData(authData);
+    setIsLoggedIn(authData.userId !== null);
   };
+
   // Function to handle user logout
   const logout = () => {
-    performLogout();
+    MESAuthService_Logout();
     setUserData({ userId: null, permissions: [] });
     setIsLoggedIn(false);
   };
 
-  useEffect(() => {
-    setIsLoggedIn(isUserLoggedIn());
-    console.log("setIsLoggedIn")
-  }, [userData]);
-
-  return { hasPermission, loginAndFetchPermissions, logout, isLoggedIn, user: userData };
+  return { hasPermission, login, logout, isLoggedIn, userData };
 };

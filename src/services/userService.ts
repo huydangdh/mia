@@ -40,5 +40,5 @@ export const getUserPermissions = (userId: string): string[] => {
 export const logout = (): void => {
   // Perform any necessary cleanup or reset logic for logout
   // In this example, we simply clear the user data
-  localStorage.removeItem('userId');
+  localStorage.removeItem('userData');
 };

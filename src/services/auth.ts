@@ -35,7 +35,10 @@ export const isUserLoggedIn = (): boolean => {
   // Kiểm tra xem có thông tin đăng nhập trong localStorage hay không
   let userDataString = localStorage.getItem('userData');
   console.log(userDataString)
-  return !!userDataString; // Trả về true nếu có thông tin đăng nhập, ngược lại trả về false
+  if(userDataString == null) userDataString = "{}"
+  let authData = JSON.parse(userDataString) as AuthData
+  if(authData.userId == null || userDataString == null  ) return false
+  else return true
 };
 
 // useAuthorization.js
