@@ -3,42 +3,43 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import { useAuthorization } from '../usermanagement/UserAuthorization';
-import './Header.css';
 
-const Header = () => {
-  const { logout } = useAuthorization();
 
+const Header: React.FC = () => {
+  const { isLoggedIn, logout } = useAuthorization(); // Destructure the isLoggedIn and logout function from useAuthorization hook
+
+  const handleLogout = () => {
+    logout(); // Call the logout function on logout button click
+  };
   return (
-    <header className="header">
-      <div className="container">
-        <nav className="navbar">
-          <Link to="/" className="navbar-brand">
-            Z-MES
-          </Link>
-          <div className="menu">
-            <ul className="nav-links">
-              <li className="nav-item">
-                <Link to="/dashboard" className="nav-link">
-                  Dashboard
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/reports" className="nav-link">
-                  Reports
-                </Link>
-              </li>
-              {/* Add more menu items here based on permissions */}
-            </ul>
-            <button onClick={logout} className="logout-btn">
-              Logout
-            </button>
-          </div>
-        </nav>
-      </div>
-    </header>
+    <Navbar bg="light" expand="lg">
+      <Navbar.Brand as={Link} to="/">
+        Z-MES
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="navbarNav" />
+      <Navbar.Collapse id="navbarNav">
+        <Nav className="ms-auto">
+          <Nav.Link as={Link} to="/">
+            Home
+          </Nav.Link>
+          <Nav.Link as={Link} to="/dashboard">
+            Dashboard
+          </Nav.Link>
+          {/* Add more navigation links as needed */}
+          {isLoggedIn ? (
+            <Nav.Link onClick={handleLogout}>Logout</Nav.Link> // Display Logout link when user is logged in
+          ) : (
+            <Nav.Link as={Link} to="/login">
+              Login
+            </Nav.Link>
+          )}
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
 export default Header;
-

@@ -14,15 +14,28 @@ import Login from "../Login";
 import { useAuthorization } from "../components/usermanagement/UserAuthorization";
 import Dashboard from "../components/dashboard/Dashboard";
 
-interface PrivateRouteProps extends RouteProps {
+interface PrivateRouteProps {
   // You can add any additional props needed for the private route
+  component: React.ComponentType,
+  path?: string
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, ...rest }) => {
-  const { isLoggedIn } = useAuthorization();
 
-  return isLoggedIn ? <Route {...rest} element={element} /> : <Navigate to="/login" />;
-};
+export const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: RouteComponent }) => {
+
+  const { isLoggedIn } = useAuthorization()
+
+
+  if (isLoggedIn) {
+    return <RouteComponent />
+  }
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />
+  }
+
+}
+
 const StepRouter = () => {
   return (
     <Router>
@@ -33,7 +46,11 @@ const StepRouter = () => {
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           {/* Add other routes for different steps as needed */}
-          <PrivateRoute path="/dashboard" element={<Dashboard />} />
+
+          <Route
+            path="dashboard"
+            element={<PrivateRoute component={Dashboard} />}
+          />
         </Routes>
       </div>
     </Router>
