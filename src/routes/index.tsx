@@ -12,7 +12,6 @@ import { useAuthorization } from "../components/usermanagement/UserAuthorization
 import Dashboard from "../components/dashboard/Dashboard";
 import { AttendanceApp } from "../components/attendance";
 import {
-  hasPermission, // Import the hasPermission function
   PERMISSION_CREATE_CLOCKRECORD,
   PERMISSION_READ_CLOCKRECORD,
 } from "../PermissionsUtil";
@@ -28,10 +27,10 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: RouteComponent,
   permissions,
 }) => {
-  const { isLoggedIn, userData } = useAuthorization();
+  const { isLoggedIn, userData, hasPermission } = useAuthorization();
 
   if (permissions && isLoggedIn) {
-    if (!hasPermission(permissions, userData)) {
+    if (!hasPermission(permissions)) {
       alert("Not permissions!!!");
       return "<>_+_<>";
     }
