@@ -1,21 +1,21 @@
 // Login.tsx
 
-import React, { useEffect, useState } from 'react';
-import { useAuthorization } from './components/usermanagement/UserAuthorization';
+import React, { useEffect, useState } from "react";
+import { useAuthorization } from "./components/usermanagement/UserAuthorization";
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const { login, isLoggedIn } = useAuthorization();
 
-  const handleLogin = async () => {
-    await login(username, password);
-  };
+  const handleLogin = async () => await login(username, password);
+  console.log(
+    "🚀 ~ file: Login.tsx:14 ~ handleLogin ~ isLoggedIn:",
+    isLoggedIn
+  );
 
-  useEffect(()=>{
-
-  })
+  useEffect(() => {});
 
   return (
     <div className="container">
@@ -52,7 +52,10 @@ const Login: React.FC = () => {
                       placeholder="Enter your password"
                     />
                   </div>
-                  <button onClick={handleLogin} className="btn btn-primary btn-block">
+                  <button
+                    onClick={handleLogin}
+                    className="btn btn-primary btn-block"
+                  >
                     Login
                   </button>
                 </>

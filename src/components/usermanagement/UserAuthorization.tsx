@@ -1,7 +1,17 @@
 // src/components/usermanagement/useAuthorization.ts
 
-import { useState, useEffect } from 'react';
-import { authenticateUser as MESAuthService_CheckAuth, AuthData, performLogout as MESAuthService_Logout, isUserLoggedIn } from '../../services/auth';
+import { useState, useEffect } from "react";
+import {
+  authenticateUser as MESAuthService_CheckAuth,
+  AuthData,
+  performLogout as MESAuthService_Logout,
+  isUserLoggedIn,
+} from "../../services/auth";
+
+//add redux
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, clearUser } from "../../redux/userSlice";
+// end add redux
 
 interface UserAuthorizationHook {
   hasPermission: (permission: string) => boolean;
@@ -11,19 +21,27 @@ interface UserAuthorizationHook {
   userData: AuthData;
 }
 
-const USER_DATA_KEY = 'userData';
+const USER_DATA_KEY = "userData";
 
 export const useAuthorization = (): UserAuthorizationHook => {
-  const [userData, setUserData] = useState<AuthData>(() => {
-    const storedData = localStorage.getItem(USER_DATA_KEY);
-    return storedData ? JSON.parse(storedData) : { userId: null, permissions: [] };
-  });
+  // Khởi tạo userData từ localStorage
+  const initialUserData: AuthData = JSON.parse(
+    localStorage.getItem(USER_DATA_KEY) || '{"userId": null, "permissions": []}'
+  );
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isUserLoggedIn());
+  const [userData, setUserData] = useState<AuthData>(initialUserData);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    // Cập nhật biến isLoggedIn khi có dữ liệu userData
+    if (userData.userId !== null) {
+      dispatch(setUser(userData));
+    } else {
+      dispatch(clearUser());
+    }
     localStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
-  }, [userData]);
+  }, []);
 
   // Function to check if the user has the specified permission
   const hasPermission = (permission: string): boolean => {
@@ -31,17 +49,20 @@ export const useAuthorization = (): UserAuthorizationHook => {
   };
 
   // Function to handle user login
-  const login = async (username: string, password: string) => {
-    const authData = await MESAuthService_CheckAuth(username, password);
-    setUserData(authData);
-    setIsLoggedIn(authData.userId !== null);
+  const login = async (username: string, password: string): Promise<void> => {
+    const authData: AuthData = await MESAuthService_CheckAuth(
+      username,
+      password
+    );
+    // Lưu trạng thái người dùng vào localStorage khi đăng nhập thành công
+    localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+    dispatch(setUser(authData));
   };
 
   // Function to handle user logout
-  const logout = () => {
+  const logout = (): void => {
     MESAuthService_Logout();
-    setUserData({ userId: null, permissions: [] });
-    setIsLoggedIn(false);
+    dispatch(clearUser());
   };
 
   return { hasPermission, login, logout, isLoggedIn, userData };

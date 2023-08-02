@@ -8,7 +8,7 @@ export interface AuthData {
 export const authenticateUser = async (username: string, password: string): Promise<AuthData> => {
   try {
     const user = login(username, password);
-    console.log(user)
+    console.log("🚀 ~ file: auth.ts:11 ~ authenticateUser ~ user:", user)
     if (user) {
       const permissions = getUserPermissions(user.id);
       // Save user data to localStorage

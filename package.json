@@ -34,6 +34,7 @@
     "react-redux": "^8.0.7",
     "react-router-dom": "^6.11.2",
     "redux": "^4.2.1",
+    "redux-persist": "^6.0.0",
     "w3-css": "^4.1.0"
   },
   "devDependencies": {

@@ -1,12 +1,11 @@
 
 // Header.tsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { useAuthorization } from '../usermanagement/UserAuthorization';
-
 
 const Header: React.FC = () => {
   const { isLoggedIn, logout } = useAuthorization(); // Destructure the isLoggedIn and logout function from useAuthorization hook
@@ -14,6 +13,11 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     logout(); // Call the logout function on logout button click
   };
+
+  useEffect(()=>{
+    console.log("🚀 ~ file: Header.tsx:20 ~ useEffect ~ isLoggedIn:", isLoggedIn)
+  },[isLoggedIn])
+
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand as={Link} to="/">
