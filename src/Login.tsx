@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuthorization } from "./components/usermanagement/UserAuthorization";
+import { Navigate } from "react-router-dom";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -25,9 +26,7 @@ const Login: React.FC = () => {
             <div className="card-body">
               <h1 className="card-title text-center mb-4">Login</h1>
               {isLoggedIn ? (
-                <div className="alert alert-success text-center" role="alert">
-                  You are already logged in.
-                </div>
+                <Navigate to="/dashboard" replace={true}></Navigate>
               ) : (
                 <>
                   <div className="form-group">

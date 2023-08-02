@@ -19,7 +19,7 @@ const users: User[] = [
     id: 'admin456',
     username: 'ad',
     password: '1',
-    permissions: ['viewDashboard', 'viewReports', 'manageUsers'],
+    permissions: ['viewDashboard', 'viewReports', 'manageUsers', 'viewClockRecord', ''],
   },
 ];
 
