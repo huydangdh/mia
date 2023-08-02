@@ -3,20 +3,17 @@ import AttendanceApp from "../attendance/AttendanceApp";
 import IApp from "../common/IApp";
 import { useAuthorization } from "../usermanagement/UserAuthorization";
 import { Link } from "react-router-dom";
+import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD } from "../../PermissionsUtil";
 
 const appsData: IApp[] = [
   // Danh sách các ứng dụng trong hệ thống
   // Mỗi ứng dụng có một tên (name) và danh sách các quyền (permissions) mà người dùng cần có để truy cập vào ứng dụng đó
   {
-    name: "CLockRecord",
+    name: "ClockRecord",
     permissions: [
-      "viewClockRecord",
-      "createClockRecord",
-      "readClockRecord",
-      "updateClockRecord",
-      "deleteClockRecord",
+      PERMISSION_READ_CLOCKRECORD
     ],
-    url: "/CLockRecord",
+    url: "/ClockRecord",
   },
   // ... Thêm các ứng dụng khác tương tự ...
 ];

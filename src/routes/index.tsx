@@ -1,12 +1,9 @@
 // src/StepRouter.js
 import {
   BrowserRouter as Router,
-  Link,
-  Outlet,
+  Navigate,
   Route,
   Routes,
-  Navigate,
-  RouteProps,
 } from "react-router-dom";
 import App from "../App";
 import Header from "../components/common/Header";
@@ -14,18 +11,31 @@ import Login from "../Login";
 import { useAuthorization } from "../components/usermanagement/UserAuthorization";
 import Dashboard from "../components/dashboard/Dashboard";
 import { AttendanceApp } from "../components/attendance";
-import NavigationBar from "../components/common/NavigationBar";
+import {
+  hasPermission, // Import the hasPermission function
+  PERMISSION_CREATE_CLOCKRECORD,
+  PERMISSION_READ_CLOCKRECORD,
+} from "../PermissionsUtil";
 
 interface PrivateRouteProps {
   // You can add any additional props needed for the private route
   component: React.ComponentType;
+  permissions?: string | string[];
   path?: string;
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: RouteComponent,
+  permissions,
 }) => {
-  const { isLoggedIn } = useAuthorization();
+  const { isLoggedIn, userData } = useAuthorization();
+
+  if (permissions && isLoggedIn) {
+    if (!hasPermission(permissions, userData)) {
+      alert("Not permissions!!!");
+      return "<>_+_<>";
+    }
+  }
   if (isLoggedIn) {
     return <RouteComponent />;
   }
@@ -47,9 +57,7 @@ const StepRouter = () => {
   return (
     <Router>
       <div>
-        
         <Header />
-        <NavigationBar /> {/* Include the NavigationBar component */}
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
@@ -59,9 +67,18 @@ const StepRouter = () => {
             path="/dashboard"
             element={<PrivateRoute component={Dashboard} />}
           />
+          
           <Route
             path="/ClockRecord"
-            element={<PrivateRoute component={AttendanceApp} />}
+            element={
+              <PrivateRoute
+                component={AttendanceApp}
+                permissions={[
+                  PERMISSION_READ_CLOCKRECORD,
+                  PERMISSION_CREATE_CLOCKRECORD,
+                ]}
+              />
+            }
           />
         </Routes>
       </div>
