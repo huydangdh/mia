@@ -1,7 +1,5 @@
 // src/utils/permissionUtils.ts
 
-import { useAuthorization } from "./components/usermanagement/UserAuthorization";
-import { AuthData } from "./services/auth";
 
 // src/permissions.ts
 

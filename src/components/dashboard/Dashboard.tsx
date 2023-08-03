@@ -4,6 +4,8 @@ import IApp from "../common/IApp";
 import { useAuthorization } from "../usermanagement/UserAuthorization";
 import { Link } from "react-router-dom";
 import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD } from "../../PermissionsUtil";
+import { Alert, Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import SMTManagementContainer from "../../containers/SMTLineManagementContainer";
 
 const appsData: IApp[] = [
   // Danh sách các ứng dụng trong hệ thống
@@ -38,19 +40,33 @@ const Dashboard = () => {
     setAppList(dataFromAPI);
   }, []);
   return (
-    <div>
-      <p>Welcome, {userData.userId}!</p>
-      <p>Your permissions: {userData.permissions.join(", ")}</p>
-      {/* Danh sách các ứng dụng */}
-      <h3>Your Apps:</h3>
-      <ul>
-        {userApps.map((app, index) => (
-          <li key={index}>
-            <Link to={app.url}>{app.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Container className="mt-4">
+        <h3>Welcome, {userData.userId}!</h3>
+        <p>Your permissions: {userData.permissions.join(", ")}</p>
+
+        <Row>
+          {userApps.map((app, index) => (
+            <Col key={index} md={4} className="mb-4">
+              <Card>
+                <Card.Body>
+                  <Card.Title>{app.name}</Card.Title>
+                  <Card.Text>[[_Desc_]]</Card.Text>
+                  <Link to={app.url} className="btn btn-primary">
+                    Go to App
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+        <Row>
+          <SMTManagementContainer />
+        </Row>
+
+      </Container>
+
+    </>
   );
 };
 

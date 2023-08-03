@@ -104,3 +104,5 @@ export const useAuthorization = (): UserAuthorizationHook => {
     userData,
     loading,
     getAppsByPermission
+  }
+}
