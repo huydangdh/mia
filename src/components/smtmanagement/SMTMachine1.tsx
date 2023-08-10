@@ -1,7 +1,6 @@
-// src/components/SMTMachine/SMTMachine1.tsx
-
 import React, { useState, useEffect } from 'react';
 import FeedersList from './FeedersList';
+import './SMTLine.css'
 
 interface CurrentProduction {
   pcbName: string;
@@ -22,28 +21,7 @@ const SMTMachine1: React.FC = () => {
       status: 'Ready',
       materialCode: 'RES001',
     },
-    {
-      id: 2,
-      name: 'Feeder 2',
-      componentType: 'Capacitor',
-      status: 'Empty',
-      materialCode: '',
-    },
-    {
-      id: 3,
-      name: 'Feeder 3',
-      componentType: 'IC',
-      status: 'Ready',
-      materialCode: 'IC123',
-    },
-    {
-      id: 4,
-      name: 'Feeder 4',
-      componentType: 'Connector',
-      status: 'Low',
-      materialCode: 'CONN789',
-    },
-    // Add more feeders data here...
+    // ... (other feeder data)
   ]);
 
   useEffect(() => {
@@ -68,8 +46,16 @@ const SMTMachine1: React.FC = () => {
     <div className="smt-machine">
       <h2>SMT Machine 1</h2>
       <h3>Current Production</h3>
-      <p>PCB Name: {currentProduction.pcbName}</p>
-      <p>Feeder Barcode: {currentProduction.feederBarcode}</p>
+      <div className="current-production">
+        <div className="pcb-name">
+          <span>PCB Name:</span>
+          <span className="animated-text">{currentProduction.pcbName}</span>
+        </div>
+        <div className="feeder-barcode">
+          <span>Feeder Barcode:</span>
+          <span>{currentProduction.feederBarcode}</span>
+        </div>
+      </div>
       <FeedersList feeders={feedersData} />
     </div>
   );

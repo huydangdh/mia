@@ -9,12 +9,13 @@ import {
 } from "../../services/auth";
 import { setUser, clearUser } from "../../redux/userSlice";
 import IApp from "../common/IApp";
+import { EPermissions } from "../../PermissionsUtil";
 
 interface UserAuthorizationHook {
   // Kiểm tra xem người dùng có quyền truy cập vào permission hay không
   hasPermission: (permission: string | string[]) => boolean;
   // Hàm xử lý đăng nhập người dùng
-  login: (username: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<boolean>;
   // Hàm xử lý đăng xuất người dùng
   logout: () => void;
   // Trạng thái người dùng đã đăng nhập hay chưa
@@ -70,15 +71,22 @@ export const useAuthorization = (): UserAuthorizationHook => {
   };
 
   // Hàm xử lý đăng nhập người dùng
-  const login = async (username: string, password: string): Promise<void> => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     const authData: AuthData = await MESAuthService_CheckAuth(
       username,
       password
     );
-    // Lưu thông tin người dùng vào localStorage khi đăng nhập thành công
-    localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
-    dispatch(setUser(authData));
+
+    if (authData.userId !== null) {
+      // Lưu thông tin người dùng vào localStorage khi đăng nhập thành công
+      localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+      dispatch(setUser(authData));
+      return true; // Trả về true nếu đăng nhập thành công
+    }
+
+    return false; // Trả về false nếu đăng nhập không thành công
   };
+
 
   // Hàm xử lý đăng xuất người dùng
   const logout = (): void => {
@@ -89,7 +97,7 @@ export const useAuthorization = (): UserAuthorizationHook => {
   };
 
   // Hàm lấy danh sách ứng dụng dựa trên permissions người dùng
-  const getAppsByPermission = (apps: IApp[], permissions: string[]): IApp[] => {
+  const getAppsByPermission = (apps: IApp[], permissions: EPermissions[]): IApp[] => {
     // Lọc danh sách apps dựa trên permissions của người dùng
     return apps.filter((app) =>
       permissions.some((permission) => app.permissions.includes(permission))

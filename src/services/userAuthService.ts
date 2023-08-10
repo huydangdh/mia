@@ -1,21 +1,23 @@
-import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD } from '../PermissionsUtil';
+import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD,EPermissions } from '../PermissionsUtil';
 import AbstractUserAuthService from './interface/AbstractUserAuthService';
 import User from './model/MMUser';
 
+// Danh sách người dùng mẫu để minh họa
 const usersData: User[] = [
   {
     id: "user123",
-    username: "john_doe",
-    password: "john@123",
-    permissions: ["viewDashboard", "viewReports"],
+    username: "user",
+    password: "1",
+    permissions: [EPermissions.VIEW_DASHBOARD, EPermissions.CREATE_CLOCKRECORD],
   },
   {
     id: "admin456",
     username: "ad",
     password: "1",
     permissions: [
-      PERMISSION_CREATE_CLOCKRECORD,
-      PERMISSION_READ_CLOCKRECORD
+      EPermissions.VIEW_CLOCKRECORD,
+      EPermissions.READ_CLOCKRECORD,
+      EPermissions.CREATE_CLOCKRECORD
     ],
   },
 ];
@@ -25,65 +27,84 @@ class UserAuthService extends AbstractUserAuthService {
     super();
   }
 
+  // Tìm người dùng bằng email trong danh sách người dùng
   private findUserByEmail(email: string): User | undefined {
     return usersData.find((user) => user.username === email);
   }
 
+  /**
+   * Xử lý xác thực người dùng bằng email và mật khẩu.
+   * @param email - Địa chỉ email người dùng.
+   * @param password - Mật khẩu người dùng.
+   * @returns {Promise<User | null>} - Thông tin người dùng đã xác thực hoặc null nếu đăng nhập thất bại.
+   */
   protected async handleEmailPasswordLogin(email: string, password: string): Promise<User | null> {
     const user = this.findUserByEmail(email);
 
     if (user && user.password === password) {
-      // Password matches, return the authenticated user
+      // Mật khẩu khớp, trả về người dùng đã xác thực
       return user;
     } else {
-      // Invalid credentials, return null to indicate login failure
+      // Thông tin đăng nhập không hợp lệ, trả về null để chỉ thị đăng nhập thất bại
       return null;
     }
   }
 
+  /**
+   * Xử lý việc đăng ký người dùng mới.
+   * @param username - Tên người dùng.
+   * @param email - Địa chỉ email người dùng.
+   * @param password - Mật khẩu người dùng.
+   * @returns {Promise<User | null>} - Thông tin người dùng đã được đăng ký hoặc null nếu đăng ký thất bại.
+   */
   protected async handleRegisterUser(username: string, email: string, password: string): Promise<User | null> {
-    // Check if a user with the email already exists
+    // Kiểm tra xem người dùng với email đã tồn tại hay chưa
     if (this.findUserByEmail(email)) {
-      return null; // User with this email already exists
+      return null; // Người dùng với email này đã tồn tại
     }
 
-    // Generate a new user ID in the format "TW{auto_increment_XXXXXX}"
+    // Tạo một ID người dùng mới duy nhất theo định dạng "TW{auto_increment_XXXXXX}"
     const id = this.generateUniqueUserId();
 
-    // Create a new user
+    // Tạo người dùng mới
     const newUser: User = {
       id,
       username,
       email,
       password,
-      permissions: [], // Initialize with an empty array of permissions
+      permissions: [], // Khởi tạo với một mảng rỗng quyền
     };
     usersData.push(newUser);
 
     return newUser;
   }
 
-  // Helper function to generate a new unique user ID in the format "TW{auto_increment_XXXXXX}"
+  // Hàm trợ giúp để tạo ID người dùng mới duy nhất theo định dạng "TW{auto_increment_XXXXXX}"
   private generateUniqueUserId(): string {
-    // For simplicity, let's use a simple incrementing counter
+    // Vì đơn giản, chúng ta sử dụng một bộ đếm tăng dần đơn giản
     const nextId = usersData.length + 1;
     return `TW${nextId.toString().padStart(6, '0')}`;
   }
 
-
+  /**
+   * Xử lý đăng xuất người dùng.
+   * @returns {Promise<void>}
+   */
   protected async handleLogout(): Promise<void> {
-    // Since this is a demo, we don't need to perform any specific logout actions
-    // For a real implementation, you might want to clear user sessions or tokens
+    // Vì đây là bản demo, chúng ta không cần thực hiện bất kỳ hành động đăng xuất cụ thể nào
+    // Trong một ứng dụng thực tế, bạn có thể muốn xóa phiên làm việc hoặc mã thông báo người dùng
     return;
   }
 
-  // Simulated function to get user permissions
-  public getUserPermissions = (userId: string): string[] => {
+  /**
+   * Hàm mô phỏng để lấy quyền của người dùng.
+   * @param userId - ID người dùng.
+   * @returns {string[]} - Mảng quyền của người dùng.
+   */
+  public getUserPermissions = (userId: string): EPermissions[] => {
     const user = usersData.find((u) => u.id === userId);
     return user ? user.permissions : [];
   };
-
 }
 
 export default UserAuthService;
-
