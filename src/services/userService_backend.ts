@@ -1,14 +1,7 @@
 // UserAuthenticationService.ts
 
-import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD } from "../PermissionsUtil";
-
-// Simulated user data
-interface User {
-  id: string;
-  username: string;
-  password: string;
-  permissions: string[];
-}
+import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD } from "../PermissionsUtil"; 
+import User from "./model/MMUser";
 
 const users: User[] = [
   {
@@ -48,3 +41,31 @@ export const logout = (): void => {
   // In this example, we simply clear the user data
   localStorage.removeItem("userData");
 };
+
+
+
+// UserAuthorizationService.ts
+
+// Abstract class for User Authorization Service
+export abstract class IUserAuthorizationService {
+  // Simulated user data
+  protected users: User[];
+
+  constructor() {
+    this.users = [];
+  }
+
+  // Simulated user authentication function
+  abstract login(username: string, password: string): User | null;
+
+  // Simulated function to get user permissions
+  abstract getUserPermissions(userId: string): string[];
+
+  // Function to logout user
+  logout(): void {
+    // Perform any necessary cleanup or reset logic for logout
+    // In this example, we simply clear the user data
+    localStorage.removeItem("userData");
+  }
+}
+

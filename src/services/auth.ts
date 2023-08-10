@@ -1,23 +1,23 @@
-import {
-  login,
-  getUserPermissions,
-  logout,
-} from "../services/userService_backend";
+import UserAuthService from "../services/userAuthService";
+
 export interface AuthData {
   userId: string | null;
   permissions: string[];
 }
+
+const authService = new UserAuthService();
+
 
 // Function to perform user login and fetch permissions
 export const authenticateUser = async (
   username: string,
   password: string
 ): Promise<AuthData> => {
-  try {
-    const user = login(username, password);
+ try {
+    const user = await authService.emailPasswordLogin(username, password);
     console.log("🚀 ~ file: auth.ts:11 ~ authenticateUser ~ user:", user);
     if (user) {
-      const permissions = getUserPermissions(user.id);
+      const permissions = authService.getUserPermissions(user.id);
       // Save user data to localStorage
       localStorage.setItem(
         "userData",
@@ -36,7 +36,7 @@ export const authenticateUser = async (
 
 // Function to perform user logout
 export const performLogout = (): void => {
-  logout();
+  authService.logout();
 };
 
 // Function to check if the user is logged in

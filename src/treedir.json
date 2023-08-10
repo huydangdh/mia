@@ -1,0 +1,513 @@
+{
+  "name": "components",
+  "path": "./src/components/",
+  "files": [
+    {
+      "name": "DataAnalytics.tsx",
+      "path": "src/components/analytics/DataAnalytics.tsx"
+    },
+    {
+      "name": "ProductionReports.tsx",
+      "path": "src/components/analytics/ProductionReports.tsx"
+    },
+    {
+      "name": "AttendanceApp.tsx",
+      "path": "src/components/attendance/AttendanceApp.tsx"
+    },
+    {
+      "name": "index.ts",
+      "path": "src/components/attendance/index.ts"
+    },
+    {
+      "name": "Footer.tsx",
+      "path": "src/components/common/Footer.tsx"
+    },
+    {
+      "name": "Header.css",
+      "path": "src/components/common/Header.css"
+    },
+    {
+      "name": "Header.tsx",
+      "path": "src/components/common/Header.tsx"
+    },
+    {
+      "name": "IApp.ts",
+      "path": "src/components/common/IApp.ts"
+    },
+    {
+      "name": "NavigationBar.tsx",
+      "path": "src/components/common/NavigationBar.tsx"
+    },
+    {
+      "name": "Sidebar.tsx",
+      "path": "src/components/common/Sidebar.tsx"
+    },
+    {
+      "name": "Dashboard.tsx",
+      "path": "src/components/dashboard/Dashboard.tsx"
+    },
+    {
+      "name": "Widget.tsx",
+      "path": "src/components/dashboard/Widget.tsx"
+    },
+    {
+      "name": "InventoryReconciliation.tsx",
+      "path": "src/components/materialmanagement/InventoryReconciliation.tsx"
+    },
+    {
+      "name": "MaterialConsumption.tsx",
+      "path": "src/components/materialmanagement/MaterialConsumption.tsx"
+    },
+    {
+      "name": "MaterialInventory.tsx",
+      "path": "src/components/materialmanagement/MaterialInventory.tsx"
+    },
+    {
+      "name": "MaterialIssuance.tsx",
+      "path": "src/components/materialmanagement/MaterialIssuance.tsx"
+    },
+    {
+      "name": "MaterialReceipts.tsx",
+      "path": "src/components/materialmanagement/MaterialReceipts.tsx"
+    },
+    {
+      "name": "MaterialRequisition.tsx",
+      "path": "src/components/materialmanagement/MaterialRequisition.tsx"
+    },
+    {
+      "name": "PurchaseManagement.tsx",
+      "path": "src/components/materialmanagement/PurchaseManagement.tsx"
+    },
+    {
+      "name": "SMTRouteManagement.tsx",
+      "path": "src/components/materialmanagement/SMTRouteManagement.tsx"
+    },
+    {
+      "name": "StockAnalysis.tsx",
+      "path": "src/components/materialmanagement/StockAnalysis.tsx"
+    },
+    {
+      "name": "StockManagement.tsx",
+      "path": "src/components/materialmanagement/StockManagement.tsx"
+    },
+    {
+      "name": "NotificationSystem.tsx",
+      "path": "src/components/notifications/NotificationSystem.tsx"
+    },
+    {
+      "name": "UserNotifications.tsx",
+      "path": "src/components/notifications/UserNotifications.tsx"
+    },
+    {
+      "name": "OrderDetail.tsx",
+      "path": "src/components/orders/OrderDetail.tsx"
+    },
+    {
+      "name": "OrderList.tsx",
+      "path": "src/components/orders/OrderList.tsx"
+    },
+    {
+      "name": "ProductionSchedule.tsx",
+      "path": "src/components/production/ProductionSchedule.tsx"
+    },
+    {
+      "name": "ProductionStatus.tsx",
+      "path": "src/components/production/ProductionStatus.tsx"
+    },
+    {
+      "name": "DefectList.tsx",
+      "path": "src/components/quality/DefectList.tsx"
+    },
+    {
+      "name": "QualityDashboard.tsx",
+      "path": "src/components/quality/QualityDashboard.tsx"
+    },
+    {
+      "name": "RouteCheck.tsx",
+      "path": "src/components/routecheck/RouteCheck.tsx"
+    },
+    {
+      "name": "RouteCheckHistory.tsx",
+      "path": "src/components/routecheck/RouteCheckHistory.tsx"
+    },
+    {
+      "name": "RouteCheckLog.tsx",
+      "path": "src/components/routecheck/RouteCheckLog.tsx"
+    },
+    {
+      "name": "ScanHistory.tsx",
+      "path": "src/components/scanner/ScanHistory.tsx"
+    },
+    {
+      "name": "ScanLog.tsx",
+      "path": "src/components/scanner/ScanLog.tsx"
+    },
+    {
+      "name": "Scanner.tsx",
+      "path": "src/components/scanner/Scanner.tsx"
+    },
+    {
+      "name": "SystemSettings.tsx",
+      "path": "src/components/settings/SystemSettings.tsx"
+    },
+    {
+      "name": "UserSettings.tsx",
+      "path": "src/components/settings/UserSettings.tsx"
+    },
+    {
+      "name": "ShopfloorControl.tsx",
+      "path": "src/components/shopfloor/ShopfloorControl.tsx"
+    },
+    {
+      "name": "ShopfloorLogs.tsx",
+      "path": "src/components/shopfloor/ShopfloorLogs.tsx"
+    },
+    {
+      "name": "ShopfloorStatus.tsx",
+      "path": "src/components/shopfloor/ShopfloorStatus.tsx"
+    },
+    {
+      "name": "FeedersList.tsx",
+      "path": "src/components/smtmanagement/FeedersList.tsx"
+    },
+    {
+      "name": "SMTLineManagement.tsx",
+      "path": "src/components/smtmanagement/SMTLineManagement.tsx"
+    },
+    {
+      "name": "SMTLineOptimization.tsx",
+      "path": "src/components/smtmanagement/SMTLineOptimization.tsx"
+    },
+    {
+      "name": "SMTMachine1.tsx",
+      "path": "src/components/smtmanagement/SMTMachine1.tsx"
+    },
+    {
+      "name": "SMTMachine2.tsx",
+      "path": "src/components/smtmanagement/SMTMachine2.tsx"
+    },
+    {
+      "name": "SMTRouteManagement.tsx",
+      "path": "src/components/smtmanagement/SMTRouteManagement.tsx"
+    },
+    {
+      "name": "SolderAOI.tsx",
+      "path": "src/components/smtmanagement/SolderAOI.tsx"
+    },
+    {
+      "name": "SolderPasteMachine.tsx",
+      "path": "src/components/smtmanagement/SolderPasteMachine.tsx"
+    },
+    {
+      "name": "UserAuthorization.tsx",
+      "path": "src/components/usermanagement/UserAuthorization.tsx"
+    }
+  ],
+  "subdirs": [
+    {
+      "name": "analytics",
+      "path": "src/components/analytics",
+      "files": [
+        {
+          "name": "DataAnalytics.tsx",
+          "path": "src/components/analytics/DataAnalytics.tsx"
+        },
+        {
+          "name": "ProductionReports.tsx",
+          "path": "src/components/analytics/ProductionReports.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "attendance",
+      "path": "src/components/attendance",
+      "files": [
+        {
+          "name": "AttendanceApp.tsx",
+          "path": "src/components/attendance/AttendanceApp.tsx"
+        },
+        {
+          "name": "index.ts",
+          "path": "src/components/attendance/index.ts"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "common",
+      "path": "src/components/common",
+      "files": [
+        {
+          "name": "Footer.tsx",
+          "path": "src/components/common/Footer.tsx"
+        },
+        {
+          "name": "Header.css",
+          "path": "src/components/common/Header.css"
+        },
+        {
+          "name": "Header.tsx",
+          "path": "src/components/common/Header.tsx"
+        },
+        {
+          "name": "IApp.ts",
+          "path": "src/components/common/IApp.ts"
+        },
+        {
+          "name": "NavigationBar.tsx",
+          "path": "src/components/common/NavigationBar.tsx"
+        },
+        {
+          "name": "Sidebar.tsx",
+          "path": "src/components/common/Sidebar.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "dashboard",
+      "path": "src/components/dashboard",
+      "files": [
+        {
+          "name": "Dashboard.tsx",
+          "path": "src/components/dashboard/Dashboard.tsx"
+        },
+        {
+          "name": "Widget.tsx",
+          "path": "src/components/dashboard/Widget.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "materialmanagement",
+      "path": "src/components/materialmanagement",
+      "files": [
+        {
+          "name": "InventoryReconciliation.tsx",
+          "path": "src/components/materialmanagement/InventoryReconciliation.tsx"
+        },
+        {
+          "name": "MaterialConsumption.tsx",
+          "path": "src/components/materialmanagement/MaterialConsumption.tsx"
+        },
+        {
+          "name": "MaterialInventory.tsx",
+          "path": "src/components/materialmanagement/MaterialInventory.tsx"
+        },
+        {
+          "name": "MaterialIssuance.tsx",
+          "path": "src/components/materialmanagement/MaterialIssuance.tsx"
+        },
+        {
+          "name": "MaterialReceipts.tsx",
+          "path": "src/components/materialmanagement/MaterialReceipts.tsx"
+        },
+        {
+          "name": "MaterialRequisition.tsx",
+          "path": "src/components/materialmanagement/MaterialRequisition.tsx"
+        },
+        {
+          "name": "PurchaseManagement.tsx",
+          "path": "src/components/materialmanagement/PurchaseManagement.tsx"
+        },
+        {
+          "name": "SMTRouteManagement.tsx",
+          "path": "src/components/materialmanagement/SMTRouteManagement.tsx"
+        },
+        {
+          "name": "StockAnalysis.tsx",
+          "path": "src/components/materialmanagement/StockAnalysis.tsx"
+        },
+        {
+          "name": "StockManagement.tsx",
+          "path": "src/components/materialmanagement/StockManagement.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "notifications",
+      "path": "src/components/notifications",
+      "files": [
+        {
+          "name": "NotificationSystem.tsx",
+          "path": "src/components/notifications/NotificationSystem.tsx"
+        },
+        {
+          "name": "UserNotifications.tsx",
+          "path": "src/components/notifications/UserNotifications.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "orders",
+      "path": "src/components/orders",
+      "files": [
+        {
+          "name": "OrderDetail.tsx",
+          "path": "src/components/orders/OrderDetail.tsx"
+        },
+        {
+          "name": "OrderList.tsx",
+          "path": "src/components/orders/OrderList.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "production",
+      "path": "src/components/production",
+      "files": [
+        {
+          "name": "ProductionSchedule.tsx",
+          "path": "src/components/production/ProductionSchedule.tsx"
+        },
+        {
+          "name": "ProductionStatus.tsx",
+          "path": "src/components/production/ProductionStatus.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "quality",
+      "path": "src/components/quality",
+      "files": [
+        {
+          "name": "DefectList.tsx",
+          "path": "src/components/quality/DefectList.tsx"
+        },
+        {
+          "name": "QualityDashboard.tsx",
+          "path": "src/components/quality/QualityDashboard.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "routecheck",
+      "path": "src/components/routecheck",
+      "files": [
+        {
+          "name": "RouteCheck.tsx",
+          "path": "src/components/routecheck/RouteCheck.tsx"
+        },
+        {
+          "name": "RouteCheckHistory.tsx",
+          "path": "src/components/routecheck/RouteCheckHistory.tsx"
+        },
+        {
+          "name": "RouteCheckLog.tsx",
+          "path": "src/components/routecheck/RouteCheckLog.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "scanner",
+      "path": "src/components/scanner",
+      "files": [
+        {
+          "name": "ScanHistory.tsx",
+          "path": "src/components/scanner/ScanHistory.tsx"
+        },
+        {
+          "name": "ScanLog.tsx",
+          "path": "src/components/scanner/ScanLog.tsx"
+        },
+        {
+          "name": "Scanner.tsx",
+          "path": "src/components/scanner/Scanner.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "settings",
+      "path": "src/components/settings",
+      "files": [
+        {
+          "name": "SystemSettings.tsx",
+          "path": "src/components/settings/SystemSettings.tsx"
+        },
+        {
+          "name": "UserSettings.tsx",
+          "path": "src/components/settings/UserSettings.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "shopfloor",
+      "path": "src/components/shopfloor",
+      "files": [
+        {
+          "name": "ShopfloorControl.tsx",
+          "path": "src/components/shopfloor/ShopfloorControl.tsx"
+        },
+        {
+          "name": "ShopfloorLogs.tsx",
+          "path": "src/components/shopfloor/ShopfloorLogs.tsx"
+        },
+        {
+          "name": "ShopfloorStatus.tsx",
+          "path": "src/components/shopfloor/ShopfloorStatus.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "smtmanagement",
+      "path": "src/components/smtmanagement",
+      "files": [
+        {
+          "name": "FeedersList.tsx",
+          "path": "src/components/smtmanagement/FeedersList.tsx"
+        },
+        {
+          "name": "SMTLineManagement.tsx",
+          "path": "src/components/smtmanagement/SMTLineManagement.tsx"
+        },
+        {
+          "name": "SMTLineOptimization.tsx",
+          "path": "src/components/smtmanagement/SMTLineOptimization.tsx"
+        },
+        {
+          "name": "SMTMachine1.tsx",
+          "path": "src/components/smtmanagement/SMTMachine1.tsx"
+        },
+        {
+          "name": "SMTMachine2.tsx",
+          "path": "src/components/smtmanagement/SMTMachine2.tsx"
+        },
+        {
+          "name": "SMTRouteManagement.tsx",
+          "path": "src/components/smtmanagement/SMTRouteManagement.tsx"
+        },
+        {
+          "name": "SolderAOI.tsx",
+          "path": "src/components/smtmanagement/SolderAOI.tsx"
+        },
+        {
+          "name": "SolderPasteMachine.tsx",
+          "path": "src/components/smtmanagement/SolderPasteMachine.tsx"
+        }
+      ],
+      "subdirs": []
+    },
+    {
+      "name": "usermanagement",
+      "path": "src/components/usermanagement",
+      "files": [
+        {
+          "name": "UserAuthorization.tsx",
+          "path": "src/components/usermanagement/UserAuthorization.tsx"
+        }
+      ],
+      "subdirs": []
+    }
+  ]
+}
