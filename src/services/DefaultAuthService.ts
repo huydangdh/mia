@@ -1,6 +1,10 @@
-import { PERMISSION_CREATE_CLOCKRECORD, PERMISSION_READ_CLOCKRECORD,EPermissions } from '../PermissionsUtil';
-import AbstractUserAuthService from './interface/AbstractUserAuthService';
-import User from './model/MMUser';
+import {
+  PERMISSION_CREATE_CLOCKRECORD,
+  PERMISSION_READ_CLOCKRECORD,
+  EPermissions,
+} from "../PermissionsUtil";
+import AbstractUserAuthService from "./interface/AbstractUserAuthService";
+import { AuthData, User } from "./model/MMUser";
 
 // Danh sách người dùng mẫu để minh họa
 const usersData: User[] = [
@@ -17,12 +21,12 @@ const usersData: User[] = [
     permissions: [
       EPermissions.VIEW_CLOCKRECORD,
       EPermissions.READ_CLOCKRECORD,
-      EPermissions.CREATE_CLOCKRECORD
+      EPermissions.CREATE_CLOCKRECORD,
     ],
   },
 ];
 
-class UserAuthService extends AbstractUserAuthService {
+class DefaultAuthService extends AbstractUserAuthService {
   constructor() {
     super();
   }
@@ -38,15 +42,30 @@ class UserAuthService extends AbstractUserAuthService {
    * @param password - Mật khẩu người dùng.
    * @returns {Promise<User | null>} - Thông tin người dùng đã xác thực hoặc null nếu đăng nhập thất bại.
    */
-  protected async handleEmailPasswordLogin(email: string, password: string): Promise<User | null> {
+  protected async handleEmailPasswordLogin(
+    email: string,
+    password: string
+  ): Promise<AuthData | null> {
+    let _authData: AuthData = {
+      user: {
+        id: null,
+        username: null,
+        email: null,
+        permissions: [],
+      },
+      accessToken: "NULL",
+    };
     const user = this.findUserByEmail(email);
-
     if (user && user.password === password) {
       // Mật khẩu khớp, trả về người dùng đã xác thực
-      return user;
+      _authData = {
+        user: user,
+        accessToken: "NULL",
+      };
+      return _authData;
     } else {
       // Thông tin đăng nhập không hợp lệ, trả về null để chỉ thị đăng nhập thất bại
-      return null;
+      return _authData;
     }
   }
 
@@ -55,12 +74,25 @@ class UserAuthService extends AbstractUserAuthService {
    * @param username - Tên người dùng.
    * @param email - Địa chỉ email người dùng.
    * @param password - Mật khẩu người dùng.
-   * @returns {Promise<User | null>} - Thông tin người dùng đã được đăng ký hoặc null nếu đăng ký thất bại.
+   * @returns {Promise<AuthData | null>} - Thông tin người dùng đã được đăng ký hoặc null nếu đăng ký thất bại.
    */
-  protected async handleRegisterUser(username: string, email: string, password: string): Promise<User | null> {
+  protected async handleRegisterUser(
+    username: string,
+    email: string,
+    password: string
+  ): Promise<AuthData | null> {
+    let _authData: AuthData = {
+      user: {
+        id: null,
+        username: null,
+        email: null,
+        permissions: [],
+      },
+      accessToken: "NULL",
+    }; 
     // Kiểm tra xem người dùng với email đã tồn tại hay chưa
     if (this.findUserByEmail(email)) {
-      return null; // Người dùng với email này đã tồn tại
+      return _authData; // Người dùng với email này đã tồn tại
     }
 
     // Tạo một ID người dùng mới duy nhất theo định dạng "TW{auto_increment_XXXXXX}"
@@ -76,14 +108,19 @@ class UserAuthService extends AbstractUserAuthService {
     };
     usersData.push(newUser);
 
-    return newUser;
+    _authData = {
+      user: newUser,
+      accessToken: "NULL",
+    };
+
+    return _authData;
   }
 
   // Hàm trợ giúp để tạo ID người dùng mới duy nhất theo định dạng "TW{auto_increment_XXXXXX}"
   private generateUniqueUserId(): string {
     // Vì đơn giản, chúng ta sử dụng một bộ đếm tăng dần đơn giản
     const nextId = usersData.length + 1;
-    return `TW${nextId.toString().padStart(6, '0')}`;
+    return `TW${nextId.toString().padStart(6, "0")}`;
   }
 
   /**
@@ -107,4 +144,4 @@ class UserAuthService extends AbstractUserAuthService {
   };
 }
 
-export default UserAuthService;
+export default DefaultAuthService;

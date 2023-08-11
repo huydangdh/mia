@@ -2,23 +2,29 @@ import React, { useState } from "react";
 import { useAuthorization } from "./components/usermanagement/UserAuthorization";
 import { Navigate } from "react-router-dom";
 
+import DefaultAuthService from "./services/DefaultAuthService";
+import { AuthData } from "./services/model/MMUser";
+import AbstractUserAuthService from "./services/interface/AbstractUserAuthService";
+import SupabaseUserAuthService from "./services/SupabaseUserAuthService";
+
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState("default");
+  const [selectedProvider, setSelectedProvider] = useState<AbstractUserAuthService | null>(new DefaultAuthService()); // Store the provider instance
+  const [selectedProviderKey, setSelectedProviderKey] = useState("default");
+  const { login, isLoggedIn } = useAuthorization(selectedProvider);
   const [isLoggingIn, setIsLoggingIn] = useState(false); // State for login indication
 
-  const { login, isLoggedIn } = useAuthorization();
 
   const handleLogin = async () => {
-    let success = false;
+    let AuthData: AuthData| null = null;
     setShowAlert(false);
     setIsLoggingIn(true); // Set loading indication to true
-    success = await login(username, password, selectedProvider);
+    AuthData = await login(username, password);
     setIsLoggingIn(false); // Set loading indication to false
 
-    if (!success) {
+    if (AuthData.user.id === null) {
       setShowAlert(true);
     }
   };
@@ -26,7 +32,20 @@ const Login: React.FC = () => {
   const handleProviderChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setSelectedProvider(event.target.value);
+    setSelectedProviderKey(event.target.value);
+
+    switch (event.target.value) {
+      case "default":
+        setSelectedProvider(new DefaultAuthService());
+        break;
+      case "supabase":
+        setSelectedProvider(new SupabaseUserAuthService());
+        break;
+      default:
+        setSelectedProvider(null);
+        break;
+    }
+
   };
 
   return (
@@ -52,7 +71,7 @@ const Login: React.FC = () => {
                     <select
                       id="provider"
                       className="form-control"
-                      value={selectedProvider}
+                      value={selectedProviderKey}
                       onChange={handleProviderChange}
                     >
                       <option value="default">Mặc Định</option>

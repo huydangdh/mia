@@ -1,12 +1,12 @@
 // UserAuthService.test.ts
 
-import UserAuthService from '../services/userAuthService';
+import DefaultAuthService from '../services/userAuthService';
 
 describe('UserAuthService', () => {
-  let authService: UserAuthService;
+  let authService: DefaultAuthService;
 
   beforeEach(() => {
-    authService = new UserAuthService();
+    authService = new DefaultAuthService();
   });
 
   it('should login with valid credentials', async () => {

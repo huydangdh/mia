@@ -2,21 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  authenticateUser as MESAuthService_CheckAuth,
-  AuthData,
-  performLogout as MESAuthService_Logout,
-} from "../../services/auth";
 import { setUser, clearUser } from "../../redux/userSlice";
 import IApp from "../common/IApp";
 import { EPermissions } from "../../PermissionsUtil";
-import SupabaseUserAuthService from "../../services/SupabaseUserAuthService";
+import AbstractUserAuthService from "../../services/interface/AbstractUserAuthService";
+import { AuthData } from "../../services/model/MMUser";
 
 interface UserAuthorizationHook {
   // Kiểm tra xem người dùng có quyền truy cập vào permission hay không
   hasPermission: (permission: string | string[]) => boolean;
   // Hàm xử lý đăng nhập người dùng
-  login: (username: string, password: string, selectedProvider: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<AuthData>;
   // Hàm xử lý đăng xuất người dùng
   logout: () => void;
   // Trạng thái người dùng đã đăng nhập hay chưa
@@ -32,12 +28,20 @@ interface UserAuthorizationHook {
 const USER_DATA_KEY = "userData";
 
 // Hook quản lý xác thực và phân quyền người dùng
-export const useAuthorization = (): UserAuthorizationHook => {
+export const useAuthorization = (
+  authService: AbstractUserAuthService
+): UserAuthorizationHook => {
   // Khởi tạo userData từ localStorage hoặc set nó thành trạng thái rỗng
   const initialUserData: AuthData = JSON.parse(
-    localStorage.getItem(USER_DATA_KEY) || '{"userId": null, "permissions": []}'
+    localStorage.getItem(USER_DATA_KEY) ||
+      `{
+      "user": {
+        "id": null
+      }
+    }`
   );
   const [userData, setUserData] = useState<AuthData>(initialUserData);
+  console.log("🚀 ~ file: UserAuthorization.tsx:39 ~ userData:", userData);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const dispatch = useDispatch();
 
@@ -45,8 +49,16 @@ export const useAuthorization = (): UserAuthorizationHook => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    if (authService === null) {
+      localStorage.clear();
+      // Đánh dấu trạng thái loading là false sau khi userData đã được đọc từ localStorage
+      setLoading(false);
+    }
+  });
+
+  useEffect(() => {
     // Cập nhật trạng thái isLoggedIn khi userData thay đổi
-    if (userData.userId !== null) {
+    if (userData.user.id !== null) {
       dispatch(setUser(userData));
     } else {
       dispatch(clearUser());
@@ -58,14 +70,14 @@ export const useAuthorization = (): UserAuthorizationHook => {
   }, [userData, dispatch]);
 
   // Hàm kiểm tra xem người dùng có quyền truy cập vào các permissions được chỉ định hay không
-  const hasPermission = (permissions: string | string[]): boolean => {
+  const hasPermission = (permissions: EPermissions[]): boolean => {
     // Kiểm tra xem userData có tồn tại và có ít nhất một trong các permissions tồn tại trong mảng permissions
     if (userData && Array.isArray(permissions)) {
       return permissions.some((permission) =>
-        userData.permissions.includes(permission)
+        userData.user.permissions.includes(permission)
       );
     } else if (userData && typeof permissions === "string") {
-      return userData.permissions.includes(permissions);
+      return userData.user.permissions.includes(permissions);
     }
 
     return false;
@@ -74,56 +86,25 @@ export const useAuthorization = (): UserAuthorizationHook => {
   // Hàm xử lý đăng nhập người dùng
   const login = async (
     username: string,
-    password: string,
-    selectedProvider: string // Pass selectedProvider as an arguments
-  ): Promise<boolean> => {
-    if (selectedProvider === "default") {
-      const authData: AuthData = await MESAuthService_CheckAuth(
-        username,
-        password
-      );
+    password: string
+  ): Promise<AuthData> => {
+    const authData: AuthData = await authService.emailPasswordLogin(
+      username,
+      password
+    );
 
-      if (authData.userId !== null) {
-        localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
-        dispatch(setUser(authData));
-        return true;
-      }
-    } else if (selectedProvider === "supabase") {
-      // Implement Supabase login logic here
-      // Example:
-      // const success = await supabaseLogin(username, password);
-      // if (success) {
-      //   const authData: AuthData = {
-      //     userId: username,
-      //     permissions: [], // Add permissions as needed
-      //   };
-      //   localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
-      //   dispatch(setUser(authData));
-      //   return true;
-      // }
-      let supabaseLogin = new SupabaseUserAuthService("https://gtjynrhgxnemxzyvdrsa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0anlucmhneG5lbXh6eXZkcnNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0Mzg4MzcsImV4cCI6MTk5NDAxNDgzN30.Kjoe4qrCyfr2nEbZVaCd55GLmcw7pD-h-VjsJFoURF0")
-      let user = await supabaseLogin.emailPasswordLogin(username, password)
-      console.log("LS -> src/components/usermanagement/UserAuthorization.tsx:105 -> user: ", user)
-      if (user.id !== null) {
-        let authData: AuthData = {
-          userId: user.id,
-          permissions: []
-        }
-        localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
-        dispatch(setUser(authData));
-        return true;
-
-      }
+    if (authData.user.id !== null) {
+      localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+      dispatch(setUser(authData));
     }
-
-    return false; // Trả về false nếu đăng nhập không thành công
+    return authData;
   };
 
   // Hàm xử lý đăng xuất người dùng
-  const logout = (): void => {
+  const logout = async (): Promise<void> => {
     // Xóa thông tin userData khỏi localStorage khi đăng xuất
     localStorage.removeItem(USER_DATA_KEY);
-    MESAuthService_Logout();
+    await authService.logout();
     dispatch(clearUser());
   };
 

@@ -3,13 +3,16 @@
 
 import { EPermissions } from "../../PermissionsUtil";
 
-interface User {
+export interface AuthData {
+  user: User;
+  accessToken?: string;
+}
+
+export interface User {
   id: string;
   email?: string;
   username: string;
-  password: string;
+  password?: string;
   permissions: EPermissions[];
 }
-
-export default User;
 

@@ -13,19 +13,24 @@ import Dashboard from "../components/dashboard/Dashboard";
 import { AttendanceApp } from "../components/attendance";
 import { EPermissions } from "../PermissionsUtil";
 import { Alert, Container, Row } from "react-bootstrap";
+import AbstractUserAuthService from "../services/interface/AbstractUserAuthService";
+import { useEffect, useState } from "react";
 
 interface PrivateRouteProps {
   // You can add any additional props needed for the private route
   component: React.ComponentType;
-  permissions?: string | string[];
+  permissions?: EPermissions[];
   path?: string;
+  authProvider: AbstractUserAuthService;
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: RouteComponent,
   permissions,
+  authProvider,
 }) => {
-  const { isLoggedIn, userData, hasPermission } = useAuthorization();
+  const { isLoggedIn, userData, hasPermission } =
+    useAuthorization(authProvider);
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
@@ -48,8 +53,19 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   return <RouteComponent />;
 };
 
-const StepRouter = () => {
-  const { loading } = useAuthorization();
+const MainRouter = () => {
+  const [selectedProvider, setSelectedProvider] =
+    useState<AbstractUserAuthService | null>(null); // State to store selected provider
+  const { loading } = useAuthorization(selectedProvider);
+
+  useEffect(() => {
+    // Check if selectedProvider is already set in localStorage when component mounts
+    const storedProvider = localStorage.getItem("selectedProvider");
+    if (storedProvider) {
+      // Set the selectedProvider state with the stored provider instance
+      setSelectedProvider(JSON.parse(storedProvider));
+    }
+  }, []);
 
   // Kiểm tra trạng thái đang tải
   if (loading) {
@@ -68,7 +84,12 @@ const StepRouter = () => {
 
           <Route
             path="/dashboard"
-            element={<PrivateRoute component={Dashboard} />}
+            element={
+              <PrivateRoute
+                component={Dashboard}
+                authProvider={selectedProvider}
+              />
+            }
           />
 
           <Route
@@ -77,6 +98,7 @@ const StepRouter = () => {
               <PrivateRoute
                 component={AttendanceApp}
                 permissions={[EPermissions.VIEW_CLOCKRECORD]}
+                authProvider={selectedProvider}
               />
             }
           />
@@ -86,4 +108,4 @@ const StepRouter = () => {
   );
 };
 
-export default StepRouter;
+export default MainRouter;
