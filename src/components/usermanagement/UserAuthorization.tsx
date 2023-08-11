@@ -10,12 +10,13 @@ import {
 import { setUser, clearUser } from "../../redux/userSlice";
 import IApp from "../common/IApp";
 import { EPermissions } from "../../PermissionsUtil";
+import SupabaseUserAuthService from "../../services/SupabaseUserAuthService";
 
 interface UserAuthorizationHook {
   // Kiểm tra xem người dùng có quyền truy cập vào permission hay không
   hasPermission: (permission: string | string[]) => boolean;
   // Hàm xử lý đăng nhập người dùng
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string, selectedProvider: string) => Promise<boolean>;
   // Hàm xử lý đăng xuất người dùng
   logout: () => void;
   // Trạng thái người dùng đã đăng nhập hay chưa
@@ -71,22 +72,52 @@ export const useAuthorization = (): UserAuthorizationHook => {
   };
 
   // Hàm xử lý đăng nhập người dùng
-  const login = async (username: string, password: string): Promise<boolean> => {
-    const authData: AuthData = await MESAuthService_CheckAuth(
-      username,
-      password
-    );
+  const login = async (
+    username: string,
+    password: string,
+    selectedProvider: string // Pass selectedProvider as an arguments
+  ): Promise<boolean> => {
+    if (selectedProvider === "default") {
+      const authData: AuthData = await MESAuthService_CheckAuth(
+        username,
+        password
+      );
 
-    if (authData.userId !== null) {
-      // Lưu thông tin người dùng vào localStorage khi đăng nhập thành công
-      localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
-      dispatch(setUser(authData));
-      return true; // Trả về true nếu đăng nhập thành công
+      if (authData.userId !== null) {
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+        dispatch(setUser(authData));
+        return true;
+      }
+    } else if (selectedProvider === "supabase") {
+      // Implement Supabase login logic here
+      // Example:
+      // const success = await supabaseLogin(username, password);
+      // if (success) {
+      //   const authData: AuthData = {
+      //     userId: username,
+      //     permissions: [], // Add permissions as needed
+      //   };
+      //   localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+      //   dispatch(setUser(authData));
+      //   return true;
+      // }
+      let supabaseLogin = new SupabaseUserAuthService("https://gtjynrhgxnemxzyvdrsa.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0anlucmhneG5lbXh6eXZkcnNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0Mzg4MzcsImV4cCI6MTk5NDAxNDgzN30.Kjoe4qrCyfr2nEbZVaCd55GLmcw7pD-h-VjsJFoURF0")
+      let user = await supabaseLogin.emailPasswordLogin(username, password)
+      console.log("LS -> src/components/usermanagement/UserAuthorization.tsx:105 -> user: ", user)
+      if (user.id !== null) {
+        let authData: AuthData = {
+          userId: user.id,
+          permissions: []
+        }
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+        dispatch(setUser(authData));
+        return true;
+
+      }
     }
 
     return false; // Trả về false nếu đăng nhập không thành công
   };
-
 
   // Hàm xử lý đăng xuất người dùng
   const logout = (): void => {
@@ -97,7 +128,10 @@ export const useAuthorization = (): UserAuthorizationHook => {
   };
 
   // Hàm lấy danh sách ứng dụng dựa trên permissions người dùng
-  const getAppsByPermission = (apps: IApp[], permissions: EPermissions[]): IApp[] => {
+  const getAppsByPermission = (
+    apps: IApp[],
+    permissions: EPermissions[]
+  ): IApp[] => {
     // Lọc danh sách apps dựa trên permissions của người dùng
     return apps.filter((app) =>
       permissions.some((permission) => app.permissions.includes(permission))
@@ -111,6 +145,6 @@ export const useAuthorization = (): UserAuthorizationHook => {
     isLoggedIn,
     userData,
     loading,
-    getAppsByPermission
-  }
-}
+    getAppsByPermission,
+  };
+};

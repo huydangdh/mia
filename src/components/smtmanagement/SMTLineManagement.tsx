@@ -24,9 +24,6 @@ const LineTW1: React.FC = () => {
               <Col sm={6}>
                 <SMTMachine1 />
               </Col>
-              <Col sm={6}>
-                <SMTMachine2 />
-              </Col>
             </Row>
           </Col>
           <Col md={4}>

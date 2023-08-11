@@ -8,7 +8,7 @@ interface User {
   email?: string;
   username: string;
   password: string;
- permissions: EPermissions[];
+  permissions: EPermissions[];
 }
 
 export default User;

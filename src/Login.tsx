@@ -5,17 +5,28 @@ import { Navigate } from "react-router-dom";
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showAlert, setShowAlert] = useState(false); // Thêm state cho hiển thị thông báo
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState("default");
+  const [isLoggingIn, setIsLoggingIn] = useState(false); // State for login indication
 
   const { login, isLoggedIn } = useAuthorization();
 
-  // Xử lý đăng nhập
   const handleLogin = async () => {
-    const success = await login(username, password);
+    let success = false;
+    setShowAlert(false);
+    setIsLoggingIn(true); // Set loading indication to true
+    success = await login(username, password, selectedProvider);
+    setIsLoggingIn(false); // Set loading indication to false
 
     if (!success) {
-      setShowAlert(true); // Hiển thị thông báo nếu đăng nhập không thành công
+      setShowAlert(true);
     }
+  };
+
+  const handleProviderChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedProvider(event.target.value);
   };
 
   return (
@@ -29,12 +40,25 @@ const Login: React.FC = () => {
                 <Navigate to="/dashboard" replace={true} />
               ) : (
                 <>
-                  {/* Hiển thị thông báo nếu đăng nhập không thành công */}
                   {showAlert && (
                     <div className="alert alert-danger" role="alert">
-                      Đăng nhập không thành công. Vui lòng kiểm tra tên đăng nhập và mật khẩu của bạn.
+                      Đăng nhập không thành công. Vui lòng kiểm tra tên đăng
+                      nhập và mật khẩu của bạn.
                     </div>
                   )}
+
+                  <div className="form-group">
+                    <label htmlFor="provider">Chọn Nhà Cung Cấp</label>
+                    <select
+                      id="provider"
+                      className="form-control"
+                      value={selectedProvider}
+                      onChange={handleProviderChange}
+                    >
+                      <option value="default">Mặc Định</option>
+                      <option value="supabase">Supabase</option>
+                    </select>
+                  </div>
 
                   <div className="form-group">
                     <label htmlFor="username">Tên Đăng Nhập</label>
@@ -61,8 +85,9 @@ const Login: React.FC = () => {
                   <button
                     onClick={handleLogin}
                     className="btn btn-primary btn-block"
+                    disabled={isLoggingIn} // Disable the button while logging in
                   >
-                    Đăng Nhập
+                    {isLoggingIn ? "Đang Đăng Nhập..." : "Đăng Nhập"}
                   </button>
                 </>
               )}

@@ -1,11 +1,14 @@
 import UserAuthService from "../services/userAuthService";
+import SupabaseUserAuthService from "../services/SupabaseUserAuthService";
 
 export interface AuthData {
   userId: string | null;
+  accessToken?: ""
   permissions: string[];
 }
 
 const authService = new UserAuthService();
+const supabaseAuthService = new SupabaseUserAuthService("https://gtjynrhgxnemxzyvdrsa.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0anlucmhneG5lbXh6eXZkcnNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg0Mzg4MzcsImV4cCI6MTk5NDAxNDgzN30.Kjoe4qrCyfr2nEbZVaCd55GLmcw7pD-h-VjsJFoURF0");
 
 // Hàm thực hiện đăng nhập người dùng và lấy quyền
 export const authenticateUser = async (
