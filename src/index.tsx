@@ -9,19 +9,21 @@ import LoginComponent from "./devSection/LoginTest";
 const domNode = document.getElementById("root");
 const root = createRoot(domNode);
 
-const isDevCon = true
+const isDevCon = false;
 
 if (isDevCon) {
   root.render(
     <MyAuthProvider>
       <h1>Dev con</h1>
-      <LoginComponent/>
+      <LoginComponent />
     </MyAuthProvider>
-  )
+  );
 } else {
   root.render(
     <Provider store={store}>
-      <MainRouter />
+      <MyAuthProvider>
+        <MainRouter />
+      </MyAuthProvider>
     </Provider>
   );
 }

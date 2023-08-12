@@ -9,7 +9,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  userData: { user: null, accessToken: "" },
+  userData: { user: null, provider: "", accessToken: "" },
   isLoggedIn: false,
 };
 
@@ -22,7 +22,7 @@ const userSlice = createSlice({
       state.isLoggedIn = action.payload.user.id !== null;
     },
     clearUser: (state) => {
-      state.userData = { user: null, accessToken: "" };
+      state.userData = { user: null, provider: "", accessToken: "" };
       state.isLoggedIn = false;
     },
   },

@@ -12,6 +12,7 @@ class SupabaseUserAuthService extends AbstractUserAuthService {
 
   constructor() {
     super();
+    this.providerName = "supabase"
     this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
@@ -26,6 +27,7 @@ class SupabaseUserAuthService extends AbstractUserAuthService {
         email: null,
         permissions: [],
       },
+      provider: this.providerName,
       accessToken: "NULL",
     };
 
@@ -54,6 +56,7 @@ class SupabaseUserAuthService extends AbstractUserAuthService {
         email: data.user.email,
         permissions: [],
       },
+      provider: this.providerName,
       accessToken: "NULL",
     };
     return _authData;
@@ -71,6 +74,7 @@ class SupabaseUserAuthService extends AbstractUserAuthService {
         email: null,
         permissions: [],
       },
+      provider: this.providerName,
       accessToken: "NULL",
     };
     const { data, error } = await this.supabase.auth.signUp({
@@ -105,6 +109,7 @@ class SupabaseUserAuthService extends AbstractUserAuthService {
         email: data.user.email,
         permissions: [],
       },
+      provider: this.providerName,
       accessToken: "NULL",
     };
     return _authData;

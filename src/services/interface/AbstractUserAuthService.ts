@@ -1,6 +1,9 @@
 import { AuthData } from '../model/MMUser';
 
 abstract class AbstractUserAuthService {
+  public providerName: string;
+
+
   constructor() {
   
   }

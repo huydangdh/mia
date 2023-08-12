@@ -1,8 +1,16 @@
-import React, { ReactNode, createContext, useContext, useState, useEffect, useMemo } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import { AuthData } from "../services/model/MMUser";
 import DefaultAuthService from "../services/DefaultAuthService";
 import SupabaseUserAuthService from "../services/SupabaseUserAuthService";
 import AbstractUserAuthService from "../services/interface/AbstractUserAuthService";
+import { setUser } from "../redux/userSlice";
 
 // Loại dữ liệu cho cấu hình của nhà cung cấp xác thực
 type AuthProviderConfigType = {
@@ -25,15 +33,22 @@ type AuthCtxType = {
   MELogout: (provider: string) => Promise<void>;
   selectedProvider: string | null;
   setSelectedProvider: React.Dispatch<React.SetStateAction<string | null>>;
+  userAuthInfo: {
+    user: AuthData | null;
+    isAuthed: boolean;
+  };
 };
 
 // Tạo ngữ cảnh xác thực
-const MyAuthContext = createContext<AuthCtxType>({} as AuthCtxType);
+export const MyAuthContext = createContext<AuthCtxType>({} as AuthCtxType);
 
 // Các thuộc tính của Component MyAuthProvider
 export type AuthorizationProps = {
   children: ReactNode;
 };
+
+// USER_DATA_KEY
+const USER_DATA_KEY = "mmUserData";
 
 // Component MyAuthProvider
 export default function MyAuthProvider(props: AuthorizationProps) {
@@ -42,6 +57,7 @@ export default function MyAuthProvider(props: AuthorizationProps) {
       return localStorage.getItem("selectedProvider") || null;
     }
   );
+  const [mmUser,setMMUser] = useState<AuthData | null>(null);
 
   // Lưu trạng thái 'selectedProvider' vào localStorage khi thay đổi
   useEffect(() => {
@@ -52,15 +68,24 @@ export default function MyAuthProvider(props: AuthorizationProps) {
     }
   }, [selectedProvider]);
 
+  useEffect(() => {
+    // Check if user data is already set in localStorage when component mounts
+    const storedUserData = localStorage.getItem(USER_DATA_KEY);
+    if (storedUserData) {
+      // Set the user data in the store using the context's setUser function
+      setMMUser(JSON.parse(storedUserData)); // Make sure to import setUser from your redux userSlice
+    }
+  }, []);
+
   // Tạo một thể hiện của nhà cung cấp dựa trên tên
   function createInstanceProvider(provider: string): AbstractUserAuthService {
     switch (provider) {
-      case 'default':
+      case "default":
         return new DefaultAuthService();
-      case 'supabase':
+      case "supabase":
         return new SupabaseUserAuthService();
       default:
-        return null
+        return null;
     }
   }
 
@@ -88,8 +113,14 @@ export default function MyAuthProvider(props: AuthorizationProps) {
     const providerInstance = providerInstances[provider];
 
     // Thực hiện xác thực dựa trên thể hiện của nhà cung cấp đã lấy
-    const authData: AuthData = await providerInstance.emailPasswordLogin(username, password);
-
+    const authData: AuthData = await providerInstance.emailPasswordLogin(
+      username,
+      password,
+    );
+    if (authData.user.id !== null) {
+      // Lưu thông tin người dùng vào localStorage khi đăng nhập thành công
+      localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
+    }
     return authData;
   }
 
@@ -99,23 +130,24 @@ export default function MyAuthProvider(props: AuthorizationProps) {
     if (!providerConfig) {
       throw new Error(`Nhà cung cấp '${provider}' không được cấu hình.`);
     }
-
+    localStorage.clear();
     // Xử lý đăng xuất dựa trên cấu hình của nhà cung cấp
 
     // TODO: Thêm mã xử lý đăng xuất
-
   }
+
+  const ctxValue = useMemo(()=>({
+    MELogin,
+    MELogout,
+    selectedProvider,
+    setSelectedProvider,
+  }),[MELogin, MELogout, selectedProvider, setSelectedProvider])
 
   return (
     <MyAuthContext.Provider
-      value={{ MELogin, MELogout, selectedProvider, setSelectedProvider }}
+      value={{ ...ctxValue }}
     >
       {props.children}
     </MyAuthContext.Provider>
   );
 }
-
-// Hook sử dụng ngữ cảnh xác thực
-export const useAuthentication = () => {
-  return useContext(MyAuthContext);
-};

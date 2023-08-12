@@ -6,6 +6,7 @@ import { EPermissions } from "../../PermissionsUtil";
 export interface AuthData {
   user: User;
   accessToken?: string;
+  provider: string;
 }
 
 export interface User {

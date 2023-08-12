@@ -29,6 +29,7 @@ const usersData: User[] = [
 class DefaultAuthService extends AbstractUserAuthService {
   constructor() {
     super();
+    this.providerName = "default"
   }
 
   // Tìm người dùng bằng email trong danh sách người dùng
@@ -53,6 +54,7 @@ class DefaultAuthService extends AbstractUserAuthService {
         email: null,
         permissions: [],
       },
+      provider: this.providerName,
       accessToken: "NULL",
     };
     const user = this.findUserByEmail(email);
@@ -61,6 +63,7 @@ class DefaultAuthService extends AbstractUserAuthService {
       _authData = {
         user: user,
         accessToken: "NULL",
+        provider: this.providerName,
       };
       return _authData;
     } else {

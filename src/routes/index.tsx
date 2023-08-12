@@ -8,7 +8,7 @@ import {
 import App from "../App";
 import Header from "../components/common/Header";
 import Login from "../Login";
-import { useAuthorization } from "../components/usermanagement/UserAuthorization";
+import { useMMAuthentication } from "../components/usermanagement/useMMAuthentication";
 import Dashboard from "../components/dashboard/Dashboard";
 import { AttendanceApp } from "../components/attendance";
 import { EPermissions } from "../PermissionsUtil";
@@ -29,8 +29,8 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   permissions,
   authProvider,
 }) => {
-  const { isLoggedIn, userData, hasPermission } =
-    useAuthorization(authProvider);
+  const { } =
+  useMMAuthentication();
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
