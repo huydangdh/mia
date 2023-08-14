@@ -5,18 +5,18 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { useAuthorization } from '../usermanagement/UserAuthorization';
+import { useMMAuthentication } from '../usermanagement/useMMAuthentication';
 
 const Header: React.FC = () => {
-  const { isLoggedIn, logout } = useAuthorization(); // Destructure the isLoggedIn and logout function from useAuthorization hook
+  const { userAuthInfo, MELogout,selectedProvider } = useMMAuthentication(); // Destructure the isLoggedIn and logout function from useAuthorization hook
 
   const handleLogout = () => {
-    logout(); // Call the logout function on logout button click
+    MELogout(selectedProvider); // Call the logout function on logout button click
   };
 
   useEffect(()=>{
-    console.log("🚀 ~ file: Header.tsx:20 ~ useEffect ~ isLoggedIn:", isLoggedIn)
-  },[isLoggedIn])
+    console.log("🚀 ~ file: Header.tsx:20 ~ useEffect ~ isLoggedIn:", userAuthInfo.isAuthed)
+  },[])
 
   return (
     <Navbar bg="light" expand="lg">
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
             Dashboard
           </Nav.Link>
           {/* Add more navigation links as needed */}
-          {isLoggedIn ? (
+          {userAuthInfo.isAuthed ? (
             <Nav.Link onClick={handleLogout}>Logout</Nav.Link> // Display Logout link when user is logged in
           ) : (
             <Nav.Link as={Link} to="/login">

@@ -1,26 +1,19 @@
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-} from "react";
-import { AuthData } from "../services/model/MMUser";
+import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import DefaultAuthService from "../services/DefaultAuthService";
 import SupabaseUserAuthService from "../services/SupabaseUserAuthService";
 import AbstractUserAuthService from "../services/interface/AbstractUserAuthService";
-import { setUser } from "../redux/userSlice";
+import { AuthData } from "../services/model/MMUser";
 
 // Loại dữ liệu cho cấu hình của nhà cung cấp xác thực
 type AuthProviderConfigType = {
-  [key: string]: any; // Bạn có thể định nghĩa các cấu hình cụ thể cho nhà cung cấp ở đây
+  [key: string]: any;
 };
 
+// Cấu hình các nhà cung cấp xác thực
 const authProvidersConfig: AuthProviderConfigType = {
   default: {},
-  supabase: {}, // Ví dụ cấu hình cho Supabase
-  // Thêm các cấu hình cho nhà cung cấp khác khi cần
+  supabase: {},
+  // Thêm cấu hình cho nhà cung cấp khác khi cần
 };
 
 // Loại dữ liệu cho ngữ cảnh xác thực
@@ -34,9 +27,10 @@ type AuthCtxType = {
   selectedProvider: string | null;
   setSelectedProvider: React.Dispatch<React.SetStateAction<string | null>>;
   userAuthInfo: {
-    user: AuthData | null;
+    data: AuthData | null;
     isAuthed: boolean;
   };
+  isLoading: boolean;
 };
 
 // Tạo ngữ cảnh xác thực
@@ -47,37 +41,48 @@ export type AuthorizationProps = {
   children: ReactNode;
 };
 
-// USER_DATA_KEY
+// Khóa lưu trữ thông tin người dùng trong localStorage
 const USER_DATA_KEY = "mmUserData";
 
 // Component MyAuthProvider
 export default function MyAuthProvider(props: AuthorizationProps) {
+  // Trạng thái lựa chọn nhà cung cấp xác thực
   const [selectedProvider, setSelectedProvider] = useState<string | null>(
     () => {
-      return localStorage.getItem("selectedProvider") || null;
+      return localStorage.getItem("selectedProvider") || "default";
     }
   );
-  const [mmUser,setMMUser] = useState<AuthData | null>(null);
 
-  // Lưu trạng thái 'selectedProvider' vào localStorage khi thay đổi
+  // Trạng thái thông tin người dùng
+  const [mmUser, setMMUser] = useState<AuthData | null>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  // Lấy thông tin người dùng từ localStorage khi component được gắn vào
   useEffect(() => {
-    if (selectedProvider) {
-      localStorage.setItem("selectedProvider", selectedProvider);
-    } else {
-      localStorage.removeItem("selectedProvider");
+    const storedUserData = localStorage.getItem(USER_DATA_KEY);
+    console.log(
+      "LS -> src/context/MyAuthProvider.tsx:69 -> storedUserData: ",
+      storedUserData
+    );
+    if (storedUserData) {
+      setMMUser(JSON.parse(storedUserData));
     }
+
+    setIsLoading(false)
+  }, []);
+  // Update the useEffect that sets the selectedProvider
+  useEffect(() => {
+    // If selectedProvider is not already set in localStor
+    //
+    //
+    //
+    //
+    //
+    // age, then set it
+    localStorage.setItem("selectedProvider", selectedProvider);
   }, [selectedProvider]);
 
-  useEffect(() => {
-    // Check if user data is already set in localStorage when component mounts
-    const storedUserData = localStorage.getItem(USER_DATA_KEY);
-    if (storedUserData) {
-      // Set the user data in the store using the context's setUser function
-      setMMUser(JSON.parse(storedUserData)); // Make sure to import setUser from your redux userSlice
-    }
-  }, []);
-
-  // Tạo một thể hiện của nhà cung cấp dựa trên tên
+  // Tạo thể hiện của nhà cung cấp dựa trên tên
   function createInstanceProvider(provider: string): AbstractUserAuthService {
     switch (provider) {
       case "default":
@@ -97,8 +102,6 @@ export default function MyAuthProvider(props: AuthorizationProps) {
       instances[provider] = createInstanceProvider(provider);
     });
 
-    // In ra mảng các thể hiện nhà cung cấp trong console
-    console.log("Danh sách thể hiện nhà cung cấp: ", instances);
     return instances;
   }, []);
 
@@ -109,16 +112,17 @@ export default function MyAuthProvider(props: AuthorizationProps) {
       throw new Error(`Nhà cung cấp '${provider}' không được cấu hình.`);
     }
 
-    // Lấy hoặc tạo thể hiện của nhà cung cấp từ cache
+    // Lấy thể hiện của nhà cung cấp từ cache
     const providerInstance = providerInstances[provider];
 
     // Thực hiện xác thực dựa trên thể hiện của nhà cung cấp đã lấy
     const authData: AuthData = await providerInstance.emailPasswordLogin(
       username,
-      password,
+      password
     );
+
+    // Lưu thông tin người dùng vào localStorage khi đăng nhập thành công
     if (authData.user.id !== null) {
-      // Lưu thông tin người dùng vào localStorage khi đăng nhập thành công
       localStorage.setItem(USER_DATA_KEY, JSON.stringify(authData));
     }
     return authData;
@@ -131,22 +135,32 @@ export default function MyAuthProvider(props: AuthorizationProps) {
       throw new Error(`Nhà cung cấp '${provider}' không được cấu hình.`);
     }
     localStorage.clear();
-    // Xử lý đăng xuất dựa trên cấu hình của nhà cung cấp
+    // TODO: Xử lý đăng xuất dựa trên cấu hình của nhà cung cấp
 
     // TODO: Thêm mã xử lý đăng xuất
   }
 
-  const ctxValue = useMemo(()=>({
-    MELogin,
-    MELogout,
-    selectedProvider,
-    setSelectedProvider,
-  }),[MELogin, MELogout, selectedProvider, setSelectedProvider])
+  // Thông tin xác thực của người dùng
+  const userAuthInfo = {
+    data: mmUser,
+    isAuthed: mmUser !== null,
+  };
+
+  // Tạo giá trị ngữ cảnh bằng useMemo để đảm bảo tạo lại giá trị chỉ khi các phụ thuộc thay đổi
+  const ctxValue = useMemo(
+    () => ({
+      MELogin,
+      MELogout,
+      selectedProvider,
+      setSelectedProvider,
+      userAuthInfo,
+      isLoading
+    }),
+    [MELogin, MELogout, selectedProvider, setSelectedProvider, userAuthInfo, isLoading]
+  );
 
   return (
-    <MyAuthContext.Provider
-      value={{ ...ctxValue }}
-    >
+    <MyAuthContext.Provider value={{ ...ctxValue }}>
       {props.children}
     </MyAuthContext.Provider>
   );

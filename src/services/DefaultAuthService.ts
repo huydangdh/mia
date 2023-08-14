@@ -1,6 +1,4 @@
 import {
-  PERMISSION_CREATE_CLOCKRECORD,
-  PERMISSION_READ_CLOCKRECORD,
   EPermissions,
 } from "../PermissionsUtil";
 import AbstractUserAuthService from "./interface/AbstractUserAuthService";
@@ -91,6 +89,7 @@ class DefaultAuthService extends AbstractUserAuthService {
         email: null,
         permissions: [],
       },
+      provider: "",
       accessToken: "NULL",
     }; 
     // Kiểm tra xem người dùng với email đã tồn tại hay chưa
@@ -114,6 +113,7 @@ class DefaultAuthService extends AbstractUserAuthService {
     _authData = {
       user: newUser,
       accessToken: "NULL",
+      provider: ""
     };
 
     return _authData;

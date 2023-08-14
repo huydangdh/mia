@@ -1,30 +1,25 @@
 import React, { useState } from "react";
-import { useAuthorization } from "./components/usermanagement/UserAuthorization";
+import { useMMAuthentication } from "./components/usermanagement/useMMAuthentication";
 import { Navigate } from "react-router-dom";
 
-import DefaultAuthService from "./services/DefaultAuthService";
 import { AuthData } from "./services/model/MMUser";
-import AbstractUserAuthService from "./services/interface/AbstractUserAuthService";
-import SupabaseUserAuthService from "./services/SupabaseUserAuthService";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState<AbstractUserAuthService | null>(new DefaultAuthService()); // Store the provider instance
-  const [selectedProviderKey, setSelectedProviderKey] = useState("default");
-  const { login, isLoggedIn } = useAuthorization(selectedProvider);
+  const { MELogin, selectedProvider, setSelectedProvider, userAuthInfo } = useMMAuthentication()
   const [isLoggingIn, setIsLoggingIn] = useState(false); // State for login indication
 
 
   const handleLogin = async () => {
-    let AuthData: AuthData| null = null;
+    let authData: AuthData | null = null;
     setShowAlert(false);
     setIsLoggingIn(true); // Set loading indication to true
-    AuthData = await login(username, password);
+    authData = await MELogin(username, password, selectedProvider);
     setIsLoggingIn(false); // Set loading indication to false
 
-    if (AuthData.user.id === null) {
+    if (authData.user.id === null) {
       setShowAlert(true);
     }
   };
@@ -32,20 +27,7 @@ const Login: React.FC = () => {
   const handleProviderChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setSelectedProviderKey(event.target.value);
-
-    switch (event.target.value) {
-      case "default":
-        setSelectedProvider(new DefaultAuthService());
-        break;
-      case "supabase":
-        setSelectedProvider(new SupabaseUserAuthService());
-        break;
-      default:
-        setSelectedProvider(null);
-        break;
-    }
-
+    setSelectedProvider(event.target.value);
   };
 
   return (
@@ -55,7 +37,7 @@ const Login: React.FC = () => {
           <div className="card login-card">
             <div className="card-body">
               <h1 className="card-title text-center mb-4">Đăng Nhập</h1>
-              {isLoggedIn ? (
+              {userAuthInfo.isAuthed ? (
                 <Navigate to="/dashboard" replace={true} />
               ) : (
                 <>
@@ -71,7 +53,7 @@ const Login: React.FC = () => {
                     <select
                       id="provider"
                       className="form-control"
-                      value={selectedProviderKey}
+                      value={selectedProvider}
                       onChange={handleProviderChange}
                     >
                       <option value="default">Mặc Định</option>

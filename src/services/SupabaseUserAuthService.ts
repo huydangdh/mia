@@ -1,7 +1,6 @@
 import AbstractUserAuthService from "./interface/AbstractUserAuthService";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { User, AuthData } from "./model/MMUser";
-import { Accordion } from "react-bootstrap";
 
 const supabaseUrl = "https://gtjynrhgxnemxzyvdrsa.supabase.co";
 const supabaseKey =

@@ -13,30 +13,23 @@ import Dashboard from "../components/dashboard/Dashboard";
 import { AttendanceApp } from "../components/attendance";
 import { EPermissions } from "../PermissionsUtil";
 import { Alert, Container, Row } from "react-bootstrap";
-import AbstractUserAuthService from "../services/interface/AbstractUserAuthService";
-import { useEffect, useState } from "react";
 
 interface PrivateRouteProps {
   // You can add any additional props needed for the private route
   component: React.ComponentType;
   permissions?: EPermissions[];
   path?: string;
-  authProvider: AbstractUserAuthService;
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: RouteComponent,
-  permissions,
-  authProvider,
+  permissions
 }) => {
-  const { } =
-  useMMAuthentication();
-
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-
-  if (permissions && !hasPermission(permissions)) {
+  const { userAuthInfo } =
+    useMMAuthentication();
+  console.log("LS -> src/routes/index.tsx:30 -> userAuthInfo: ", userAuthInfo)
+  if (!userAuthInfo.isAuthed || userAuthInfo === null) return <Navigate to="/login" />
+  if (permissions && !(userAuthInfo.data.user.permissions)) {
     return (
       <Container className="mt-5">
         <Row className="justify-content-center">
@@ -54,24 +47,12 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
 };
 
 const MainRouter = () => {
-  const [selectedProvider, setSelectedProvider] =
-    useState<AbstractUserAuthService | null>(null); // State to store selected provider
-  const { loading } = useAuthorization(selectedProvider);
+  const { userAuthInfo, isLoading } = useMMAuthentication(); // Use the hook function
 
-  useEffect(() => {
-    // Check if selectedProvider is already set in localStorage when component mounts
-    const storedProvider = localStorage.getItem("selectedProvider");
-    if (storedProvider) {
-      // Set the selectedProvider state with the stored provider instance
-      setSelectedProvider(JSON.parse(storedProvider));
-    }
-  }, []);
 
-  // Kiểm tra trạng thái đang tải
-  if (loading) {
-    // Nếu đang tải, hiển thị placeholder Loading
-    return <div>Loading...</div>;
-  }
+  // Destructure userAuthInfo
+  if (isLoading) return <>Loading...</>
+  console.log("LS -> src/routes/index.tsx:54 -> isLoading: ", isLoading)
 
   return (
     <Router>
@@ -87,7 +68,6 @@ const MainRouter = () => {
             element={
               <PrivateRoute
                 component={Dashboard}
-                authProvider={selectedProvider}
               />
             }
           />
@@ -98,7 +78,6 @@ const MainRouter = () => {
               <PrivateRoute
                 component={AttendanceApp}
                 permissions={[EPermissions.VIEW_CLOCKRECORD]}
-                authProvider={selectedProvider}
               />
             }
           />

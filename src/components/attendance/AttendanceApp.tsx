@@ -8,16 +8,14 @@ import {
   Form,
   Table,
 } from "react-bootstrap";
-import { useAuthorization } from "../usermanagement/UserAuthorization";
+import { useMMAuthentication } from "../usermanagement/useMMAuthentication";
 
 import Clock from "react-clock";
-import "react-clock/dist/Clock.css";
 
-//import "./AttendanceApp.css"; // Tệp CSS cho các hiệu ứng
-const thresholdTime = "05:00 AM"; // Define the threshold time for lateness
+const thresholdTime = "13:00 PM"; // Xác định thời gian ngưỡng muộn
 
 const AttendanceApp = () => {
-  const { userData } = useAuthorization();
+  const { userAuthInfo: userData } = useMMAuthentication();
   const [clockInTime, setClockInTime] = useState<string | null>(
     localStorage.getItem("clockInTime")
   );
@@ -29,64 +27,64 @@ const AttendanceApp = () => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
 
+  // Hiệu ứng và khởi tạo dữ liệu
   useEffect(() => {
-    // Nạp dữ liệu đã ghi từ bộ nhớ cục bộ khi thành phần được gắn vào
     const savedData = localStorage.getItem("recordedData");
     if (savedData) {
       setRecordedData(JSON.parse(savedData));
     }
   }, []);
 
+  // Lưu thời gian vào/ra làm trong local storage
   useEffect(() => {
-    // Lưu giờ vào/ra làm vào bộ nhớ cục bộ mỗi khi chúng thay đổi
     localStorage.setItem("clockInTime", clockInTime || "");
     localStorage.setItem("clockOutTime", clockOutTime || "");
   }, [clockInTime, clockOutTime]);
 
+  // Lọc dữ liệu dựa trên truy vấn tìm kiếm
   useEffect(() => {
-    // Lọc dữ liệu đã ghi dựa trên truy vấn tìm kiếm
     const filtered = recordedData.filter((data) =>
       data.employeeId.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredData(filtered);
   }, [recordedData, searchQuery]);
 
+  // Xử lý sự kiện khi bắt đầu làm việc
   const handleClockIn = () => {
-    // Check if the user is late for work
-    const actualCheckInTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    const isLate = actualCheckInTime > thresholdTime;
-
-    if (isLate) {
+    const actualCheckInTime = new Date();
+    const thresholdTimeDate = new Date(`01/01/2000 ${thresholdTime}`);
+    const actualCheckInTimeDate = new Date(`01/01/2000 ${actualCheckInTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`);
+    
+    if (actualCheckInTimeDate > thresholdTimeDate) {
       alert("Bạn đã đến làm muộn!");
     } else {
-      setClockInTime(actualCheckInTime);
+      setClockInTime(actualCheckInTime.toLocaleString());
       setClockOutTime(null);
     }
-    /*
-    const currentTime = new Date().toLocaleString();
-    setClockInTime(currentTime);
-    setClockOutTime(null);*/
   };
 
+  // Xử lý sự kiện khi kết thúc làm việc
   const handleClockOut = () => {
     const currentTime = new Date().toLocaleString();
     setClockOutTime(currentTime);
   };
 
+  // Xử lý sự kiện đặt lại
   const handleReset = () => {
     setClockInTime(null);
     setClockOutTime(null);
   };
 
+  // Xử lý sự kiện lưu dữ liệu
   const handleSaveData = async () => {
-    if (!userData || !userData.userId || !clockInTime || !clockOutTime) {
+    if (!userData || !userData.data.user.id || !clockInTime || !clockOutTime) {
       return;
     }
-    const employeeId = userData.userId;
+    const employeeId = userData.data.user.id;
     const dataRecord = {
       employeeId,
       clockInTime,
-      clockOutTime: clockOutTime || "N/A",
+      clockOutTime: clockOutTime || "Không có",
     };
     await simulateLoading(); // Giả lập tải trong 2 giây
     const newData = [...recordedData, dataRecord];
@@ -97,19 +95,23 @@ const AttendanceApp = () => {
     setSearchQuery("");
   };
 
+  // Giả lập tải
   const simulateLoading = () => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve();
+        resolve("");
       }, 2000); // Giả lập tải trong 2 giây
     });
   };
+
+  // Cập nhật thời gian hiện tại
   useEffect(() => {
     const interval = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => {
       clearInterval(interval);
     };
   }, []);
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-center">
@@ -120,15 +122,13 @@ const AttendanceApp = () => {
                 Ứng dụng Chấm công
               </Card.Title>
               <div className="text-center">
-                {" "}
-                {/* Add a container for the clock */}
                 <Clock value={currentTime} />
               </div>
               <Form.Group controlId="employeeId">
                 <Form.Label>Mã nhân viên</Form.Label>
                 <Form.Control
                   type="text"
-                  value={userData && userData.userId ? userData.userId : ""}
+                  value={userData && userData.data.user.id ? userData.data.user.id : ""}
                   disabled
                 />
               </Form.Group>
@@ -136,15 +136,14 @@ const AttendanceApp = () => {
                 {clockInTime && (
                   <>
                     <div>
-                      Bắt đầu làm việc: {new Date(clockInTime).toLocaleString()}
+                      Bắt đầu làm việc: {clockInTime}
                     </div>
                   </>
                 )}
                 {clockOutTime && (
                   <>
                     <div>
-                      Kết thúc làm việc:{" "}
-                      {new Date(clockOutTime).toLocaleString()}
+                      Kết thúc làm việc: {clockOutTime}
                     </div>
                   </>
                 )}
@@ -203,7 +202,7 @@ const AttendanceApp = () => {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{data.employeeId}</td>
-                        <td>{new Date(data.clockInTime).toLocaleString()}</td>
+                        <td>{data.clockInTime}</td>
                         <td>{data.clockOutTime}</td>
                       </tr>
                     ))}

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useAuthentication } from "../context/MyAuthProvider";
+  
 import { AuthData } from "../services/model/MMUser";
+import { useMMAuthentication } from "../components/usermanagement/useMMAuthentication";
 
 const LoginComponent = () => {
-  const { MELogin, MELogout, selectedProvider, setSelectedProvider } = useAuthentication();
+  const { MELogin, MELogout, selectedProvider, setSelectedProvider } = useMMAuthentication();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [userM, setUserM] = useState<AuthData>({} as AuthData)
