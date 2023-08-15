@@ -11,6 +11,7 @@ import {
 import { useMMAuthentication } from "../usermanagement/useMMAuthentication";
 
 import Clock from "react-clock";
+import "react-clock/dist/Clock.css";
 
 const thresholdTime = "13:00 PM"; // Xác định thời gian ngưỡng muộn
 
@@ -53,8 +54,13 @@ const AttendanceApp = () => {
   const handleClockIn = () => {
     const actualCheckInTime = new Date();
     const thresholdTimeDate = new Date(`01/01/2000 ${thresholdTime}`);
-    const actualCheckInTimeDate = new Date(`01/01/2000 ${actualCheckInTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`);
-    
+    const actualCheckInTimeDate = new Date(
+      `01/01/2000 ${actualCheckInTime.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`
+    );
+
     if (actualCheckInTimeDate > thresholdTimeDate) {
       alert("Bạn đã đến làm muộn!");
     } else {
@@ -122,29 +128,31 @@ const AttendanceApp = () => {
                 Ứng dụng Chấm công
               </Card.Title>
               <div className="text-center">
-                <Clock value={currentTime} />
+                <center>
+                  <Clock value={currentTime} />
+                </center>
               </div>
               <Form.Group controlId="employeeId">
                 <Form.Label>Mã nhân viên</Form.Label>
                 <Form.Control
                   type="text"
-                  value={userData && userData.data.user.id ? userData.data.user.id : ""}
+                  value={
+                    userData && userData.data.user.id
+                      ? userData.data.user.id
+                      : ""
+                  }
                   disabled
                 />
               </Form.Group>
               <Card.Text className="text-center">
                 {clockInTime && (
                   <>
-                    <div>
-                      Bắt đầu làm việc: {clockInTime}
-                    </div>
+                    <div>Bắt đầu làm việc: {clockInTime}</div>
                   </>
                 )}
                 {clockOutTime && (
                   <>
-                    <div>
-                      Kết thúc làm việc: {clockOutTime}
-                    </div>
+                    <div>Kết thúc làm việc: {clockOutTime}</div>
                   </>
                 )}
               </Card.Text>
