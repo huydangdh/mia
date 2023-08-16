@@ -6,7 +6,9 @@ export enum EPermissions {
   VIEW_REPORTS = "viewReports",
   CREATE_CLOCKRECORD = "createClockRecord",
   READ_CLOCKRECORD = "readClockRecord",
-  VIEW_CLOCKRECORD = "viewClockRecord"
+  VIEW_CLOCKRECORD = "viewClockRecord",
+  VIEW_CHINESE_DICT = "viewChineseDict"
+
 }
 
 

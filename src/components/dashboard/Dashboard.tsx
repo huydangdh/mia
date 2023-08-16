@@ -14,6 +14,11 @@ const appsData: IApp[] = [
     permissions: [EPermissions.VIEW_CLOCKRECORD],
     url: "/ClockRecord",
   },
+  {
+    name: "Từ điển Tiếng Trung",
+    permissions: [EPermissions.VIEW_CHINESE_DICT],
+    url: "/ChineseDict",
+  }
   // ... Thêm các ứng dụng khác tương tự ...
 ];
 
