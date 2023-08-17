@@ -12,6 +12,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     MELogout(selectedProvider); // Call the logout function on logout button click
+    window.location.href = "/login"
   };
 
   useEffect(()=>{

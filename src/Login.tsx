@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMMAuthentication } from "./components/usermanagement/useMMAuthentication";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import { AuthData } from "./services/model/MMUser";
 
@@ -14,6 +14,7 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     let authData: AuthData | null = null;
+
     setShowAlert(false);
     setIsLoggingIn(true); // Set loading indication to true
     authData = await MELogin(username, password, selectedProvider);
@@ -21,6 +22,8 @@ const Login: React.FC = () => {
 
     if (authData.user.id === null) {
       setShowAlert(true);
+    } else{
+      window.location.href = "/dashboard" 
     }
   };
 
