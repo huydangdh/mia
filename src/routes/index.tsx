@@ -13,6 +13,7 @@ import Dashboard from "../components/dashboard/Dashboard";
 import { AttendanceApp } from "../components/attendance";
 import { EPermissions } from "../PermissionsUtil";
 import { Alert, Container, Row } from "react-bootstrap";
+import ChineseDictApp from "../components/chinesedict/ChineseDictApp";
 
 interface PrivateRouteProps {
   // You can add any additional props needed for the private route
@@ -77,6 +78,15 @@ const MainRouter = () => {
             element={
               <PrivateRoute
                 component={AttendanceApp}
+                permissions={[EPermissions.VIEW_CLOCKRECORD]}
+              />
+            }
+          />
+           <Route
+            path="/ChineseDict"
+            element={
+              <PrivateRoute
+                component={ChineseDictApp}
                 permissions={[EPermissions.VIEW_CLOCKRECORD]}
               />
             }
