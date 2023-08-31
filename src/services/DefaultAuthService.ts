@@ -20,6 +20,7 @@ const usersData: User[] = [
       EPermissions.VIEW_CLOCKRECORD,
       EPermissions.READ_CLOCKRECORD,
       EPermissions.CREATE_CLOCKRECORD,
+      EPermissions.VIEW_CHINESE_DICT
     ],
   },
 ];

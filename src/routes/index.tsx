@@ -30,7 +30,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
     useMMAuthentication();
   console.log("LS -> src/routes/index.tsx:30 -> userAuthInfo: ", userAuthInfo)
   if (!userAuthInfo.isAuthed || userAuthInfo === null) return <Navigate to="/login" />
-  if (permissions && !(userAuthInfo.data.user.permissions)) {
+  if (permissions && !permissions.some((permission)=> userAuthInfo.data.user.permissions.includes(permission))) {
     return (
       <Container className="mt-5">
         <Row className="justify-content-center">
@@ -87,7 +87,7 @@ const MainRouter = () => {
             element={
               <PrivateRoute
                 component={ChineseDictApp}
-                permissions={[EPermissions.VIEW_CLOCKRECORD]}
+                permissions={[EPermissions.VIEW_CHINESE_DICT]}
               />
             }
           />
