@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import getCroppedImg from "./Crop";
-import { Container, Image } from "react-bootstrap";
+import { Button, Container, Image } from "react-bootstrap";
 
 function ChineseDictApp() {
   const [hanzi, setHanzi] = useState("");
@@ -59,9 +59,8 @@ function ChineseDictApp() {
             onChange={(e) => setHanzi(e.target.value)}
           />
         </label>
-        <button type="button" onClick={handleSearch}>
-          Search
-        </button>
+        <Button onClick={handleSearch}>
+          Search        </Button>
         <Image fluid src={imageData} alt="ImageData" />
       </form>
 
