@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import Cropper, { Area } from "react-easy-crop";
 import getCroppedImg from "./Crop";
+import { Container, Image } from "react-bootstrap";
 
 function ChineseDictApp() {
   const [hanzi, setHanzi] = useState("");
@@ -48,15 +49,7 @@ function ChineseDictApp() {
     []
   );
   return (
-    <div>
-      <button
-        style={{
-          display: imageData === null || croppedImage !== null ? "none" : "block",
-        }}
-        onClick={showCroppedImage}
-      >
-        Crop
-      </button>
+    <Container>
       <form>
         <label>
           Hanzi:
@@ -69,39 +62,10 @@ function ChineseDictApp() {
         <button type="button" onClick={handleSearch}>
           Search
         </button>
-        <Cropper
-            image={imageData}
-            crop={crop}
-            zoom={zoom}
-            aspect={16/9}
-            showGrid={true}
-            onCropChange={setCrop}
-            onZoomChange={setZoom}
-            onCropComplete={handleCropComplete}
-          />
+        <Image fluid src={imageData} alt="ImageData" />
       </form>
-      {imageData && (
-        <div>
-         
-          <button
-            type="button"
-            onClick={() => {
-              const base64 = croppedImage.split(",")[1];
-              console.log(base64);
-            }}
-          >
-            Save cropped image
-          </button>
-        </div>
-      )}
 
-      <div className="cropped-image-container">
-        {croppedImage && (
-          <img className="cropped-image" src={croppedImage} alt="cropped" />
-        )}
-        {croppedImage && <button onClick={onClose}>close</button>}
-      </div>
-    </div>
+    </Container>
   );
 }
 
